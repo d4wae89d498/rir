@@ -1,0 +1,27 @@
+WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
+
+CFLAGS ?= -std=c99 -pedantic 					\
+	-Wno-newline-eof							\
+	-I$(WORKSPACE_DIR)/third-party/libstc		\
+	-I$(WORKSPACE_DIR)/third-party/libsugar 	\
+	-I$(WORKSPACE_DIR)/third-party/libbtp		\
+	-I$(WORKSPACE_DIR)/include
+
+DEBUG ?= 0
+
+ifeq ($(DEBUG), 1) 
+	CFLAGS = $(CFLAGS) -g	-fsanitize=leak
+endif
+
+
+LDFLAGS ?=
+CC ?= clang
+
+
+AR ?= ar -rcs
+RM ?= rm -f
+
+
+SRCS ?= $(wildcard *.c)
+HDRS ?= $(wildcard *.h)
+OBJS ?= $(SRCS:.c=.o)

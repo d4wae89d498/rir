@@ -1,0 +1,24 @@
+# Project specifics
+.old
+
+# Editors
+
+*.swp
+.vscode
+.idea
+
+# OS 
+
+.Identifier
+.DS_Store
+
+# Unix bins
+*.a
+*.out
+*.o
+*.so
+
+# Unix intermediates
+*.d
+*.i
+
