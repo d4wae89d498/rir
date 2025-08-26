@@ -37,6 +37,8 @@
 # include "./../rir-ir/nodes/expressions/unaryop.h"
 # include "./../rir-ir/nodes/expressions/resolve.h"
 # include "./../rir-ir/nodes/expressions/strlit.h"
+# include "./../rir-ir/nodes/expressions/intlit.h"
+
 // BACKEND
 // TODO
 

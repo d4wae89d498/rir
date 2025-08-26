@@ -23,18 +23,15 @@ static inline void *_new(size_t size, void *content) {
 /////////////////////////////////////////////////////
 
 # ifndef	__USE_XOPEN2K8
-
-static inline size_t strnlen(const char *s, size_t maxlen)
-{
-    const char *e = memchr(s, '\0', maxlen);
-    return e ? (size_t)(e - s) : maxlen;
-}
-
+    static inline size_t strnlen(const char *s, size_t maxlen)
+    {
+        const char *e = memchr(s, '\0', maxlen);
+        return e ? (size_t)(e - s) : maxlen;
+    }
 # endif
 
 # if !((defined __USE_XOPEN_EXTENDED || defined __USE_XOPEN2K8 \
         || (defined __GLIBC_USE && (__GLIBC_USE(LIB_EXT2) || __GLIBC_USE(ISOC2X)))))
-
     static inline char *strdup(const char *s) {
         if (!s) return NULL;
         size_t len = strlen(s) + 1;
