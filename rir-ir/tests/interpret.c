@@ -20,14 +20,14 @@ int main() {
 
     var *v1 = var("v1");
     block *c1 = block("c1");
-    store(v1, load("v1"), intlit(12));  // value x1
+    store(v1, intlit(12));  // value x1
 
     block *c2 = block("c2");
-    store(v1, load("v1"), intlit(12));  // value x2
+    store(v1, intlit(12));  // value x2
 
 
     block *c3 = block("c3");
-    load("v1"); // phi x1 c1 x2 c2  => value
+    load(v1); // phi x1 c1 x2 c2  => value
 
 
     builder_end();

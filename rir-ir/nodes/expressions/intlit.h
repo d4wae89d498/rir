@@ -1,7 +1,6 @@
 #ifndef RIR_INTLIT_H
 # define RIR_INTLIT_H
-
-# include "./../expr.h"
+# include <rir.h>
 
 typedef struct intlit
 {
@@ -9,8 +8,11 @@ typedef struct intlit
     int value;
 } intlit;
 
-static value *IntLit(const char *value) {
-    return 0;
+static value *IntLit(int n) 
+{
+    expr *e = new(intlit, .value = n);
+    value *out = value(e);
+    return out;
 }
 
 # define intlit(v) IntLit(v)
