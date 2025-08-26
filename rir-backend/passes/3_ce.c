@@ -1,2 +1,1 @@
-// copy elimination 
-// DEPENDS on dce
+// DESCRIPTION: copy elimination 

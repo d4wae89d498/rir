@@ -1,2 +1,1 @@
-// depends on: phi
-// DESCRIPTION: propagate constants
+// DESCRIPTION: constant propagation
