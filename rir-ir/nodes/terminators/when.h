@@ -1,9 +1,6 @@
 #ifndef RIR_WHEN_H
 # define RIR_WHEN_H
-# include "./../terminator.h"
-# include "./../expr.h"
-# include "./../block.h"
-# include "./../temp.h"
+# include <rir.h>
 
 typedef struct when 
 {

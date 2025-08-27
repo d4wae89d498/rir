@@ -1,18 +1,15 @@
 #ifndef RIR_BLOCK_H
 # define RIR_BLOCK_H
 
-# include "./instr.h"
-# include "./terminator.h"
+# include <rir.h>
 
-typedef struct block 
+struct block 
 {
     const char  *name;
     instr       *start;
     instr       *last;
     terminator  *exit;
-} block;
-
-static void builder_begin_block(block*);
+};
 
 static block *Block(const char *name) {
     block *out = new(block, 

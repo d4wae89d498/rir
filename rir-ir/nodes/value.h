@@ -12,7 +12,7 @@ typedef struct value {
 
 
 value *Value(expr *e) {
-    value *out = new(value, 
+    instr *out = new(value, 
         .e = e,
         .prev = 0,
         .next = 0
@@ -28,7 +28,7 @@ value *Value(expr *e) {
         out->prev = b->last;
         b->last = out;
     }
-    return out;
+    return (value*)out;
 }
 
 # define value(v) Value(v)

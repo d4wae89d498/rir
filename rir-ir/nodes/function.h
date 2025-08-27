@@ -1,6 +1,6 @@
 #ifndef RIR_FUNCTION_H
 # define RIR_FUNCTION_H
-# include "./block.h"
+# include <rir.h>
 
 typedef struct function {
     const char  *name;

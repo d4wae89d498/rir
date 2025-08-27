@@ -1,8 +1,8 @@
 #ifndef RIR_BUILDER
 # define RIR_BUILDER
-# include "./nodes/prog.h"
-# include "./nodes/function.h"
 # include "./nodes/block.h"
+# include "./nodes/function.h"
+# include "./nodes/prog.h"
 
 static prog        *current_prog;
 static function    *current_function;
@@ -38,7 +38,7 @@ static void builder_begin_block(block *b) {
     current_block = b;
 }
 
-static block *builder_get_block() {
+static block *builder_get_block(void) {
     return current_block;
 }
 

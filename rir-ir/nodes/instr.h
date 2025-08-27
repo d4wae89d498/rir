@@ -8,9 +8,9 @@
     struct instr *next;         \
     const char *instr_type;     \
 
-typedef struct instr 
+struct instr 
 {
     instr_base
-} instr;
+};
 
 #endif // RIR_INSTR_H

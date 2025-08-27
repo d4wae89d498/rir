@@ -1,25 +1,18 @@
 #ifndef RIR_RET_H
 # define RIR_RET_H
-# include "./../instr.h"
-# include "./../expr.h"
+# include <rir.h>
 
 typedef struct ret
 {
-    instr_base
-
+    terminator_base
     expr    *value;
 } ret;
 
-
-static void* Ret_accept() {
-
-}
-
-static instr* Ret(expr *value) {
-    return new(ret, 
-        .instr_type = "ret", 
-        .accept = &Ret_accept
-    );
+void Ret(expr *value) {
+    terminator *self = new(ret, .value = value, .terminator_type = "ret");
+    terminator(self);
 };
+
+# define ret(x) Ret(x)
 
 #endif // RIR_RET_H
