@@ -30,10 +30,27 @@ int main() {
     load(v1); // phi x1 c1 x2 c2  => value
 
 
+
     builder_end();
 
 
     
+//////////////
+    var *x = var("x");
+    store(x, intlit(42));
+
+    var *k = var("k");
+    store(k, ref(x));
+
+    store(deref(load(k)), intlit(2));
+
+
+    //
+    int ix = 42;
+    int *ik = &ix;    
+    *ik = 2;
+
+
    return 0;
 }
 
