@@ -6,7 +6,7 @@ Experimental compiler pipelines written in C99 using [STC](https://github.com/st
 
 1) The IR should remain as simple as possible using a single type that is a native CPU word (inspired from B langauge).
 
-2) Parser frontend should do - lexing/parsing/first IR building - in a single pass and allow modification of the backend pipeline.
+2) Demo frontend should do - lexing/parsing/first IR building - in a single pass and allow modification of the backend pipeline.
 
 ## Roadmap
 

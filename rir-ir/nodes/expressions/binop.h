@@ -13,9 +13,13 @@ typedef struct binop
 
 
 # define def_binop(NAME)                                                \
-    static void * NAME ## _accept(void *visitor, void *ctx) {           \
+    static void * NAME ## _accept(node *self, hmap *vis, void *ctx) {   \
         /* todo: find name for vis...*/                                 \
-        return 0;                                                       \
+        trace();                                                        \
+        void* p = (hmap_find(vis, "binop").ref)->second;                \
+        ir_visitor_method f = (ir_visitor_method)(uintptr_t)p;          \
+        trace();                                                        \
+        return f(self, ctx);                                            \
     }                                                                   \
                                                                         \
     static value * NAME(value *left, value *right) {                    \
@@ -23,7 +27,8 @@ typedef struct binop
             .expr_type = "binop",                                       \
             .binop_type = #NAME,                                        \
             .left = left,                                               \
-            .right = right                                              \
+            .right = right,                                             \
+            .accept = (ir_node_method) & ( NAME ## _accept )            \
         );                                                              \
         return value((expr*)self);                                      \
     }

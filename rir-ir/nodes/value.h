@@ -11,11 +11,26 @@ typedef struct value {
 } value;
 
 
-value *Value(expr *e) {
+static void *value_visit(value *self, hmap *vis, void *ctx) {
+    trace();
+    void* p = (hmap_find(vis, "value").ref)->second;
+    fprintf(stderr, "-> %p\n", p);
+    ir_visitor_method f = (ir_visitor_method)(uintptr_t)p;
+    trace();
+    return f((node*)self, ctx);
+}
+
+static value *Value(expr *e) {
+    static int nb;
+
+    nb++;
+
     instr *out = new(value, 
         .e = e,
+        .id = nb,
         .prev = 0,
-        .next = 0
+        .next = 0,
+        .accept = (ir_node_method) &value_visit
     );
     instr(out);
    

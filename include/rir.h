@@ -61,7 +61,6 @@ static block* builder_get_block(void);
 # include "./../rir-ir/nodes/terminator.h"
 # include "./../rir-ir/nodes/terminators/jump.h"
 
-# include "./../rir-ir/visitors/print.h"
 
 // BACKEND
 // TODO
@@ -70,5 +69,9 @@ static block* builder_get_block(void);
 // TODO
 
 # include "./../rir-ir/builder.impl.h"
+
+
+# include "./../rir-ir/visitors/print.h"
+
 
 #endif // RIR_H

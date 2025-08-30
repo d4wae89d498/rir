@@ -1,0 +1,52 @@
+.TH RIR 1 "August 2025" "RIR 0.1" "User Commands"
+.SH NAME
+rir \- Reflective IR experimental compiler pipelines
+.SH SYNOPSIS
+.B rir
+.RI [ options ] " file.rir " ...
+.SH DESCRIPTION
+.B RIR
+(Reflective IR) is an experimental compiler pipeline framework designed for exploring 
+IR transformations, interpretation, and just-in-time compilation.
+
+It accepts one or more source files in the \fB.rir\fR format and produces different 
+backends according to the selected target.
+
+.SH OPTIONS
+.TP
+.BR --target =\fITARGET
+Selects the compilation or execution target. Valid targets include:
+.RS
+.IP \(bu 2
+\fBprint\fR \- dump the internal IR after processing.
+.IP \(bu 2
+\fBinterpret-ffi\fR \- run the IR directly using an interpreter with foreign-function interface support.
+.IP \(bu 2
+\fBlinux-x86_32-jit\fR \- just-in-time compile and execute on 32-bit Linux.
+.IP \(bu 2
+\fBlinux-x86_32-elf:test.o\fR \- produce a 32-bit Linux ELF object file named \fItest.o\fR.
+.RE
+
+.TP
+.BR -D\fINAME\fR[=\fIVALUE\fR]
+Define a compile-time constant. Unlike the C preprocessor,
+these constants exist in the RIR evaluation environment and 
+can be used for conditional evaluation or constant folding.
+
+.TP
+.BR -h ,\ --help
+Display usage information and exit.
+
+.SH USAGE
+Examples:
+.EX
+  rir program.rir --target=print
+  rir lib.rir -DDEBUG=1 --target=linux-x86_32-elf:lib.o
+  rir main.rir utils.rir --target=linux-x86_32-jit
+.EE
+
+.SH EXIT STATUS
+The exit status is 0 on success, and nonzero on failure.
+
+.SH SEE ALSO
+gcc(1), clang(1)

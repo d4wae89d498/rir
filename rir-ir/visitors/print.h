@@ -47,9 +47,21 @@ static void *visit_value(value *self, target_ctx *ctx)
 {
     printf("temp%i = ", self->id);
     ((node*) self->e)->accept((node*)self->e, print_visitor, ctx); 
+    printf("\n");
     return 0;
 }
 
+static void *visit_arg(arg *self, target_ctx *ctx) {
+    printf("arg(%d)", self->n);
+    return 0;
+}
+
+static void *visit_binop(binop *self, target_ctx *ctx) 
+{
+    printf("temp%p %s temp%p\n", (void*)self->left, self->binop_type, (void*)self->right);
+  //  ((node*) self)->accept((node*)self, print_visitor, ctx); 
+    return 0;
+}
 
 
 #define print_visitor() PrintVisitor()
@@ -67,6 +79,8 @@ hmap* PrintVisitor()
     visitor_method(function)
     visitor_method(block)
     visitor_method(value)
+    visitor_method(binop)
+    visitor_method(arg)
     // ... todo
 #undef visitor_method
 

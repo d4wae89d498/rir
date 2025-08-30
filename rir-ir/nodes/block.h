@@ -17,6 +17,8 @@ struct block
 
 static void *block_visit(block *self, hmap *vis, void *ctx) {
     printf("block: %s start: %p\n", self->name, (void*)self->start);
+    trace();
+    ((node*)self->start)->accept((node*)self->start, vis, ctx);
     return 0;
 }
 

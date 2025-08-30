@@ -3,6 +3,7 @@
 # include "./../node.h"
 
 # define expr_base               \
+    node_base                    \
     const char *expr_type;       \
 
 typedef struct expr 
