@@ -7,8 +7,8 @@
 
 # define new(T, ...) _new( sizeof(T) , &(T) { __VA_ARGS__ } )
 # define ull unsigned long long
-
-
+# define trace() \
+    fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__)
 
 static inline void *_new(size_t size, void *content) {
     void *ptr = malloc(size);

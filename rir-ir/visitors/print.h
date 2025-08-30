@@ -7,17 +7,17 @@ typedef struct target_ctx {
     int depth;
 } target_ctx;
 
-static StrPtrMap *print_visitor;
+static hmap *print_visitor;
 
 static void *visit_prog(prog *self, target_ctx *ctx) 
 {
-    printf("=== BEGIN OF RIR DEBUG DUMP ===");
-    for(c_each(i, StrPtrMap, self->functions)) {
+    printf("=== BEGIN OF RIR DEBUG DUMP ===\n");
+    for(c_each(i, hmap, self->functions)) {
         printf("Function[%s] = \n", cstr_str(&(i.ref->first)));
-        ((node*) i.ref->second)->accept(i.ref->second, print_visitor, ctx);   // todo: make sure functions are node* (and everything else too...)
+        ((node*) i.ref->second)->accept((node*)i.ref->second, print_visitor, ctx);   // todo: make sure functions are node* (and everything else too...)
 
     }
-    printf("=== END OF RIR DEBUG DUMP ===");
+    printf("=== END OF RIR DEBUG DUMP ===\n");
     return 0;
 }
 
@@ -26,7 +26,7 @@ static void *visit_function(function *self, target_ctx *ctx)
     printf("function %s: \n", self->name);
     block *b = self->start;
     while (b) {
-        ((node*) b)->accept(b, print_visitor, ctx); 
+        ((node*) b)->accept((node*)b, print_visitor, ctx); 
         b = b->next;
     }
     return 0;
@@ -37,7 +37,7 @@ static void *visit_block(block *self, target_ctx *ctx)
     printf("block %s: \n", self->name);
     instr *i = self->start;
     while (i) {
-        ((node*) i)->accept(i, print_visitor, ctx); 
+        ((node*) i)->accept((node*)i, print_visitor, ctx); 
         i = i->next;
     }
     return 0;
@@ -46,7 +46,7 @@ static void *visit_block(block *self, target_ctx *ctx)
 static void *visit_value(value *self, target_ctx *ctx) 
 {
     printf("temp%i = ", self->id);
-    ((node*) self->e)->accept(self->e, print_visitor, ctx); 
+    ((node*) self->e)->accept((node*)self->e, print_visitor, ctx); 
     return 0;
 }
 
@@ -54,14 +54,14 @@ static void *visit_value(value *self, target_ctx *ctx)
 
 #define print_visitor() PrintVisitor()
 
-StrPtrMap* PrintVisitor() 
+hmap* PrintVisitor() 
 {
     // Create and attach visitor
-    print_visitor = new(StrPtrMap, 0);
-    *print_visitor = StrPtrMap_init();
+    print_visitor = new(hmap, 0);
+    *print_visitor = hmap_init();
 
 # define visitor_method(W) \
-    StrPtrMap_emplace(print_visitor, #W, (void*)(uintptr_t)& (visit_ ## W));
+    hmap_emplace(print_visitor, #W, (void*)(uintptr_t)& (visit_ ## W));
     // Visitor impl
     visitor_method(prog)
     visitor_method(function)
@@ -69,6 +69,7 @@ StrPtrMap* PrintVisitor()
     visitor_method(value)
     // ... todo
 #undef visitor_method
+
 
     return print_visitor;
 }

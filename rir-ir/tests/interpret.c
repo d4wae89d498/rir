@@ -46,9 +46,9 @@ int main() {
 
 
     //
-    printf("===\n");
-    StrPtrMap *pvis = print_visitor();
-    demo->accept(demo, pvis, 0);
+    trace();
+    hmap *pvis = print_visitor();
+    demo->accept((node*)demo, pvis, 0);
 
     return 0;
 }

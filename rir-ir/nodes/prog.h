@@ -7,13 +7,23 @@
 typedef struct prog {
     node_base    
 
-    StrPtrMap   functions;
+    hmap   functions;
 
 } prog;
 
+static void *prog_visit(node *self, hmap *vis, void *ctx) {
+    trace();
+    void* p = (hmap_find(vis, "prog").ref)->second;
+    fprintf(stderr, "-> %p\n", p);
+    ir_visitor_method f = (ir_visitor_method)(uintptr_t)p;
+    trace();
+    return f(self, ctx);
+}
+
 static prog *Prog() {
     prog *out = new(prog, 
-        .functions = StrPtrMap_init()
+        .functions = hmap_init(),
+        .accept = &prog_visit
     );
 
     return out;

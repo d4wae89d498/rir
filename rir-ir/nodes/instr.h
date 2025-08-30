@@ -13,19 +13,9 @@ struct instr
     instr_base
 };
 
-instr *Instr(instr *out) {
-    block *b = builder_get_block();
-    // TODO: if (b == NULL) Error
-    if (!b->start)
-    {
-        b->start = b->last =  out;
-    }
-    else
-    {
-        out->prev = b->last;
-        b->last = out;
-    }
-    return out;
+instr *Instr(instr *i) {
+    builder_begin_instr(i);    
+    return i;
 }
 
 # define instr(x) Instr(x)

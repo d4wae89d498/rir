@@ -2,7 +2,7 @@
 # define RIR_TARGETS_H
 # include <rir.h>
 
-StrPtrMap targets;
+hmap targets;
 
 static void setup_targets()
 {

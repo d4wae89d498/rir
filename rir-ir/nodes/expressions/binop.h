@@ -12,25 +12,22 @@ typedef struct binop
 } binop;
 
 
-//     return hmap_find(visitor, "addw")(ctx);
 # define def_binop(NAME)                                                \
     static void * NAME ## _accept(void *visitor, void *ctx) {           \
+        /* todo: find name for vis...*/                                 \
         return 0;                                                       \
     }                                                                   \
                                                                         \
     static value * NAME(value *left, value *right) {                    \
-        return 0;                                                       \
-    }
-
-/*
- return new(binop,                                               \
+        binop *self = new(binop,                                        \
             .expr_type = "binop",                                       \
             .binop_type = #NAME,                                        \
             .left = left,                                               \
             .right = right                                              \
         );                                                              \
+        return value((expr*)self);                                      \
+    }
 
-*/
 
 
 def_binop(add)   // both operands signed or unsigned, same bitwise op, addition

@@ -4,42 +4,28 @@
 # include "./nodes/function.h"
 # include "./nodes/prog.h"
 
-static prog        *current_prog;
-static function    *current_function;
-static block       *current_block;
+extern prog        *current_prog;
+extern function    *current_function;
+extern block       *current_block;
 
 ////
 
-static void builder_begin(prog *p) {
-    current_prog = p;
-}
+static void builder_begin(prog *p);
 
-static prog *builder_get_prog(void) {
-    return current_prog;
-} 
+static prog *builder_get_prog(void);
+static void builder_end(void);
+////
 
-static void builder_end(void) {
-    current_prog = 0;
-}
+static void builder_begin_function(function *f);
+
+static function *builder_get_function();
 
 ////
 
-static void builder_begin_function(function *f) {
-    current_function = f;
-}
+static void builder_begin_block(block *b);
 
-static function *builder_get_function() {
-    return current_function;
-}
+static void builder_begin_instr(instr *i);
 
-////
-
-static void builder_begin_block(block *b) {
-    current_block = b;
-}
-
-static block *builder_get_block(void) {
-    return current_block;
-}
+static block *builder_get_block(void);
 
 #endif

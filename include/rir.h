@@ -19,7 +19,7 @@
 # include <sugar.h>
 
 # include <stc/cstr.h>
-# define T StrPtrMap, cstr, void*, (c_keypro)
+# define T hmap, cstr, void*, (c_keypro)
 # include <stc/hmap.h>
 
 // IR
@@ -34,10 +34,16 @@ static block* builder_get_block(void);
 
 # include "./../rir-ir/builder.h"
 
+# include "./../rir-ir/nodes/block.h"
+
+# include "./../rir-ir/nodes/function.h"
+
 # include "./../rir-ir/nodes/value.h"
 # include "./../rir-ir/nodes/var.h"
 
 # include "./../rir-ir/nodes/expr.h"
+
+
 # include "./../rir-ir/nodes/expressions/load.h"
 # include "./../rir-ir/nodes/expressions/store.h"
 # include "./../rir-ir/nodes/expressions/ref.h"
@@ -62,5 +68,7 @@ static block* builder_get_block(void);
 
 // PARSER
 // TODO
+
+# include "./../rir-ir/builder.impl.h"
 
 #endif // RIR_H
