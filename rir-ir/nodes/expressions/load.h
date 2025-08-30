@@ -13,6 +13,7 @@ value *Load(var *v)
         .instr_type = "store", 
         .v = v
     );
+    instr(self);
     return 0;
 }
 

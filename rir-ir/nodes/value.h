@@ -17,17 +17,8 @@ value *Value(expr *e) {
         .prev = 0,
         .next = 0
     );
-    block *b = builder_get_block();
-    // todo if no b... error
-    if (!b->start)
-    {
-        b->start = b->last =  out;
-    }
-    else
-    {
-        out->prev = b->last;
-        b->last = out;
-    }
+    instr(out);
+   
     return (value*)out;
 }
 

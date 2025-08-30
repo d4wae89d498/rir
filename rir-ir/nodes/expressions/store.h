@@ -15,9 +15,7 @@ value *Store(var *dest, value *v)
         .dest = dest, 
         .v = v
     );
-
-    block *b = builder_get_block();
-    // todo: push self
+    instr(self);
     return 0;
 }
 

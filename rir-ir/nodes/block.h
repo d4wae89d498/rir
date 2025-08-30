@@ -5,6 +5,8 @@
 
 struct block 
 {
+    block       *prev;
+    block       *next;
     const char  *name;
     instr       *start;
     instr       *last;

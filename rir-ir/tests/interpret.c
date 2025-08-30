@@ -46,11 +46,10 @@ int main() {
 
 
     //
-    int ix = 42;
-    int *ik = &ix;    
-    *ik = 2;
+    printf("===\n");
+    StrPtrMap *pvis = print_visitor();
+    demo->accept(demo, pvis, 0);
 
-
-   return 0;
+    return 0;
 }
 
