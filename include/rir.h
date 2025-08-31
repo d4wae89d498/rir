@@ -15,6 +15,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <time.h>
+# include <getopt.h>
 
 # define i_static 1 // for STC header only
 # define STC_HAS_TYPEOF 0 // c99 
