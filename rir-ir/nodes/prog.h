@@ -3,8 +3,8 @@
 # include "./../node.h"
 
 struct prog {
-    node    node;
-    hmap    functions;
+    node        node;
+    functions   functions;
 };
 
 static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
@@ -20,7 +20,7 @@ static prog *Prog() {
         .node = {
             .accept = &prog_visit
         },
-        .functions = hmap_init(),
+        .functions = functions_init(),
     );
 
     return out;

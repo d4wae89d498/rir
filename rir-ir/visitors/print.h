@@ -12,9 +12,9 @@ static node_visitor *print_visitor;
 static void *visit_prog(prog *self, target_ctx *ctx) 
 {
     printf("=== BEGIN OF RIR DEBUG DUMP ===\n");
-    for(c_each(i, hmap, self->functions)) {
+    for(c_each(i, functions, self->functions)) {
         printf("Function[%s] = \n", cstr_str(&(i.ref->first)));
-        ((node*) i.ref->second)->accept((node*)i.ref->second, print_visitor, ctx);   // todo: make sure functions are node* (and everything else too...)
+        i.ref->second->node.accept(&i.ref->second->node, print_visitor, ctx);   // todo: make sure functions are node* (and everything else too...)
 
     }
     printf("=== END OF RIR DEBUG DUMP ===\n");
@@ -61,8 +61,7 @@ static void *visit_arg(arg *self, target_ctx *ctx) {
 
 static void *visit_binop(binop *self, target_ctx *ctx) 
 {
-    printf("temp%d %s temp%d\n", self->left->id, self->type, self->right->id);
-  //  ((node*) self)->accept((node*)self, print_visitor, ctx); 
+    printf("temp%d [%s] temp%d\n", self->left->id, self->type, self->right->id);
     return 0;
 }
 
@@ -86,7 +85,6 @@ static void *visit_resolve(resolve *self, target_ctx *ctx)
 
 static void *visit_call(call *self, target_ctx *ctx) 
 {
-    //self->fp->instr.node.accept(&self->fp->instr.node, print_visitor, ctx);
     printf(" temp%d(", self->fp->id);
     unsigned i = 0;
     while (i < self->arg_count) {
@@ -97,8 +95,6 @@ static void *visit_call(call *self, target_ctx *ctx)
         }
     }
     printf(")");
-
-    // todo:: print arguments
     return 0;
 }
 

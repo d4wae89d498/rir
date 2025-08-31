@@ -2,12 +2,12 @@
 # define RIR_FUNCTION_H
 # include <rir.h>
 
-typedef struct function {
+struct function {
     node        node;
     const char  *name;
     block       *start;
     block       *end;
-} function;
+};
 
 static void builder_begin_function(function*);
 static prog *builder_get_prog(void);
@@ -32,7 +32,7 @@ static function *Function(const char *name) {
     builder_begin_function(out);
 
     prog *current_prog = builder_get_prog();
-    hmap_emplace(&(current_prog->functions), name, out);
+    functions_emplace(&(current_prog->functions), name, out);
 
     return 0;
 }

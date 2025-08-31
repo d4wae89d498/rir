@@ -4,8 +4,7 @@
 
 typedef struct phi
 {
-    expr expr; 
-
+    expr     expr; 
     value    **values;
     block    **blocks;
     unsigned   size;

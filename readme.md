@@ -22,6 +22,7 @@ Experimental compiler pipelines written in C99 using [STC](https://github.com/st
     - [ ] visitors (todo: move em into BE targets)
         - [ ] Print visitor
         - [ ] Graph visitor (emit a CFG)
+        - [ ] C
 
 - [ ] BE
     - [ ] passes
@@ -34,6 +35,7 @@ Experimental compiler pipelines written in C99 using [STC](https://github.com/st
 - [x] CLI
     - [x] a man page
     - [x] impl
+    - [ ] dynamic cli help & man page & target using an hmap for targets
 
 ## See also
 

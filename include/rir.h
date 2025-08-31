@@ -38,6 +38,13 @@ typedef struct value        value;
 typedef struct binop        binop;
 typedef struct unaryop      unaryop;
 typedef struct var          var;
+typedef struct call         call;
+typedef struct strlit       strlit;
+typedef struct intlit       intlit;
+typedef struct function     function;
+
+# define T functions, cstr, function*, (c_keypro)
+# include <stc/hmap.h>
 
 static void builder_begin_block(block*);
 static block* builder_get_block(void);
