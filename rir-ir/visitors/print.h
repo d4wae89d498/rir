@@ -26,9 +26,11 @@ static void *visit_function(function *self, target_ctx *ctx)
     printf("function %s: \n", self->name);
     block *b = self->start;
     while (b) {
-        ((node*) b)->accept((node*)b, print_visitor, ctx); 
+        printf(" -- block:\n");
+        (&b->node)->accept(&b->node, print_visitor, ctx); 
         b = b->next;
     }
+    printf("-- func end\n");
     return 0;
 }
 
@@ -37,7 +39,8 @@ static void *visit_block(block *self, target_ctx *ctx)
     printf("block %s: \n", self->name);
     instr *i = self->start;
     while (i) {
-        ((node*) i)->accept((node*)i, print_visitor, ctx); 
+        printf(" -- instr:\n");
+        (&i->node)->accept(&i->node, print_visitor, ctx); 
         i = i->next;
     }
     return 0;
@@ -46,7 +49,7 @@ static void *visit_block(block *self, target_ctx *ctx)
 static void *visit_value(value *self, target_ctx *ctx) 
 {
     printf("temp%i = ", self->id);
-    ((node*) self->e)->accept((node*)self->e, print_visitor, ctx); 
+    (&self->e->node)->accept(&self->e->node, print_visitor, ctx); 
     printf("\n");
     return 0;
 }
@@ -58,7 +61,7 @@ static void *visit_arg(arg *self, target_ctx *ctx) {
 
 static void *visit_binop(binop *self, target_ctx *ctx) 
 {
-    printf("temp%p %s temp%p\n", (void*)self->left, self->type, (void*)self->right);
+    printf("temp%d %s temp%d\n", self->left->id, self->type, self->right->id);
   //  ((node*) self)->accept((node*)self, print_visitor, ctx); 
     return 0;
 }

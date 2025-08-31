@@ -52,12 +52,16 @@ static void builder_begin_instr(instr *i) {
     // TODO: if (b == NULL) Error
     if (!b->start)
     {
+        printf("first!\n");
         b->start = b->last =  i;
     }
     else
     {
+        printf("pushed!\n");
+        b->last->next = i;
         i->prev = b->last;
         b->last = i;
+
     }
 }
 

@@ -7,8 +7,11 @@ int main() {
     function("main");
 
     block *b1 = block("b1");
-    value *x1 = add(arg(2), arg(1));
+
+    value *x1 = add(arg(2), arg(4));
     call(resolve("printf"), strlit("Result id : %d"), x1);
+
+    /*
 
     block *b2 = block("b2");
     value *x2 = add(arg(2), arg(1));
@@ -31,11 +34,6 @@ int main() {
 
 
 
-    builder_end();
-
-
-    
-//////////////
     var *x = var("x");
     store(x, intlit(42));
 
@@ -43,10 +41,15 @@ int main() {
     store(k, ref(x));
 
     store(deref(load(k)), intlit(2));
+    */
+
+    builder_end();
 
 
-    //
+    
+
     trace();
+
     node_visitor *pvis = print_visitor();
     demo->node.accept(&demo->node, pvis, 0);
 

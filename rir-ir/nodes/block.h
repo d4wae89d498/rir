@@ -5,8 +5,7 @@
 
 struct block 
 {
-    node node;
-
+    node        node;
     block       *prev;
     block       *next;
     const char  *name;
@@ -16,10 +15,10 @@ struct block
 };
 
 static void *block_visit(block *self, node_visitor *vis, void *ctx) {
-    printf("block: %s start: %p\n", self->name, (void*)self->start);
-    trace();
-    ((node*)self->start)->accept((node*)self->start, vis, ctx);
-    return 0;
+    return node_visitor_find(vis, "block").ref->second(
+        &self->node,
+        ctx
+    );
 }
 
 static block *Block(const char *name) {

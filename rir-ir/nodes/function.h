@@ -15,10 +15,10 @@ static prog *builder_get_prog(void);
 static void *function_visit(function *self, node_visitor *vis, void *ctx) {
     printf("-- %s start %p\n", self->name, (void*)self->start);
 
-    node *start_node = &(self->start->node);
-    start_node->accept(start_node, vis, ctx);
-
-    return 0;
+    return node_visitor_find(vis, "function").ref->second(
+        &self->node,
+        ctx
+    );
 }
 
 static function *Function(const char *name) {
