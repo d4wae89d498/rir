@@ -66,6 +66,41 @@ static void *visit_binop(binop *self, target_ctx *ctx)
     return 0;
 }
 
+static void *visit_intlit(intlit *self, target_ctx *ctx) 
+{
+    printf("intlit(%d)", self->value);
+    return 0;
+}
+
+static void *visit_strlit(strlit *self, target_ctx *ctx) 
+{
+    printf("strlit(\"%s\")", self->value);
+    return 0;
+}
+
+static void *visit_resolve(resolve *self, target_ctx *ctx) 
+{
+    printf("resolve(\"%s\")", self->symbol_name);
+    return 0;
+}
+
+static void *visit_call(call *self, target_ctx *ctx) 
+{
+    //self->fp->instr.node.accept(&self->fp->instr.node, print_visitor, ctx);
+    printf(" temp%d(", self->fp->id);
+    unsigned i = 0;
+    while (i < self->arg_count) {
+        printf("temp%d", self->args[i]->id);
+        i += 1;
+        if (i != self->arg_count) {
+            printf(", ");
+        }
+    }
+    printf(")");
+
+    // todo:: print arguments
+    return 0;
+}
 
 #define print_visitor() PrintVisitor()
 
@@ -84,6 +119,11 @@ node_visitor* PrintVisitor()
     visitor_method(value)
     visitor_method(binop)
     visitor_method(arg)
+    visitor_method(intlit)
+    visitor_method(strlit)
+    visitor_method(resolve)
+    visitor_method(call)
+
     // ... todo
 #undef visitor_method
 

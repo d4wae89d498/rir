@@ -2,17 +2,31 @@
 # define RIR_INTLIT_H
 # include <rir.h>
 
-typedef struct intlit
+struct intlit
 {
     expr    expr;
     int     value;
-} intlit;
+};
 
-static value *IntLit(int n) 
+static void *intlit_visit(intlit *self, node_visitor *vis, void *ctx) {
+    return (node_visitor_find(vis,  "intlit").ref)->second(
+        &self->expr.node,
+        ctx
+    );
+}
+
+static value *IntLit(int value) 
 {
-    intlit *e = new(intlit, .value = n);
-    value *out = value(&e->expr);
-    return out;
+    intlit *e = new(intlit, 
+        .expr = {
+            .node = {
+                .accept = (ir_node_method) &intlit_visit
+            },
+            .type = "intlit"
+        },
+        .value = value
+    );
+    return value(&e->expr);
 }
 
 # define intlit(v) IntLit(v)

@@ -9,7 +9,7 @@ int main() {
     block *b1 = block("b1");
 
     value *x1 = add(arg(2), arg(4));
-    call(resolve("printf"), strlit("Result id : %d"), x1);
+    call(resolve("printf"), strlit("Result id : %d %d"), x1, intlit(4));
 
     /*
 
