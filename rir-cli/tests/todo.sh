@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Define the RIR script path relative to this script’s directory
+# Define the RIR path relative to this script’s directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RIR="$SCRIPT_DIR/../rir"
 

@@ -2,6 +2,8 @@ MK_SUBDIRS := rir-ir rir-cli # rir-backend
 
 include ./mk/run-in-dirs.mk
 
+########################################################
+
 PREFIX ?= /usr/local
 
 install:
