@@ -3,7 +3,7 @@
 # include "./../expr.h"
 
 typedef struct resolve {
-    expr_base
+    expr expr;
 
     prog    *prog;
     char    *symbol_name;

@@ -1,18 +1,10 @@
-#ifndef RIR_NODE
-# define RIR_NODE
+#ifndef RIR_NODE_H
+# define RIR_NODE_H
 # include <rir.h>
 
-typedef struct node node;
-
-typedef void *(*ir_visitor_method )(node *, void*);
-typedef void *(*ir_node_method )(node *, hmap *, void*);
-
-
-# define node_base       \
-    ir_node_method accept;
 
 struct node {
-    node_base
+    ir_node_method accept;
 };
 
 #endif

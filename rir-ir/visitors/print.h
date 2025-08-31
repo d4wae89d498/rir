@@ -7,7 +7,7 @@ typedef struct target_ctx {
     int depth;
 } target_ctx;
 
-static hmap *print_visitor;
+static node_visitor *print_visitor;
 
 static void *visit_prog(prog *self, target_ctx *ctx) 
 {
@@ -58,7 +58,7 @@ static void *visit_arg(arg *self, target_ctx *ctx) {
 
 static void *visit_binop(binop *self, target_ctx *ctx) 
 {
-    printf("temp%p %s temp%p\n", (void*)self->left, self->binop_type, (void*)self->right);
+    printf("temp%p %s temp%p\n", (void*)self->left, self->type, (void*)self->right);
   //  ((node*) self)->accept((node*)self, print_visitor, ctx); 
     return 0;
 }
@@ -66,14 +66,14 @@ static void *visit_binop(binop *self, target_ctx *ctx)
 
 #define print_visitor() PrintVisitor()
 
-hmap* PrintVisitor() 
+node_visitor* PrintVisitor() 
 {
     // Create and attach visitor
-    print_visitor = new(hmap, 0);
-    *print_visitor = hmap_init();
+    print_visitor = new(node_visitor, 0);
+    *print_visitor = node_visitor_init();
 
 # define visitor_method(W) \
-    hmap_emplace(print_visitor, #W, (void*)(uintptr_t)& (visit_ ## W));
+    node_visitor_emplace(print_visitor, #W, (ir_visitor_method)& (visit_ ## W));
     // Visitor impl
     visitor_method(prog)
     visitor_method(function)

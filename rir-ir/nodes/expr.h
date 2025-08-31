@@ -1,14 +1,12 @@
 #ifndef RIR_EXPR_H
 # define RIR_EXPR_H
-# include "./../node.h"
+# include <rir.h>
 
-# define expr_base               \
-    node_base                    \
-    const char *expr_type;       \
 
-typedef struct expr 
+struct expr 
 {
-    expr_base
-} expr;
+    node        node;
+    const char  *type;
+};
 
 #endif // RIR_EXPR_H

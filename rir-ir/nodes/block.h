@@ -5,7 +5,7 @@
 
 struct block 
 {
-    node_base
+    node node;
 
     block       *prev;
     block       *next;
@@ -15,7 +15,7 @@ struct block
     terminator  *exit;
 };
 
-static void *block_visit(block *self, hmap *vis, void *ctx) {
+static void *block_visit(block *self, node_visitor *vis, void *ctx) {
     printf("block: %s start: %p\n", self->name, (void*)self->start);
     trace();
     ((node*)self->start)->accept((node*)self->start, vis, ctx);
@@ -24,11 +24,13 @@ static void *block_visit(block *self, hmap *vis, void *ctx) {
 
 static block *Block(const char *name) {
     block *out = new(block, 
+        .node = {
+            .accept = (ir_node_method) &block_visit
+        },
         .name = name,
         .start = 0,
         .last = 0,
         .exit = 0,
-        .accept = (ir_node_method) &block_visit
     );
 
     builder_begin_block(out);

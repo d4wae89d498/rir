@@ -1,6 +1,8 @@
 #ifndef RIR_H
 # define RIR_H
 
+
+
 // COMMON DEPS
 # include <assert.h>
 # include <ctype.h>
@@ -24,11 +26,35 @@
 
 // IR
 
-typedef struct terminator terminator;
-typedef struct block block;
-typedef struct instr instr;
+typedef struct node         node;
+
+typedef struct prog         prog;
+typedef struct terminator   terminator;
+typedef struct block        block;
+typedef struct instr        instr;
+typedef struct expr         expr;
+typedef struct value        value;
+typedef struct binop        binop;
+typedef struct unaryop      unaryop;
+typedef struct var          var;
+
 static void builder_begin_block(block*);
 static block* builder_get_block(void);
+
+
+
+typedef void *(*ir_visitor_method )(node *, void*);
+
+# define T node_visitor, cstr, ir_visitor_method, (c_keypro)
+# include <stc/hmap.h>
+
+typedef void *(*ir_node_method )(node *, node_visitor*, void*);
+
+
+
+# include "./../rir-ir/node.h"
+
+# include "./../rir-ir/nodes/expr.h"
 
 # include "./../rir-ir/nodes/prog.h"
 
@@ -38,10 +64,12 @@ static block* builder_get_block(void);
 
 # include "./../rir-ir/nodes/function.h"
 
+# include "./../rir-ir/nodes/instr.h"
+
+
 # include "./../rir-ir/nodes/value.h"
 # include "./../rir-ir/nodes/var.h"
 
-# include "./../rir-ir/nodes/expr.h"
 
 
 # include "./../rir-ir/nodes/expressions/load.h"
@@ -69,6 +97,8 @@ static block* builder_get_block(void);
 // TODO
 
 # include "./../rir-ir/builder.impl.h"
+
+
 
 
 # include "./../rir-ir/visitors/print.h"

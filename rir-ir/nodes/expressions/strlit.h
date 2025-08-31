@@ -5,7 +5,7 @@
 
 typedef struct strlit
 {
-    expr_base
+    expr expr;
     char *value;
 } strlit;
 

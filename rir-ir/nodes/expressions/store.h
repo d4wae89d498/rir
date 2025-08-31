@@ -3,19 +3,21 @@
 # include <rir.h>
 
 typedef struct store {
-    instr_base
+    instr instr;
     var *dest;
     value *v;
 } store;
 
 value *Store(var *dest, value *v) 
 {
-    instr *self = new(store, 
-        .instr_type = "store", 
+    store *self = new(store, 
+        .instr = {
+            .type = "store", 
+        },
         .dest = dest, 
         .v = v
     );
-    instr(self);
+    instr(&self->instr);
     return 0;
 }
 

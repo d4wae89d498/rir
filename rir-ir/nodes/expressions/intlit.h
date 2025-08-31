@@ -4,14 +4,14 @@
 
 typedef struct intlit
 {
-    expr_base
-    int value;
+    expr    expr;
+    int     value;
 } intlit;
 
 static value *IntLit(int n) 
 {
-    expr *e = new(intlit, .value = n);
-    value *out = value(e);
+    intlit *e = new(intlit, .value = n);
+    value *out = value(&e->expr);
     return out;
 }
 

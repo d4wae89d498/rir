@@ -3,12 +3,12 @@
 # include "./../instr.h"
 # include "./../value.h"
 
-typedef struct unaryop 
+struct unaryop 
 {
-    expr_base
-    const char  *unaryop_type;
+    expr        expr;
+    const char  *type;
     value       *operand;
-} unaryop;
+};
 
 
 //     return hmap_find(visitor, "addw")(ctx);
@@ -18,12 +18,18 @@ typedef struct unaryop
     }                                                                       \
                                                                             \
     static value * NAME(value *operand) {                                   \
-        return new(unaryop,                                                 \
-            .expr_type = "unaryop" ,                                        \
-            .unaryop_type = #NAME ,                                         \
+        return value(&new(unaryop,                                          \
+            .expr = {                                                       \
+                .node = {                                                   \
+                    .accept = (ir_node_method)&NAME ## _accept,             \
+                },                                                          \
+                .type = "unaryop"                                           \
+            },                                                              \
+            .type = #NAME ,                                                 \
             .operand = operand,                                             \
-        );                                                                  \
+        )->expr);                                                           \
     }   
+
 
 def_unaryop(not)
 def_unaryop(inc)

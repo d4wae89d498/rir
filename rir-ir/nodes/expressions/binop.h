@@ -3,37 +3,39 @@
 # include "./../expr.h"
 # include "./../value.h"
 
-typedef struct binop 
+struct binop 
 {
-    expr_base
-    const char *binop_type;
-    value *left;
-    value *right;
-} binop;
+    expr        expr;
+    const char  *type;
+    value       *left;
+    value       *right;
+};
 
 
 # define def_binop(NAME)                                                \
-    static void * NAME ## _accept(node *self, hmap *vis, void *ctx) {   \
+    static void * NAME ## _accept(node *self, node_visitor *vis, void *ctx) {\
         /* todo: find name for vis...*/                                 \
         trace();                                                        \
-        void* p = (hmap_find(vis, "binop").ref)->second;                \
-        ir_visitor_method f = (ir_visitor_method)(uintptr_t)p;          \
-        trace();                                                        \
-        return f(self, ctx);                                            \
+        return (node_visitor_find(vis,  "binop").ref)->second(          \
+            self,                                                       \
+            ctx                                                         \
+        );                                                              \
     }                                                                   \
                                                                         \
     static value * NAME(value *left, value *right) {                    \
         binop *self = new(binop,                                        \
-            .expr_type = "binop",                                       \
-            .binop_type = #NAME,                                        \
+            .expr = {                                                   \
+                .node = {                                               \
+                    .accept = (ir_node_method) & ( NAME ## _accept )    \
+                },                                                      \
+                .type = "binop",                                        \
+            },                                                          \
+            .type = #NAME,                                              \
             .left = left,                                               \
             .right = right,                                             \
-            .accept = (ir_node_method) & ( NAME ## _accept )            \
         );                                                              \
         return value((expr*)self);                                      \
     }
-
-
 
 def_binop(add)   // both operands signed or unsigned, same bitwise op, addition
 def_binop(sub)   // both operands signed or unsigned, same bitwise op, subtraction

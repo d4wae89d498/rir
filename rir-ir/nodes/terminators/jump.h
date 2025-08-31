@@ -4,15 +4,20 @@
 
 typedef struct jump
 {
-    terminator_base
+    terminator terminator;
 
     block *dest;
 } jump;
 
 void Jump(block *dest) {
-    terminator *self = new(jump, .dest = dest, .terminator_type = "jump");
+    jump *self = new(jump, 
+        .terminator = {
+            .type = "jump"
+        },
+        .dest = dest, 
+    );
 
-    terminator(self);
+    terminator(&self->terminator);
 }
 
 # define jump(d) Jump(d)

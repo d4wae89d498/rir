@@ -3,8 +3,7 @@
 # include <rir.h>
 
 typedef struct function {
-    node_base
-
+    node        node;
     const char  *name;
     block       *start;
     block       *end;
@@ -13,16 +12,21 @@ typedef struct function {
 static void builder_begin_function(function*);
 static prog *builder_get_prog(void);
 
-static void *function_visit(function *self, hmap *vis, void *ctx) {
+static void *function_visit(function *self, node_visitor *vis, void *ctx) {
     printf("-- %s start %p\n", self->name, (void*)self->start);
-    self->start->accept((node*)self->start, vis, ctx);
+
+    node *start_node = &(self->start->node);
+    start_node->accept(start_node, vis, ctx);
+
     return 0;
 }
 
 static function *Function(const char *name) {
     function *out = new(function, 
+         .node = {
+            .accept = (ir_node_method) &function_visit
+        },
         .name = name,
-        .accept = (ir_node_method) &function_visit
     );
     
     builder_begin_function(out);

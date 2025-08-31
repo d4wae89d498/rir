@@ -4,7 +4,7 @@
 
 typedef struct unreachable 
 {
-    terminator_base
+    terminator terminator;
 } unreachable;
 
 #endif // RIR_UNREACHABLE_H

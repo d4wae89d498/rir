@@ -47,8 +47,8 @@ int main() {
 
     //
     trace();
-    hmap *pvis = print_visitor();
-    demo->accept((node*)demo, pvis, 0);
+    node_visitor *pvis = print_visitor();
+    demo->node.accept(&demo->node, pvis, 0);
 
     return 0;
 }

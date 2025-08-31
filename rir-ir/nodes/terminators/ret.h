@@ -4,13 +4,18 @@
 
 typedef struct ret
 {
-    terminator_base
+    terminator terminator;
     expr    *value;
 } ret;
 
 void Ret(expr *value) {
-    terminator *self = new(ret, .value = value, .terminator_type = "ret");
-    terminator(self);
+    ret *self = new(ret, 
+        .terminator = {
+            .type = "ret"
+        },
+        .value = value
+    );
+    terminator(&self->terminator);
 };
 
 # define ret(x) Ret(x)

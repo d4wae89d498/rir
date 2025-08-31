@@ -2,18 +2,15 @@
 # define RIR_TERMINATOR_H
 # include <rir.h>
 
-# define terminator_base        \
-    instr_base                  \
-    const char *terminator_type;
-
 struct terminator 
 {
-   terminator_base
+    instr       instr;
+    const char  *type;
 };
 
 static instr* Terminator(terminator *t)
 {
-    t->instr_type = "terminator";
+    t->instr.type = "terminator";
     block *b = builder_get_block();
     // todo if no b... error
     if (b->exit)
@@ -23,11 +20,11 @@ static instr* Terminator(terminator *t)
     else
     {
         if (!b->start) {
-            b->start = (instr*) t;
+            b->start = &t->instr;
         }
-        t->prev = b->last;
-        b->last = (instr*) t;
-        t->next = 0;
+        t->instr.prev = b->last;
+        b->last = &t->instr;
+        t->instr.next = 0;
     } 
     return (instr*) t;
 } 

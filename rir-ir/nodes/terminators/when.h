@@ -4,11 +4,10 @@
 
 typedef struct when 
 {
-    terminator_base
-
-    expr    *cond;
-    block   *t;
-    block   *f;
+    terminator  terminator;
+    expr        *cond;
+    block       *t;
+    block       *f;
 } when;
 
 #endif // RIR_WHEN_H

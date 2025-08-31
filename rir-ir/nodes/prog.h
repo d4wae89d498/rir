@@ -2,28 +2,25 @@
 # define RIR_PROG_H
 # include "./../node.h"
 
+struct prog {
+    node    node;
+    hmap    functions;
+};
 
-
-typedef struct prog {
-    node_base    
-
-    hmap   functions;
-
-} prog;
-
-static void *prog_visit(node *self, hmap *vis, void *ctx) {
+static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
     trace();
-    void* p = (hmap_find(vis, "prog").ref)->second;
-    fprintf(stderr, "-> %p\n", p);
-    ir_visitor_method f = (ir_visitor_method)(uintptr_t)p;
-    trace();
-    return f(self, ctx);
+    return (node_visitor_find(vis,  "prog").ref)->second(
+        self,
+        ctx
+    );
 }
 
 static prog *Prog() {
     prog *out = new(prog, 
+        .node = {
+            .accept = &prog_visit
+        },
         .functions = hmap_init(),
-        .accept = &prog_visit
     );
 
     return out;

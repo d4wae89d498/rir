@@ -4,7 +4,7 @@
 
 typedef struct phi
 {
-    expr_base 
+    expr expr; 
 
     value    **values;
     block    **blocks;

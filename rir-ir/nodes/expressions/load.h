@@ -3,17 +3,19 @@
 # include <rir.h>
 
 typedef struct load {
-    instr_base
-    var *v;
+    instr   instr;
+    var     *v;
 } load;
 
 value *Load(var *v) 
 {
-    instr *self = new(load, 
-        .instr_type = "store", 
+    load *self = new(load, 
+        .instr = {
+            .type = "store",
+        }, 
         .v = v
     );
-    instr(self);
+    instr(&self->instr);
     return 0;
 }
 

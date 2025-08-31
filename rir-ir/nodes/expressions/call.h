@@ -5,7 +5,7 @@
 
 typedef struct call 
 {
-    expr_base
+    expr        expr;
     void        *fp;
     void        **args;
     int         arg_count;
