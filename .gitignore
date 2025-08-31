@@ -4,7 +4,8 @@ rir-cli/rir
 # Editors
 
 *.swp
-.vscode
+.vscode/*
+!.vscode/extensions.json
 .idea
 
 # OS 
