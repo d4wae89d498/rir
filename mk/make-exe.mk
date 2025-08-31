@@ -14,14 +14,17 @@ $(NAME): $(OBJS)
 
 TESTS := $(wildcard tests/*.sh)
 
-test: $(TESTS)
-	@for t in $(TESTS); do \
+test: all $(TESTS)
+	@FAIL=0; \
+	for t in $(TESTS); do \
 		if bash $$t; then \
 			echo "$(NAME) test $$t SUCCESS"; \
 		else \
 			echo "$(NAME) test $$t FAILED"; \
-		fi \
-	done
+			FAIL=1; \
+		fi; \
+	done; \
+	exit $$FAIL
 
 ##################################
 
