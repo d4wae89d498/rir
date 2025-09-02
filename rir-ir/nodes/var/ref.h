@@ -3,6 +3,7 @@
 # include <rir.h>
 
 struct ref {
+    node    node;
     expr    expr;
     var     *v;
 };
@@ -15,6 +16,9 @@ static value *Ref(var *v) {
     // todo:: store ref into CFG block
     v->type = V_STACK;
     ref *self = new(ref, 
+        .node = {
+            .accept = (ir_node_method) &ref_visit
+        },
         .v = v
     );
     return value(&self->expr);

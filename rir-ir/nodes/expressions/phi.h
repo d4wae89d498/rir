@@ -4,11 +4,19 @@
 
 typedef struct phi
 {
-    expr     expr; 
+    instr     instr; 
     value    **values;
     block    **blocks;
+    value      *dest;
     unsigned   size;
 } phi;
+
+static void *phi_accept(phi *self, node_visitor *vis, void *ctx) {
+    return node_visitor_find(vis, "phi").ref->second(
+        &self->instr.node,
+        ctx
+    );
+}
 
 static value *Phi(value *v1, block *b2, ...)
 {
@@ -32,6 +40,7 @@ static value *Phi(value *v1, block *b2, ...)
     phi *p = (phi*)calloc(1, sizeof(phi));
     if (!p)
         return NULL;
+    p->instr.node.accept = (ir_node_method) &phi_accept;
     p->values = (value**)malloc(sizeof(value*) * count);
     p->blocks = (block**)malloc(sizeof(block*) * count);
     if (!p->values || !p->blocks) {
@@ -56,7 +65,16 @@ static value *Phi(value *v1, block *b2, ...)
         ++i;
     }
     va_end(ap);
-    return 0; // TODO: make a new value and decorate
+
+
+
+    instr(&p->instr);
+
+    value *out = intlit(0);
+
+    p->dest = out;
+
+    return out;
 }
 
 # define phi(...) Phi(__VA_ARGS__, 0)

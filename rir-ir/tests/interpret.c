@@ -19,7 +19,7 @@ int main() {
     block(0);
     value *x3 = phi(x1, b1, x2, b2);
 
-    //
+    */
 
     var *v1 = var("v1");
     block *c1 = block("c1");
@@ -28,7 +28,7 @@ int main() {
     block *c2 = block("c2");
     store(v1, intlit(12));  // value x2
 
-
+    /*
     block *c3 = block("c3");
     load(v1); // phi x1 c1 x2 c2  => value
 

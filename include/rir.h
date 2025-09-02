@@ -45,6 +45,8 @@ typedef struct unaryop      unaryop;    // an expr
 typedef struct call         call;       // an expr
 typedef struct strlit       strlit;     // an expr
 typedef struct intlit       intlit;     // an expr
+# define intlit(X) IntLit(X)
+static value *IntLit(int);
 
 typedef struct var          var;        // an instr
 

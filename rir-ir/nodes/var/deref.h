@@ -3,7 +3,7 @@
 # include <rir.h>
 
 struct deref {
-    node    node;
+    instr   instr;
     value   *v;
     var     *dest;
 };
@@ -12,9 +12,21 @@ static void *deref_visit(deref *self, node_visitor *vis, void *ctx) {
     return 0;
 }
 
-static var *DeRef(value *v) {
-    // todo:: store deref into CFG block
-    var *out = var(v);
+static var *DeRef(value *val) {
+    var *out = var(val);
+
+    deref *self = new(deref, 
+        .instr = {
+            .node = {
+                .accept = (ir_node_method) &deref_visit
+            },
+            .type = "deref"
+        },
+        .v = val,
+        .dest = out
+    );
+    instr(&self->instr);
+
     out->type = V_PTR;
     return out;
 }
