@@ -3,16 +3,33 @@
 # include <rir.h>
 
 struct var {
-    const char  *name;
+    instr       instr;
+    unsigned    id;
     enum var_type {
                 V_REG,      //  Default
                 V_STACK,    //  Created by ref(var), ref will returns a value and promote var to V_STACK
                 V_PTR       //  Created by var = deref(value), deref returns a V_PTR var
-    }           var_type;
+    }           type;
 };
 
-static var *Var(const char *name) {
-    var *out = new(var, .name = name, .var_type = V_REG);
+static void *var_visit(var *self, node_visitor *vis, void *ctx) {
+    return 0;
+}
+
+static var *Var() {
+    static unsigned id;
+    id += 1;
+    var *out = new(var, 
+        .instr = {
+            .node = {
+                .accept = (ir_node_method)&var_visit
+            },
+            .type = "var"
+        },
+        .id = id, 
+        .type = V_REG
+    );
+    instr(&out->instr);
     return out;
 }
 

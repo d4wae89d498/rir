@@ -30,18 +30,30 @@
 typedef struct node         node;
 
 typedef struct prog         prog;
-typedef struct terminator   terminator;
-typedef struct block        block;
-typedef struct instr        instr;
-typedef struct expr         expr;
-typedef struct value        value;
-typedef struct binop        binop;
-typedef struct unaryop      unaryop;
-typedef struct var          var;
-typedef struct call         call;
-typedef struct strlit       strlit;
-typedef struct intlit       intlit;
+
 typedef struct function     function;
+typedef struct block        block;
+typedef struct terminator   terminator;
+
+typedef struct instr        instr;
+typedef struct value        value;      // an instr
+
+typedef struct expr         expr;       // a node 
+
+typedef struct binop        binop;      // an expr
+typedef struct unaryop      unaryop;    // an expr
+typedef struct call         call;       // an expr
+typedef struct strlit       strlit;     // an expr
+typedef struct intlit       intlit;     // an expr
+
+typedef struct var          var;        // an instr
+
+typedef struct store        store;      // an expr
+typedef struct load         load;       // an expr
+typedef struct ref          ref;        // an expr
+typedef struct deref        deref;      // an expr
+
+
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
@@ -80,10 +92,10 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
 
 
-# include "./../rir-ir/nodes/expressions/load.h"
-# include "./../rir-ir/nodes/expressions/store.h"
-# include "./../rir-ir/nodes/expressions/ref.h"
-# include "./../rir-ir/nodes/expressions/deref.h"
+# include "./../rir-ir/nodes/var/load.h"
+# include "./../rir-ir/nodes/var/store.h"
+# include "./../rir-ir/nodes/var/ref.h"
+# include "./../rir-ir/nodes/var/deref.h"
 
 # include "./../rir-ir/nodes/expressions/phi.h"
 # include "./../rir-ir/nodes/expressions/arg.h"
