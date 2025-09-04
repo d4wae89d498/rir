@@ -98,17 +98,11 @@ static void *visit_call(call *self, target_ctx *ctx)
     return 0;
 }
 
-
-#define print_visitor() PrintVisitor()
-
-node_visitor* PrintVisitor() 
+static void _setup_print_target(Targets *targets)
 {
     // Create and attach visitor
     print_visitor = new(node_visitor, 0);
     *print_visitor = node_visitor_init();
-
-# define visitor_method(W) \
-    node_visitor_emplace(print_visitor, #W, (ir_visitor_method)& (visit_ ## W));
     // Visitor impl
     visitor_method(prog)
     visitor_method(function)
@@ -121,20 +115,13 @@ node_visitor* PrintVisitor()
     visitor_method(resolve)
     visitor_method(call)
 
-    // ... todo
-#undef visitor_method
-
-
-    return print_visitor;
-}
-
-static void setup_print_target()
-{
-    Targets_emplace(&targets, "print", new(target, 
+    Targets_emplace(targets, "print", new(target, 
         .name = "print",
         .descr = "Print the IR in a human readable format.",
-        .vis = PrintVisitor()
+        .vis = print_visitor
     ));
 }
+
+target_setup setup_print_target = &_setup_print_target;
 
 #endif

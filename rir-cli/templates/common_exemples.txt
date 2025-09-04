@@ -1,0 +1,3 @@
+  rir program.rir --target=print
+  rir lib.rir -DDEBUG=1 --target=linux-x86_32-elf:lib.o
+  rir main.rir utils.rir --target=linux-x86_32-jit

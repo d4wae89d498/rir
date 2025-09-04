@@ -13,7 +13,7 @@ static void *deref_visit(deref *self, node_visitor *vis, void *ctx) {
 }
 
 static var *DeRef(value *val) {
-    var *out = var(val);
+    var *out = var();
 
     deref *self = new(deref, 
         .instr = {

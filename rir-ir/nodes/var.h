@@ -33,7 +33,7 @@ static var *Var() {
     return out;
 }
 
-# define var(n) Var(n)
+# define var() Var()
 
 
 #endif // RIR_VAR_H

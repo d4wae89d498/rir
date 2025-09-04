@@ -1,6 +1,8 @@
 # Reflective IR
 
-Experimental compiler pipelines written in C99 using [STC](https://github.com/stclib/STC). 
+Experimental compiler pipelines lib written in C99 using [STC](https://github.com/stclib/STC). 
+
+The CLI is built using C23.
 
 ## Goals
 

@@ -17,16 +17,7 @@ generates output according to the selected target.
 .BR --target =\fITARGET
 Selects the compilation or execution target. Valid targets include:
 .RS
-.IP \(bu 2
-\fBprint\fR \- dump the internal IR after processing.
-.IP \(bu 2
-\fBinterpret-ffi\fR \- run the IR directly using an interpreter with foreign-function interface support.
-.IP \(bu 2
-\fBlinux-x86_32-asm\fR \- emit a gas compatible assembly file.
-.IP \(bu 2
-\fBlinux-x86_32-jit\fR \- just-in-time compile and execute on 32-bit Linux.
-.IP \(bu 2
-\fBlinux-x86_32-elf:test.o\fR \- produce a 32-bit Linux ELF object file named \fItest.o\fR.
+%s
 .RE
 
 .TP
@@ -42,9 +33,7 @@ Display usage information and exit.
 .SH USAGE
 Examples:
 .EX
-  rir program.rir --target=print
-  rir lib.rir -DDEBUG=1 --target=linux-x86_32-elf:lib.o
-  rir main.rir utils.rir --target=linux-x86_32-jit
+%s
 .EE
 
 .SH EXIT STATUS

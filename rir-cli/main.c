@@ -8,27 +8,33 @@
 
 #include <rir.h>
 
+////////////////////////
+
+char man_main_txt[] = {
+#embed  "templates/man_main.txt"
+};
+
+char man_target_txt[] = {
+#embed  "templates/man_main.txt"
+};
+
+char common_exemples_txt[] = {
+#embed "templates/common_exemples.txt"
+};
+
+char cli_usage_txt[] = {
+#embed "templates/cli_usage.txt"
+};
+
+////////////////////////
+
 typedef struct {
     char *name;
     char *value; /* may be NULL */
 } Define;
 
 static void usage(FILE *out, const char *progname) {
-    fprintf(out,
-"Usage: %s [ options ] file.rir ...\n\n"
-"Options:\n"
-"  --target=TARGET, -t TARGET  Select compilation/execution target. Valid targets:\n"
-"                              print\n"
-"                              interpret-ffi\n"
-"                              linux-x86_32-jit\n"
-"                              linux-x86_32-elf:OUTFILE\n"
-"  -DNAME[=VALUE]              Define a compile-time constant NAME with optional VALUE.\n"
-"  -h, --help                  Show this help and exit.\n\n"
-"Examples:\n"
-"  %s program.rir --target=print\n"
-"  %s lib.rir -DDEBUG=1 --target=linux-x86_32-elf:lib.o\n"
-"  %s main.rir utils.rir --target=linux-x86_32-jit\n",
-    progname, progname, progname, progname);
+    fprintf(out, cli_usage_txt, "<todo: fill using targets>", common_exemples_txt);
 }
 
 static void version(FILE *out) {

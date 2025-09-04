@@ -123,7 +123,7 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
 
 
-# include "./../rir-backend/outputs/target.h"
+# include "./../rir-backend/target.h"
 
 
 #endif // RIR_H

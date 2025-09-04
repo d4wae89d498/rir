@@ -1,0 +1,10 @@
+Usage: rir [ options ] file.rir ...
+
+Options:
+  --target=TARGET, -t TARGET  Select compilation/execution target. Valid targets:
+%s
+  -DNAME[=VALUE]              Define a compile-time constant NAME with optional VALUE.
+  -h, --help                  Show this help and exit.
+
+Examples:
+%s
