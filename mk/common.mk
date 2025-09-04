@@ -22,6 +22,15 @@ AR ?= ar -rcs
 RM ?= rm -f
 
 
-SRCS ?= $(wildcard *.c)
-HDRS ?= $(wildcard *.h)
+rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+
+
+SRCS ?= $(call rwildcard,./,*.c)
+HDRS ?= $(call rwildcard,./,*.h)
 OBJS ?= $(SRCS:.c=.o)
+
+define EOL
+
+
+
+endef

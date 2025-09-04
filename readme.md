@@ -19,10 +19,6 @@ Experimental compiler pipelines written in C99 using [STC](https://github.com/st
 - [ ] IR
     - [x] finish node spec
     - [x] IR Builder tool
-    - [ ] visitors (todo: move em into BE targets)
-        - [ ] Print visitor
-        - [ ] Graph visitor (emit a CFG)
-        - [ ] C
 
 - [ ] BE
     - [ ] passes
@@ -31,6 +27,9 @@ Experimental compiler pipelines written in C99 using [STC](https://github.com/st
     - [ ] abstract machine decl / regalloc interface
     - [ ] targets 
         - [ ] quick interpreter that uses LIBFFI for C interop
+        - [x] Print visitor
+        - [ ] Graph visitor (emit a CFG)
+        - [ ] C
 
 - [x] CLI
     - [x] a man page

@@ -50,7 +50,9 @@ int main() {
 
     trace();
 
-    node_visitor *pvis = print_visitor();
+    target *print = Targets_find(&targets, "print").ref->second;
+
+    node_visitor *pvis = print->vis;
     demo->node.accept(&demo->node, pvis, 0);
 
     return 0;

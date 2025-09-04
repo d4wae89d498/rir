@@ -108,7 +108,17 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    /* Validate supported targets and extract optional data */
+    setup_targets();
+
+    for (c_each(i, Targets, targets)) {
+        printf("-- %s\n", cstr_str(&i.ref->first));
+    }
+
+    /*
+
+    TODO: replace bellow using automatically built targets
+
+    // Validate supported targets and extract optional data
     bool target_ok = false;
     char *elf_out = NULL;
 
@@ -136,7 +146,7 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    /* For now we only stub the behaviour described in the man page. */
+    // For now we only stub the behaviour described in the man page.
     printf("rir: files to process (%d):\n", file_count);
     for (int i = 0; i < file_count; ++i) printf("  %s\n", files[i]);
 
@@ -152,7 +162,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    /* Simulate actions */
+    // Simulate actions
     if (strcmp(target, "print") == 0) {
         printf("[stub] would dump the internal IR after processing these files.\n");
     } else if (strcmp(target, "interpret-ffi") == 0) {
@@ -163,7 +173,7 @@ int main(int argc, char **argv) {
         printf("[stub] would generate 32-bit Linux ELF object: %s\n", elf_out);
     }
 
-    /* cleanup */
+    // cleanup 
     free(target);
     free(elf_out);
     for (size_t i = 0; i < defines_count; ++i) {
@@ -171,6 +181,6 @@ int main(int argc, char **argv) {
         free(defines[i].value);
     }
     free(defines);
-
+    */
     return 0;
 }

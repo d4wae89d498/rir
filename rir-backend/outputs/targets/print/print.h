@@ -98,6 +98,7 @@ static void *visit_call(call *self, target_ctx *ctx)
     return 0;
 }
 
+
 #define print_visitor() PrintVisitor()
 
 node_visitor* PrintVisitor() 
@@ -126,4 +127,14 @@ node_visitor* PrintVisitor()
 
     return print_visitor;
 }
+
+static void setup_print_target()
+{
+    Targets_emplace(&targets, "print", new(target, 
+        .name = "print",
+        .descr = "Print the IR in a human readable format.",
+        .vis = PrintVisitor()
+    ));
+}
+
 #endif
