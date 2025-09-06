@@ -1,7 +1,7 @@
 WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
-CVER ?=99
-CFLAGS ?= -std=c$(CVER) -pedantic 					\
+CSTD ?=c99
+CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-Wno-newline-eof							\
 	-I$(WORKSPACE_DIR)/third-party/libstc		\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 	\

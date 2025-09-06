@@ -21,7 +21,7 @@ int main() {
 
     */
 
-    var *v1 = var("v1");
+    var *v1 = var();
     block *c1 = block("c1");
     store(v1, intlit(12));  // value x1
 

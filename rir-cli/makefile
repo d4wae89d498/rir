@@ -1,6 +1,6 @@
+NAME=rir
 
 CC=clang
-CVER=23
-NAME=rir
+CSTD=c23
 
 include ./../mk/make-exe.mk
