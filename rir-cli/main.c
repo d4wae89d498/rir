@@ -6,13 +6,6 @@
  * backends are left as TODOs for now.
  */
 
-
-# define i_static 1 // for STC header only
-# define STC_CSTR_UTF8 1
-# define STC_CSTR_IO  1
-# define FMT_H_INCLUDED 1
-# define STC_HAS_TYPEOF 0 // c99 
-
 #include <rir.h>
 
 ////////////////////////

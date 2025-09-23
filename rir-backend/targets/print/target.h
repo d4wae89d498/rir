@@ -43,6 +43,7 @@ static void *visit_block(block *self, target_ctx *ctx)
         (&i->node)->accept(&i->node, print_visitor, ctx); 
         i = i->next;
     }
+    printf("block end.\n");
     return 0;
 }
 
@@ -98,11 +99,18 @@ static void *visit_call(call *self, target_ctx *ctx)
     return 0;
 }
 
+static void *visit_ret(ret *self, target_ctx *ctx) 
+{
+    printf(" ret temp%d\n", self->value->id);
+    return 0;
+}
+
 static void _setup_print_target(Targets *targets)
 {
     // Create and attach visitor
     print_visitor = new(node_visitor, 0);
     *print_visitor = node_visitor_init();
+
     // Visitor impl
     visitor_method(prog)
     visitor_method(function)
@@ -114,7 +122,9 @@ static void _setup_print_target(Targets *targets)
     visitor_method(strlit)
     visitor_method(resolve)
     visitor_method(call)
+    visitor_method(ret)
 
+    // register visitor
     Targets_emplace(targets, "print", new(target, 
         .name = "print",
         .descr = "Print the IR in a human readable format.",

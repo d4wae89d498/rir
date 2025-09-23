@@ -15,16 +15,12 @@ static instr* Terminator(terminator *t)
     // todo if no b... error
     if (b->exit)
     {
+        printf("error !! exit already set ??\n");
         // TODO: error no 2x consecutive terminator in a block possible
     }
     else
     {
-        if (!b->start) {
-            b->start = &t->instr;
-        }
-        t->instr.prev = b->last;
-        b->last = &t->instr;
-        t->instr.next = 0;
+        builder_begin_instr(&t->instr);
     } 
     return (instr*) t;
 } 

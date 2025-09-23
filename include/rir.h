@@ -52,7 +52,7 @@ typedef struct load         load;       // an expr
 typedef struct ref          ref;        // an expr
 typedef struct deref        deref;      // an expr
 
-
+typedef struct ret          ret;      // an expr
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
@@ -107,7 +107,7 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
 # include "./../rir-ir/nodes/terminator.h"
 # include "./../rir-ir/nodes/terminators/jump.h"
-
+# include "./../rir-ir/nodes/terminators/ret.h"
 
 // BACKEND
 // TODO
