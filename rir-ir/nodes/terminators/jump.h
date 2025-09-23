@@ -2,25 +2,37 @@
 # define RIR_JUMP_H
 # include <rir.h>
 
-typedef struct jump
+struct jump
 {
-    terminator terminator;
+    terminator  terminator;
+    block       *dest;
+};
 
-    block *dest;
-} jump;
+static void *jump_visit(jump *self, node_visitor *vis, void *ctx) {
+    trace();
+    return (node_visitor_find(vis,  "jump").ref)->second(
+        &self->terminator.instr.node,
+        ctx
+    );
+}
+    
 
 void Jump(block *dest) {
     jump *self = new(jump, 
         .terminator = {
-            .type = "jump"
+            .type = "jump",
+            .instr = {
+                .type = "terminator",
+                .node = {
+                    .accept = (ir_node_method) &jump_visit
+                }
+            }
         },
-        .dest = dest, 
+        .dest = dest
     );
-
     terminator(&self->terminator);
 }
 
-# define jump(d) Jump(d)
+# define jump(x) Jump(x)
 
-
-#endif // RIR_JUMP_H
+#endif // RIR_jump_H

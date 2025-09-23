@@ -1,6 +1,7 @@
 #ifndef RIR_H
 # define RIR_H
-// COMMON DEPS
+
+// libc/system
 # include <assert.h>
 # include <ctype.h>
 # include <errno.h>
@@ -14,45 +15,43 @@
 # include <time.h>
 # include <getopt.h>
 
-
-# include <sugar.h>
-
+// third party
 # include <stc/cstr.h>
-
 # define T hmap, cstr, void*, (c_keypro)
 # include <stc/hmap.h>
+# include <sugar.h>
+
 
 // IR
 
 typedef struct node         node;
 
 typedef struct prog         prog;
-
 typedef struct function     function;
 typedef struct block        block;
-typedef struct terminator   terminator;
 
 typedef struct instr        instr;
+typedef struct expr         expr;  // a node 
 
-typedef struct expr         expr;       // a node 
-typedef struct value        value;      // an instr
+// instrs
+typedef struct value        value;
+typedef struct var          var;
+typedef struct terminator   terminator;
 
-typedef struct binop        binop;      // an expr
-typedef struct unaryop      unaryop;    // an expr
-typedef struct call         call;       // an expr
-typedef struct strlit       strlit;     // an expr
-typedef struct intlit       intlit;     // an expr
-# define intlit(X) IntLit(X)
-static value *IntLit(int);
+// exprs
+typedef struct binop        binop;
+typedef struct unaryop      unaryop;
+typedef struct call         call;
+typedef struct strlit       strlit;
+typedef struct intlit       intlit;
+typedef struct store        store;
+typedef struct load         load;
+typedef struct ref          ref;
+typedef struct deref        deref;
 
-typedef struct var          var;        // an instr
-
-typedef struct store        store;      // an expr
-typedef struct load         load;       // an expr
-typedef struct ref          ref;        // an expr
-typedef struct deref        deref;      // an expr
-
-typedef struct ret          ret;      // an expr
+// terminators 
+typedef struct ret          ret;
+typedef struct jump         jump;
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>

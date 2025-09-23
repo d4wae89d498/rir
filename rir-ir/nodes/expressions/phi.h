@@ -65,16 +65,8 @@ static value *Phi(value *v1, block *b2, ...)
         ++i;
     }
     va_end(ap);
-
-
-
     instr(&p->instr);
-
-    value *out = intlit(0);
-
-    p->dest = out;
-
-    return out;
+    return NULL;
 }
 
 # define phi(...) Phi(__VA_ARGS__, 0)

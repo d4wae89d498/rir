@@ -29,4 +29,6 @@ static value *IntLit(int value)
     return value(&e->expr);
 }
 
+# define intlit(X) IntLit(X)
+
 #endif // RIR_INTLIT_H
