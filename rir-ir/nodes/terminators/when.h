@@ -5,9 +5,36 @@
 typedef struct when 
 {
     terminator  terminator;
-    expr        *cond;
+    value       *cond;
     block       *t;
     block       *f;
 } when;
+
+static void *when_visit(when *self, node_visitor *vis, void *ctx) {
+    trace();
+    return (node_visitor_find(vis,  "when").ref)->second(
+        &self->terminator.instr.node,
+        ctx
+    );
+}
+
+void When(value *cond, block *t, block *f) {
+    when *self = new(when, 
+        .terminator = {
+            .type = "when",
+            .instr = {
+                .type = "terminator",
+                .node = {
+                    .accept = (ir_node_method) &when_visit
+                }
+            }
+        },
+        .cond = cond,
+        .t=t,
+        .f=f
+    );
+    terminator(&self->terminator);
+}
+# define when(a,b,c) When(a,b,c)
 
 #endif // RIR_WHEN_H

@@ -15,7 +15,6 @@ static void *ret_visit(ret *self, node_visitor *vis, void *ctx) {
         ctx
     );
 }
-    
 
 void Ret(value *value) {
     ret *self = new(ret, 
