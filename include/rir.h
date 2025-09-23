@@ -14,11 +14,11 @@
 # include <time.h>
 # include <getopt.h>
 
-# define i_static 1 // for STC header only
-# define STC_HAS_TYPEOF 0 // c99 
+
 # include <sugar.h>
 
 # include <stc/cstr.h>
+
 # define T hmap, cstr, void*, (c_keypro)
 # include <stc/hmap.h>
 

@@ -6,24 +6,41 @@
  * backends are left as TODOs for now.
  */
 
+
+# define i_static 1 // for STC header only
+# define STC_CSTR_UTF8 1
+# define STC_CSTR_IO  1
+# define FMT_H_INCLUDED 1
+# define STC_HAS_TYPEOF 0 // c99 
+
 #include <rir.h>
 
 ////////////////////////
 
 char man_main_txt[] = {
 #embed  "templates/man_main.txt"
+,0
 };
 
 char man_target_txt[] = {
-#embed  "templates/man_main.txt"
+#embed  "templates/man_target.txt"
+,0
 };
 
 char common_exemples_txt[] = {
 #embed "templates/common_exemples.txt"
+,0
 };
+
 
 char cli_usage_txt[] = {
 #embed "templates/cli_usage.txt"
+,0
+};
+
+char cli_target_txt[] = {
+#embed "templates/cli_target.txt"
+,0
 };
 
 ////////////////////////
@@ -33,8 +50,15 @@ typedef struct {
     char *value; /* may be NULL */
 } Define;
 
+
 static void usage(FILE *out, const char *progname) {
-    fprintf(out, cli_usage_txt, "<todo: fill using targets>", common_exemples_txt);
+    cstr result = cstr_init();
+    c_defer(cstr_drop(&result))
+    {
+        for (c_each(e, Targets, targets))
+            cstr_append_fmt(&result, cli_target_txt, cstr_toraw(&e.ref->first));
+        fprintf(out, cli_usage_txt, cstr_toraw(&result), common_exemples_txt);
+    }
 }
 
 static void version(FILE *out) {
@@ -65,6 +89,7 @@ static void add_define(Define **defs, size_t *count, const char *arg) {
 }
 
 int main(int argc, char **argv) {
+    setup_targets();
     const char *prog = (argc > 0) ? argv[0] : "rir";
 
     static struct option longopts[] = {
@@ -94,7 +119,7 @@ int main(int argc, char **argv) {
                 return 0;
             case '?':
             default:
-                usage(stderr, prog);
+                //usage(stderr, prog);
                 return 2;
         }
     }
@@ -102,24 +127,25 @@ int main(int argc, char **argv) {
     int file_count = argc - optind;
     char **files = argv + optind;
 
-    if (file_count <= 0) {
-        fprintf(stderr, "error: no input files provided.\n");
-        usage(stderr, prog);
-        return 2;
-    }
-
     if (!target) {
-        fprintf(stderr, "error: --target or -t is required.\n");
-        usage(stderr, prog);
+        fprintf(stderr, "%s: option required -- 't'\n", prog);
         return 2;
     }
 
-    setup_targets();
-
-    for (c_each(i, Targets, targets)) {
-        printf("-- %s\n", cstr_str(&i.ref->first));
+    if (file_count <= 0) {
+        fprintf(stderr, "%s: missing one ore multiple files\n", prog);
+        return 2;
     }
 
+    printf("choosen target: %s\n", target);
+
+    auto result = Targets_find(&targets, target);
+
+    if (!result.ref) {
+        printf("Target don't exist. Type: rir -h to list em.\n");
+    }
+
+    return 0;
     /*
 
     TODO: replace bellow using automatically built targets
