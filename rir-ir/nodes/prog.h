@@ -1,6 +1,6 @@
 #ifndef RIR_PROG_H
 # define RIR_PROG_H
-# include "./../node.h"
+# include <rir.h>
 
 struct prog {
     node        node;

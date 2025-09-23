@@ -1,8 +1,6 @@
 #ifndef RIR_BUILDER
 # define RIR_BUILDER
-# include "./nodes/block.h"
-# include "./nodes/function.h"
-# include "./nodes/prog.h"
+# include <rir.h>
 
 extern prog        *current_prog;
 extern function    *current_function;

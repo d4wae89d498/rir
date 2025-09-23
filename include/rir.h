@@ -1,8 +1,5 @@
 #ifndef RIR_H
 # define RIR_H
-
-
-
 // COMMON DEPS
 # include <assert.h>
 # include <ctype.h>
@@ -36,9 +33,9 @@ typedef struct block        block;
 typedef struct terminator   terminator;
 
 typedef struct instr        instr;
-typedef struct value        value;      // an instr
 
 typedef struct expr         expr;       // a node 
+typedef struct value        value;      // an instr
 
 typedef struct binop        binop;      // an expr
 typedef struct unaryop      unaryop;    // an expr

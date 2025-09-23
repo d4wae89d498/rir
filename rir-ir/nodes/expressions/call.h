@@ -1,7 +1,6 @@
 #ifndef RIR_CALL_H
 # define RIR_CALL_H
-
-# include "./../expr.h"
+# include <rir.h>
 
 struct call 
 {

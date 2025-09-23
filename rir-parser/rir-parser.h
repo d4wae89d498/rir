@@ -8,7 +8,7 @@
 
 
 typedef struct {
-
+	int _;
 } RirParserUserData;
 
 BTP_DECLARE_PARSER(RirParser, RirParserUserData)
@@ -41,6 +41,7 @@ bool parse_binop(RirParser *p) {
 	)
 	&& btp_rule(p, identifier)) {
 
+		/*
 		char *op = stack_pop(p->value_stack, &p->value_stack_len);
 
 		if (op == plus) {
@@ -56,32 +57,31 @@ bool parse_binop(RirParser *p) {
 
 		} else if (op == div) {
 
-		}
+		}*/
 	}
+	return false;
+}
 
+bool space(struct Parser*) {
+	return false;
 }
 
 bool assignement(RirParser *p) {
 	return btp_optional(p, space)
 	&& btp_rule(p, identifier)
 	&& btp_optional(p, space)
-	&& btp_match_str(p, "=")
-	&& btp_optional(p, space)
-	&& btp_choice(p, binop, unaryop, identifier)
-	&& btp_rule(p, instr_end);
-
+	&& btp_token(p, "=")
+	&& btp_optional(p, space);
 }
 
 bool rir_parse_statement(RirParser *p) {
 	return btp_choice(p,
-		assignement,
-		comparaison,
-		jump
-	)
+		assignement
+	);
 }
 
 bool rir_parse_program_step(RirParser *p) {
-
+	return false;
 }
 
 bool rir_parse_program(RirParser *p) {
@@ -97,4 +97,5 @@ bool rir_parse_program(RirParser *p) {
 			// error : a rule was accepted without consuming a character ...
 		}
 	}
+	return false;
 }

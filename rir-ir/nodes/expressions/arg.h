@@ -1,7 +1,6 @@
 #ifndef RIR_ARG_H
 # define RIR_ARG_H
-
-# include "./../expr.h"
+# include <rir.h>
 
 typedef struct arg
 {

@@ -2,6 +2,7 @@
 # define RIR_TARGET_H
 # include <rir.h>
 
+
 /* Public API */
 typedef struct target {
     const char      *name;

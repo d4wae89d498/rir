@@ -1,7 +1,6 @@
 #ifndef RIR_INSTR_H
 # define RIR_INSTR_H
-# include "./../node.h"
-
+# include <rir.h>
 
 struct instr 
 {
@@ -10,6 +9,8 @@ struct instr
     struct instr    *next;
     const char      *type;
 };
+
+# include <rir.h>
 
 instr *Instr(instr *i) {
     builder_begin_instr(i);    

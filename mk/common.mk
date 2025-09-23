@@ -1,12 +1,13 @@
 WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
 CSTD ?=c99
-CFLAGS ?= -std=$(CSTD) -pedantic 					\
+CFLAGS ?= -std=$(CSTD) -pedantic 				\
 	-Wno-newline-eof							\
+	-Wno-unused				\
 	-I$(WORKSPACE_DIR)/third-party/libstc		\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 	\
 	-I$(WORKSPACE_DIR)/third-party/libbtp		\
-	-I$(WORKSPACE_DIR)/include
+	-I$(WORKSPACE_DIR)/include					\
 
 DEBUG ?= 0
 

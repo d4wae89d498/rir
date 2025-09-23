@@ -1,6 +1,5 @@
 #ifndef RIR_BLOCK_H
 # define RIR_BLOCK_H
-
 # include <rir.h>
 
 struct block 

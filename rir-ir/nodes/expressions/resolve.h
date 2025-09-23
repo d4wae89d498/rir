@@ -1,6 +1,6 @@
 #ifndef RIR_RESOLVE_H
 # define RIR_RESOLVE_H
-# include "./../expr.h"
+# include <rir.h>
 
 typedef struct resolve {
     expr        expr;

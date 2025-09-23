@@ -1,7 +1,6 @@
 #ifndef RIR_UNARY_H
 # define RIR_UNARY_H
-# include "./../instr.h"
-# include "./../value.h"
+# include <rir.h>
 
 struct unaryop 
 {

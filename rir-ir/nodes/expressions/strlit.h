@@ -1,7 +1,6 @@
 #ifndef RIR_STRLIT_H
 # define RIR_STRLIT_H
-
-# include "./../expr.h"
+# include <rir.h>
 
 struct strlit
 {

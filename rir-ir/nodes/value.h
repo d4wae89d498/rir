@@ -1,7 +1,6 @@
 #ifndef RIR_VALUE_H
 # define RIR_VALUE_H
-# include "expr.h"
-# include "instr.h"
+# include <rir.h>
 
 struct value {
     instr   instr;

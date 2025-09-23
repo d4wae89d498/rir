@@ -9,8 +9,9 @@ struct function {
     block       *end;
 };
 
-static void builder_begin_function(function*);
-static prog *builder_get_prog(void);
+///////
+
+# include "prog.h"
 
 static void *function_visit(function *self, node_visitor *vis, void *ctx) {
     printf("-- %s start %p\n", self->name, (void*)self->start);
