@@ -18,7 +18,7 @@ static void *when_visit(when *self, node_visitor *vis, void *ctx) {
     );
 }
 
-void When(value *cond, block *t, block *f) {
+static void When(value *cond, block *t, block *f) {
     when *self = new(when, 
         .terminator = {
             .type = "when",

@@ -15,7 +15,7 @@ static void *unreachable_visit(ret *self, node_visitor *vis, void *ctx) {
     );
 }
 
-void Unreachable() {
+static void Unreachable() {
     ret *self = new(ret, 
         .terminator = {
             .type = "unreachable",

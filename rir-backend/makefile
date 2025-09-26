@@ -1,4 +1,4 @@
-NAME=
+NAME=rir-backend.a
 
 include ./../mk/make-lib.mk
 

@@ -8,7 +8,7 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(AR) $(NAME)  $(OBJS) 
+	$(AR) -rcs $(NAME)  $(OBJS) 
 
 ##################################
 

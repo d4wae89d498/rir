@@ -5,7 +5,7 @@ include $(WORKSPACE_DIR)/mk/common.mk
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 %.o: %.c $(HDRS)
 	$(CC) $(CFLAGS) -c $< -o $@

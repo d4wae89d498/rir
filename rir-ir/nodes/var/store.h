@@ -12,7 +12,7 @@ static void *store_visit(store *self, node_visitor *vis, void *ctx) {
     return 0;
 }
 
-value *Store(var *dest, value *v) 
+static value *Store(var *dest, value *v) 
 {
     store *self = new(store, 
         .expr = {

@@ -17,7 +17,7 @@ static void *jump_visit(jump *self, node_visitor *vis, void *ctx) {
 }
     
 
-void Jump(block *dest) {
+static void Jump(block *dest) {
     jump *self = new(jump, 
         .terminator = {
             .type = "jump",

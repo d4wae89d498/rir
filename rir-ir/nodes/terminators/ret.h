@@ -16,7 +16,7 @@ static void *ret_visit(ret *self, node_visitor *vis, void *ctx) {
     );
 }
 
-void Ret(value *value) {
+static void Ret(value *value) {
     ret *self = new(ret, 
         .terminator = {
             .type = "ret",

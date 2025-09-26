@@ -2,9 +2,9 @@
 # define RIR_BUILDER_IMPL_H
 # include <rir.h>
 
-prog        *current_prog;
-function    *current_function;
-block       *current_block;
+static prog        *current_prog;
+static function    *current_function;
+static block       *current_block;
 
 static void builder_begin(prog *p) {
     current_prog = p;

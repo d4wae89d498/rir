@@ -11,7 +11,7 @@ static void *load_visit(load *self, node_visitor *vis, void *ctx) {
     return 0;
 }
 
-value *Load(var *v) 
+static value *Load(var *v) 
 {
     load *self = new(load, 
         .expr = {

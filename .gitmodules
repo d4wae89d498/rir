@@ -1,3 +1,0 @@
-[submodule "third-party/libstc"]
-	path = third-party/libstc
-	url = git@github.com:stclib/stcsingle.git

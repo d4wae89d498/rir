@@ -2,10 +2,6 @@
 # define RIR_BUILDER
 # include <rir.h>
 
-extern prog        *current_prog;
-extern function    *current_function;
-extern block       *current_block;
-
 ////
 
 static void builder_begin(prog *p);

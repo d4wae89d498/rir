@@ -15,7 +15,7 @@ static void *resolve_visit(arg *self, node_visitor *vis, void *ctx) {
     );
 }
 
-value *Resolve(const char *symbol_name) {
+static value *Resolve(const char *symbol_name) {
     resolve *self = new(resolve, 
         .expr = {
             .node = {

@@ -17,7 +17,7 @@ static void *call_visit(call *self, node_visitor *vis, void *ctx) {
     );
 }
 
-value *Call(value *addr, ...) {
+static value *Call(value *addr, ...) {
     call *self = new(call,
         .expr = {
             .node = {

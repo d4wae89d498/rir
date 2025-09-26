@@ -49,7 +49,7 @@ static void usage(FILE *out, const char *progname) {
     c_defer(cstr_drop(&result))
     {
         for (c_each(e, Targets, targets))
-            cstr_append_fmt(&result, cli_target_txt, cstr_toraw(&e.ref->first));
+            cstr_append_fmt(&result, cli_target_txt, e.ref->second->name, e.ref->second->descr);
         fprintf(out, cli_usage_txt, cstr_toraw(&result), common_exemples_txt);
     }
 }

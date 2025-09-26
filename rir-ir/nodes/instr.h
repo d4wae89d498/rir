@@ -10,9 +10,7 @@ struct instr
     const char      *type;
 };
 
-# include <rir.h>
-
-instr *Instr(instr *i) {
+static instr *Instr(instr *i) {
     builder_begin_instr(i);    
     return i;
 }

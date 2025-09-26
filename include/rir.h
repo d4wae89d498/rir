@@ -1,6 +1,8 @@
 #ifndef RIR_H
 # define RIR_H
 
+///////////////////////////////////////////////////////////////////////////////
+
 // libc/system
 # include <assert.h>
 # include <ctype.h>
@@ -21,7 +23,7 @@
 # include <stc/hmap.h>
 # include <sugar.h>
 
-
+///////////////////////////////////////////////////////////////////////////////
 // IR
 
 typedef struct node         node;
@@ -53,42 +55,28 @@ typedef struct deref        deref;
 typedef struct ret          ret;
 typedef struct jump         jump;
 
+///////////////////////////////////////////////////////////////////////////////
+
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
-
-static void builder_begin_block(block*);
-static block* builder_get_block(void);
-
-
-
 typedef void *(*ir_visitor_method )(node *, void*);
-
 # define T node_visitor, cstr, ir_visitor_method, (c_keypro)
 # include <stc/hmap.h>
-
 typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
-
-
-# include "./../rir-ir/node.h"
-
-# include "./../rir-ir/nodes/expr.h"
-
-# include "./../rir-ir/nodes/prog.h"
+///////////////////////////////////////////////////////////////////////////////
 
 # include "./../rir-ir/builder.h"
+# include "./../rir-ir/node.h"
 
+# include "./../rir-ir/nodes/prog.h"
 # include "./../rir-ir/nodes/block.h"
-
 # include "./../rir-ir/nodes/function.h"
 
 # include "./../rir-ir/nodes/instr.h"
-
-
+# include "./../rir-ir/nodes/expr.h"
 # include "./../rir-ir/nodes/value.h"
 # include "./../rir-ir/nodes/var.h"
-
-
 
 # include "./../rir-ir/nodes/var/load.h"
 # include "./../rir-ir/nodes/var/store.h"
@@ -108,18 +96,17 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 # include "./../rir-ir/nodes/terminators/jump.h"
 # include "./../rir-ir/nodes/terminators/ret.h"
 
-// BACKEND
-// TODO
-
-// PARSER
-// TODO
-
 # include "./../rir-ir/builder.impl.h"
 
+//
+
+# include "./../rir-backend/targets.h"
 
 
+// PARSER: TODO
 
-# include "./../rir-backend/target.h"
+///////////////////////////////////////////////////////////////////////////////
+
 
 
 #endif // RIR_H
