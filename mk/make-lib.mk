@@ -17,7 +17,15 @@ FORCE:
 TESTS=$(wildcard tests/*.c)
 TESTS_EXES=$(TESTS:.c=.out)
 tests/%.out: tests/%.o $(NAME) FORCE
-	$(CC)  $(CFLAGS) $< $(NAME) -o $@  $(LDFLAGS)  && (( ./$@ && echo $(NAME) tests SUCCESS ) || (echo $(NAME) tests FAILED))
+	$(CC) $(CFLAGS) $< $(NAME) -o $@ $(LDFLAGS)
+	@echo "Running test $@..."
+	@./$@ ; \
+	if [ $$? -eq 0 ]; then \
+	    echo "$(NAME) tests SUCCESS"; \
+	else \
+	    echo "$(NAME) tests FAILED"; \
+	    exit 1; \
+	fi
 
 test: $(TESTS_EXES)
 

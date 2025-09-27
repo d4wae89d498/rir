@@ -1,7 +1,12 @@
 define run-in-dirs
-	@for dir in $(MK_SUBDIRS); do \
-		$(MAKE) -C $$dir $(1); \
-	done
+	@( \
+		status=0; \
+		for dir in $(MK_SUBDIRS); do \
+			$(MAKE) -C $$dir $(1) || status=1; \
+		done; \
+		echo "status:: $$status"; \
+		exit $$status \
+	)
 endef
 
 
