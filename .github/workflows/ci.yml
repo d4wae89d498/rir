@@ -21,4 +21,4 @@ jobs:
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
             silkeh/clang:19 \
-            make test
+            make CC=clang test
