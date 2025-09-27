@@ -23,12 +23,12 @@ ifeq ($(DEBUG), 1)
 	CFLAGS = $(CFLAGS) -g	-fsanitize=leak
 endif
 
-LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a \
+LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a \
 	 $(WORKSPACE_DIR)/rir-backend/librir-backend.a
 
 LDFLAGS ?= $(LIBS)
 
-$(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a:
+$(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a:
 	make -C $(WORKSPACE_DIR)/third-party/libstc
 
 $(WORKSPACE_DIR)/rir-backend/librir-backend.a:
