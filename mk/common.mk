@@ -24,7 +24,7 @@ ifeq ($(DEBUG), 1)
 endif
 
 LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a \
-	 $(WORKSPACE_DIR)/rir-backend/rir-backend.a
+	 $(WORKSPACE_DIR)/rir-backend/librir-backend.a
 
 LDFLAGS ?= $(LIBS)
 

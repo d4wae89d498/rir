@@ -14,7 +14,7 @@ $(NAME): $(OBJS) $(LIBS)
 
 TESTS := $(wildcard tests/*.sh)
 
-test: all $(TESTS)
+test: all $(LIBS) $(TESTS)
 	@bash -c '\
 		FAIL=0; \
 		for t in $(TESTS); do \

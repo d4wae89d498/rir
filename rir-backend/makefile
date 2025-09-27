@@ -1,4 +1,4 @@
-NAME=rir-backend.a
+NAME=librir-backend.a
 
 include ./../mk/make-lib.mk
 
