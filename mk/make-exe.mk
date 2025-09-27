@@ -15,7 +15,7 @@ $(NAME): $(OBJS) $(LIBS)
 TESTS := $(wildcard tests/*.sh)
 
 test: all $(TESTS)
-	@(
+	@bash -c '\
 		FAIL=0; \
 		for t in $(TESTS); do \
 			if bash $$t; then \
@@ -26,7 +26,7 @@ test: all $(TESTS)
 			fi; \
 		done; \
 		exit $$FAIL \
-	)
+	'
 ##################################
 
 clean:
