@@ -4,15 +4,7 @@ include $(WORKSPACE_DIR)/mk/common.mk
 
 all: $(NAME)
 
-$(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a:
-	make -C $(WORKSPACE_DIR)/third-party/libstc
-
-$(WORKSPACE_DIR)/rir-backend/librir-backend.a:
-	make -C $(WORKSPACE_DIR)/rir-backend
-
-$(NAME): $(OBJS)\
-$(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a\
-$(WORKSPACE_DIR)/rir-backend/librir-backend.a
+$(NAME): $(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 %.o: %.c $(HDRS)

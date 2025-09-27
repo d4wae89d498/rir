@@ -1,5 +1,6 @@
 WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
+CC = clang #?= clang
 CSTD ?=c23
 CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-Wno-newline-eof								\
@@ -22,12 +23,16 @@ ifeq ($(DEBUG), 1)
 	CFLAGS = $(CFLAGS) -g	-fsanitize=leak
 endif
 
-LDFLAGS ?= $(WORKSPACE_DIR)/rir-backend/rir-backend.a			\
-	$(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a
+LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a \
+	 $(WORKSPACE_DIR)/rir-backend/rir-backend.a
 
+LDFLAGS ?= $(LIBS)
 
-CC = clang #?= clang
+$(WORKSPACE_DIR)/third-party/libstc/build/Linux_gcc/libstc.a:
+	make -C $(WORKSPACE_DIR)/third-party/libstc
 
+$(WORKSPACE_DIR)/rir-backend/librir-backend.a:
+	make -C $(WORKSPACE_DIR)/rir-backend
 
 AR ?= ar
 RM ?= rm -f

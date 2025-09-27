@@ -17,7 +17,7 @@ FORCE:
 TESTS=$(wildcard tests/*.c)
 TESTS_EXES=$(TESTS:.c=.out)
 tests/%.out: tests/%.o $(NAME) FORCE
-	$(CC)  $(CFLAGS) $(LDFLAGS) $< $(NAME) -o $@ && (( ./$@ && echo $(NAME) tests SUCCESS ) || (echo $(NAME) tests FAILED))
+	$(CC)  $(CFLAGS) $< $(NAME) -o $@  $(LDFLAGS)  && (( ./$@ && echo $(NAME) tests SUCCESS ) || (echo $(NAME) tests FAILED))
 
 test: $(TESTS_EXES)
 
