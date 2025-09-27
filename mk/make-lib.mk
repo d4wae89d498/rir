@@ -1,8 +1,8 @@
 WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
-include $(WORKSPACE_DIR)/mk/common.mk
-
 all: $(NAME)
+
+include $(WORKSPACE_DIR)/mk/common.mk
 
 %.o: %.c $(HDRS)
 	$(CC) $(CFLAGS) -c $< -o $@
