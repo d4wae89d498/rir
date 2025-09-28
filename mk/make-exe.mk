@@ -7,6 +7,7 @@ include $(WORKSPACE_DIR)/mk/common.mk
 $(NAME): $(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
+%.o: CSTD = $(CSTD_LATEST)
 %.o: %.c $(HDRS)
 	$(CC) $(CFLAGS) -c $< -o $@
 

@@ -6,32 +6,32 @@ static prog        *current_prog;
 static function    *current_function;
 static block       *current_block;
 
-static void builder_begin(prog *p) {
+void builder_begin(prog *p) {
     current_prog = p;
 }
 
-static prog *builder_get_prog(void) {
+prog *builder_get_prog(void) {
     return current_prog;
 } 
 
-static void builder_end(void) {
+void builder_end(void) {
     current_prog = 0;
 }
 
 ////
 
-static void builder_begin_function(function *f) {
+void builder_begin_function(function *f) {
     trace();
     current_function = f;
 }
 
-static function *builder_get_function() {
+function *builder_get_function(void) {
     return current_function;
 }
 
 ////
 
-static void builder_begin_block(block *b) {
+void builder_begin_block(block *b) {
     trace();
     current_block = b;
     // TODO: if (current_function == NULL) Error
@@ -45,7 +45,7 @@ static void builder_begin_block(block *b) {
     }
 }
 
-static void builder_begin_instr(instr *i) {
+void builder_begin_instr(instr *i) {
     trace();
     block *b = current_block;
     printf("instr for b->name = %s\n", b->name);
@@ -65,7 +65,7 @@ static void builder_begin_instr(instr *i) {
     }
 }
 
-static block *builder_get_block(void) {
+block *builder_get_block(void) {
     return current_block;
 }
 

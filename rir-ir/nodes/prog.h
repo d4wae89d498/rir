@@ -15,7 +15,7 @@ static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
     );
 }
 
-static prog *Prog() {
+static prog *Prog(void) {
     prog *out = new(prog, 
         .node = {
             .accept = &prog_visit

@@ -2,7 +2,7 @@
 
 Experimental compiler pipelines lib written in C99 using [STC](https://github.com/stclib/STC). 
 
-The CLI / tests are written in C23.
+The CLI and tests are written in C23.
 
 ## Goals
 

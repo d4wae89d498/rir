@@ -1,5 +1,4 @@
 #include <rir.h>
-#include <stdio.h>
 
 int main() {
     // Build the IR
@@ -16,12 +15,12 @@ int main() {
     setup_targets();
     auto e = Targets_find(&targets, "print").ref;
     if (!e) {
-        fprintf(stderr, "ERROR, print target not found.");
+        fmt_printd(stderr, "ERROR, print target not found.\n");
         exit(1);
     }
     auto vis = e->second->vis;
-    demo->node.accept(&demo->node, vis, 0);
-
+    dot(demo->node, accept, vis, 0);
+    fmt_println("Exiting... {}\n", (void*)vis);
     return 0;
 }
 

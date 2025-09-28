@@ -29,7 +29,7 @@ typedef void (target_setup)(Targets*);
 //void setup_print_target (Targets*);
 /* Setup standard targets */
 static Targets targets;
-static void setup_targets()
+static void setup_targets(void)
 {
     setup_print_target(&targets);
     setup_c_target(&targets);

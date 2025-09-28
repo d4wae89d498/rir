@@ -1,7 +1,8 @@
 #ifndef RIR_H
 # define RIR_H
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//////////////           COMMON         ////////////////////////////////////////
 
 // libc/system
 # include <assert.h>
@@ -19,12 +20,17 @@
 
 // third party
 # include <stc/cstr.h>
-# define T hmap, cstr, void*, (c_keypro)
-# include <stc/hmap.h>
 # include <sugar.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// IR
+// optinal: make test file easier
+# if __STDC_VERSION__ >= 201112L
+#  include <c11/fmt.h>
+# endif
+
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////           IR             ////////////////////////////////////////
+
 
 typedef struct node         node;
 
@@ -55,7 +61,6 @@ typedef struct deref        deref;
 typedef struct ret          ret;
 typedef struct jump         jump;
 
-///////////////////////////////////////////////////////////////////////////////
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
@@ -64,48 +69,20 @@ typedef void *(*ir_visitor_method )(node *, void*);
 # include <stc/hmap.h>
 typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
-///////////////////////////////////////////////////////////////////////////////
+# include "./../rir-ir/ir.h"
 
-# include "./../rir-ir/builder.h"
-# include "./../rir-ir/node.h"
 
-# include "./../rir-ir/nodes/prog.h"
-# include "./../rir-ir/nodes/block.h"
-# include "./../rir-ir/nodes/function.h"
-
-# include "./../rir-ir/nodes/instr.h"
-# include "./../rir-ir/nodes/expr.h"
-# include "./../rir-ir/nodes/value.h"
-# include "./../rir-ir/nodes/var.h"
-
-# include "./../rir-ir/nodes/var/load.h"
-# include "./../rir-ir/nodes/var/store.h"
-# include "./../rir-ir/nodes/var/ref.h"
-# include "./../rir-ir/nodes/var/deref.h"
-
-# include "./../rir-ir/nodes/expressions/phi.h"
-# include "./../rir-ir/nodes/expressions/arg.h"
-# include "./../rir-ir/nodes/expressions/binop.h"
-# include "./../rir-ir/nodes/expressions/call.h"
-# include "./../rir-ir/nodes/expressions/unaryop.h"
-# include "./../rir-ir/nodes/expressions/resolve.h"
-# include "./../rir-ir/nodes/expressions/strlit.h"
-# include "./../rir-ir/nodes/expressions/intlit.h"
-
-# include "./../rir-ir/nodes/terminator.h"
-# include "./../rir-ir/nodes/terminators/jump.h"
-# include "./../rir-ir/nodes/terminators/ret.h"
-
-# include "./../rir-ir/builder.impl.h"
-
-//
+////////////////////////////////////////////////////////////////////////////////
+//////////////           TARGETS             ///////////////////////////////////
 
 # include "./../rir-backend/targets.h"
 
 
-// PARSER: TODO
+////////////////////////////////////////////////////////////////////////////////
+//////////////           PARSERS             ///////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
+
+// TODO
 
 
 

@@ -16,7 +16,7 @@ static void *var_visit(var *self, node_visitor *vis, void *ctx) {
     return 0;
 }
 
-static var *Var() {
+static var *Var(void) {
     static unsigned id;
     id += 1;
     var *out = new(var, 

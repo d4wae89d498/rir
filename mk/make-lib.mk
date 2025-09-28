@@ -16,6 +16,7 @@ FORCE:
 
 TESTS=$(wildcard tests/*.c)
 TESTS_EXES=$(TESTS:.c=.out)
+tests/%.o: CSTD = $(CSTD_LATEST)
 tests/%.out: tests/%.o $(LIBS) $(NAME) FORCE
 	$(CC) $(CFLAGS) $< $(NAME) -o $@ $(LDFLAGS)
 	@echo "Running test $@..."

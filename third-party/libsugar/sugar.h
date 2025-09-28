@@ -5,6 +5,8 @@
 # include <stdio.h>
 # include <stdarg.h>
 
+# define dot(A, V, ...) (A).V(&(A), __VA_ARGS__)
+# define arrow(A, V, ...) (A)->V(A, __VA_ARGS__)
 # define new(T, ...) ((T*)(_new( sizeof(T) , &(T) { __VA_ARGS__ } )))
 # define ull unsigned long long
 # define trace() \
