@@ -14,8 +14,9 @@ static void *deref_visit(deref *self, node_visitor *vis, void *ctx) {
 
 static var *DeRef(value *val) {
     var *out = var();
+    out->type = V_PTR;
 
-    deref *self = new(deref, 
+    deref *self = new(deref,         
         .instr = {
             .node = {
                 .accept = (ir_node_method) &deref_visit
@@ -25,9 +26,7 @@ static var *DeRef(value *val) {
         .v = val,
         .dest = out
     );
-    instr(&self->instr);
-
-    out->type = V_PTR;
+    builder_attach_instr(&self->instr);    
     return out;
 }
 

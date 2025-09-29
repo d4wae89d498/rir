@@ -3,3 +3,6 @@ Diagnostics:
     - pp_including_mainfile_in_preamble # seems broken, reccursive headers may be good...
     - unused-includes                   # seems broken with a typedef defined outside header...
     - field_incomplete_or_sizeless      # seems broken with reccursive headers
+
+CompileFlags:
+  Add: [-Wno-format-security]           # todo: check why this seem needed for libstc's fmt

@@ -16,7 +16,7 @@ function *builder_get_function(void);
 //// Block / instr builder
 
 void builder_begin_block(block *b);
-void builder_begin_instr(instr *i);
+void builder_attach_instr(instr *i);
 block *builder_get_block(void);
 
 #endif

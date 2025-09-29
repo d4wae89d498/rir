@@ -18,7 +18,7 @@ static value *Load(var *v)
             .node = {
                 .accept = (ir_node_method) &load_visit
             },
-            .type = "store",
+            .type = "load",
         }, 
         .v = v
     );

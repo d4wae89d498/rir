@@ -29,7 +29,7 @@ static var *Var(void) {
         .id = id, 
         .type = V_REG
     );
-    instr(&out->instr);
+    builder_attach_instr(&out->instr);
     return out;
 }
 

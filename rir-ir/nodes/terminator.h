@@ -20,7 +20,7 @@ static instr* Terminator(terminator *t)
     }
     else
     {
-        builder_begin_instr(&t->instr);
+        builder_attach_instr(&t->instr);
     } 
     return (instr*) t;
 } 

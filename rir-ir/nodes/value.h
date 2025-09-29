@@ -35,9 +35,7 @@ static value *Value(expr *e) {
         .id = nb,
         .e = e,
     );
-    
-    instr(&out->instr);
-   
+    builder_attach_instr(&out->instr);
     return out;
 }
 

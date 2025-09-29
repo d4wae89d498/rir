@@ -10,11 +10,4 @@ struct instr
     const char      *type;
 };
 
-static instr *Instr(instr *i) {
-    builder_begin_instr(i);    
-    return i;
-}
-
-# define instr(x) Instr(x)
-
 #endif // RIR_INSTR_H

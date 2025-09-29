@@ -65,7 +65,7 @@ static value *Phi(value *v1, block *b2, ...)
         ++i;
     }
     va_end(ap);
-    instr(&p->instr);
+    builder_attach_instr(&p->instr);
     return NULL;
 }
 
