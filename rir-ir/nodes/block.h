@@ -9,6 +9,7 @@ struct block
     block       *next;
     const char  *name;
     instr       *start;
+    instr       *last;  // TODO: maybe only have one instr* exit, and check later if its a terminator -- should make builder shorter?
     terminator  *exit;
 };
 
@@ -26,6 +27,7 @@ static block *Block(const char *name) {
         },
         .name = name,
         .start = 0,
+        .last = 0,
         .exit = 0,
     );
 
