@@ -9,7 +9,6 @@ struct block
     block       *next;
     const char  *name;
     instr       *start;
-    instr       *last;
     terminator  *exit;
 };
 
@@ -27,7 +26,6 @@ static block *Block(const char *name) {
         },
         .name = name,
         .start = 0,
-        .last = 0,
         .exit = 0,
     );
 

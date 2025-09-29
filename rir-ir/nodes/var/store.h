@@ -9,7 +9,10 @@ struct store {
 };
 
 static void *store_visit(store *self, node_visitor *vis, void *ctx) {
-    return 0;
+    return (node_visitor_find(vis,  "store").ref)->second(
+        &self->expr.node,
+        ctx
+    );
 }
 
 static value *Store(var *dest, value *v) 

@@ -9,13 +9,15 @@ struct deref {
 };
 
 static void *deref_visit(deref *self, node_visitor *vis, void *ctx) {
-    return 0;
+    return (node_visitor_find(vis,  "deref").ref)->second(
+        &self->instr.node,
+        ctx
+    );
 }
 
 static var *DeRef(value *val) {
     var *out = var();
     out->type = V_PTR;
-
     deref *self = new(deref,         
         .instr = {
             .node = {

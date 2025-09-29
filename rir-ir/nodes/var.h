@@ -13,7 +13,10 @@ struct var {
 };
 
 static void *var_visit(var *self, node_visitor *vis, void *ctx) {
-    return 0;
+    return (node_visitor_find(vis,  "var").ref)->second(
+        &self->instr.node,
+        ctx
+    );
 }
 
 static var *Var(void) {

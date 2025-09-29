@@ -3,21 +3,25 @@
 # include <rir.h>
 
 struct ref {
-    node    node;
     expr    expr;
     var     *v;
 };
 
 static void *ref_visit(store *self, node_visitor *vis, void *ctx) {
-    return 0;
+    return (node_visitor_find(vis,  "load").ref)->second(
+        &self->expr.node,
+        ctx
+    );
 }
 
 static value *Ref(var *v) {
-    // todo:: store ref into CFG block
     v->type = V_STACK;
     ref *self = new(ref, 
-        .node = {
-            .accept = (ir_node_method) &ref_visit
+        .expr = {
+            .node = {
+                .accept = (ir_node_method) &ref_visit
+            },
+            .type = "load"
         },
         .v = v
     );

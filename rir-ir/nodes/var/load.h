@@ -8,7 +8,10 @@ struct load {
 };
 
 static void *load_visit(load *self, node_visitor *vis, void *ctx) {
-    return 0;
+    return (node_visitor_find(vis,  "load").ref)->second(
+        &self->expr.node,
+        ctx
+    );
 }
 
 static value *Load(var *v) 
