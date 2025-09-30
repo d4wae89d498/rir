@@ -2,11 +2,11 @@
 # define RIR_ARG_H
 # include <rir.h>
 
-typedef struct arg
+struct arg
 {
     expr        expr;
     unsigned    n;
-} arg;
+};
 
 static void *arg_visit(arg *self, node_visitor *vis, void *ctx) {
     return (node_visitor_find(vis,  "arg").ref)->second(

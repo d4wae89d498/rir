@@ -85,6 +85,14 @@ static void *visit_call(call *self, target_ctx *ctx)
     return 0;
 }
 
+static void *visit_jump(jump *self, target_ctx *ctx) 
+{
+    trace();
+    printf("%p\n", self);
+    printf("jump %s\n", self->dest->name);
+    return 0;
+}
+
 static void *visit_ret(ret *self, target_ctx *ctx) 
 {
     printf(" ret temp%d\n", self->value->id);
@@ -148,6 +156,7 @@ void setup_print_target(Targets *targets)
     visitor_method(call)
     visitor_method(ret)
     visitor_method(when)
+    visitor_method(jump)
 
     visitor_method(var)
     visitor_method(load)

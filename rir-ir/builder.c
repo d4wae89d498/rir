@@ -66,4 +66,8 @@ block *builder_get_block(void) {
     return current_block;
 }
 
+void builder_set_block(block *b) {
+    current_block = b;
+}
+
 #endif

@@ -18,5 +18,6 @@ function *builder_get_function(void);
 void builder_begin_block(block *b);
 void builder_attach_instr(instr *i);
 block *builder_get_block(void);
+void builder_set_block(block*);
 
 #endif

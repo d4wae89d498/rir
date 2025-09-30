@@ -44,9 +44,11 @@ typedef struct expr         expr;  // a node
 // instrs
 typedef struct value        value;
 typedef struct var          var;
+typedef struct deref        deref;
 typedef struct terminator   terminator;
 
 // exprs
+typedef struct arg          arg;
 typedef struct binop        binop;
 typedef struct unaryop      unaryop;
 typedef struct call         call;
@@ -55,7 +57,6 @@ typedef struct intlit       intlit;
 typedef struct store        store;
 typedef struct load         load;
 typedef struct ref          ref;
-typedef struct deref        deref;
 
 // terminators 
 typedef struct ret          ret;

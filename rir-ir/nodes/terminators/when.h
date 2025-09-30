@@ -18,6 +18,13 @@ static void *when_visit(when *self, node_visitor *vis, void *ctx) {
 }
 
 static void When(value *cond, block *t, block *f) {
+    block *current = builder_get_block();
+    block *next = block("next");
+    builder_set_block(t);
+    jump(next);
+    builder_set_block(f);
+    jump(next);
+    builder_set_block(current);
     when *self = new(when, 
         .terminator = {
             .type = "when",
@@ -33,6 +40,7 @@ static void When(value *cond, block *t, block *f) {
         .f=f
     );
     terminator(&self->terminator);
+    builder_set_block(next);
 }
 # define when(a,b,c) When(a,b,c)
 
