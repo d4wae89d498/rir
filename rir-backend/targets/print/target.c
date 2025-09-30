@@ -4,13 +4,9 @@ node_visitor *print_visitor;
 
 static void *visit_prog(prog *self, target_ctx *ctx) 
 {
-    printf("=== BEGIN OF RIR DEBUG DUMP ===\n");
     for(c_each(i, functions, self->functions)) {
-        printf("Function[%s] = \n", cstr_str(&(i.ref->first)));
         i.ref->second->node.accept(&i.ref->second->node, print_visitor, ctx);   // todo: make sure functions are node* (and everything else too...)
-
     }
-    printf("=== END OF RIR DEBUG DUMP ===\n");
     return 0;
 }
 
@@ -19,24 +15,21 @@ static void *visit_function(function *self, target_ctx *ctx)
     printf("function %s: \n", self->name);
     block *b = self->start;
     while (b) {
-        printf(" -- block:\n");
         (&b->node)->accept(&b->node, print_visitor, ctx); 
         b = b->next;
     }
-    printf("-- func end\n");
+    printf("function end\n");
     return 0;
 }
 
 static void *visit_block(block *self, target_ctx *ctx) 
 {
-    printf("block %s: \n", self->name);
+    printf("%s: \n", self->name);
     instr *i = self->start;
     while (i) {
-        printf(" -- instr:\n");
         (&i->node)->accept(&i->node, print_visitor, ctx); 
         i = i->next;
     }
-    printf("block end.\n");
     return 0;
 }
 
@@ -55,7 +48,7 @@ static void *visit_arg(arg *self, target_ctx *ctx) {
 
 static void *visit_binop(binop *self, target_ctx *ctx) 
 {
-    printf("temp%d [%s] temp%d\n", self->left->id, self->type, self->right->id);
+    printf("%s(temp%d, temp%d)", self->type, self->left->id, self->right->id);
     return 0;
 }
 
@@ -79,7 +72,7 @@ static void *visit_resolve(resolve *self, target_ctx *ctx)
 
 static void *visit_call(call *self, target_ctx *ctx) 
 {
-    printf(" temp%d(", self->fp->id);
+    printf("call temp%d(", self->fp->id);
     unsigned i = 0;
     while (i < self->arg_count) {
         printf("temp%d", self->args[i]->id);
@@ -95,6 +88,36 @@ static void *visit_call(call *self, target_ctx *ctx)
 static void *visit_ret(ret *self, target_ctx *ctx) 
 {
     printf(" ret temp%d\n", self->value->id);
+    return 0;
+}
+
+static void *visit_var(var *self, target_ctx *ctx) 
+{
+    printf("init v%d\n", self->id);
+    return 0;
+}
+
+static void *visit_deref(deref *self, target_ctx *ctx) 
+{
+    printf("v%d = deref tmp%d\n", self->dest->id, self->v->id);
+    return 0;
+}
+
+static void *visit_load(load *self, target_ctx *ctx)
+{
+    printf("load v%d", self->v->id);
+    return 0;
+}
+
+static void *visit_ref(ref *self, target_ctx *ctx) 
+{
+    printf("ref v%d", self->v->id);
+    return 0;
+}
+
+static void *visit_store(store *self, target_ctx *ctx) 
+{
+    printf("v%d = temp%d\n", self->dest->id, self->v->id);
     return 0;
 }
 
@@ -117,6 +140,12 @@ void setup_print_target(Targets *targets)
     visitor_method(resolve)
     visitor_method(call)
     visitor_method(ret)
+
+    visitor_method(var)
+    visitor_method(load)
+    visitor_method(deref)
+    visitor_method(ref)
+    visitor_method(store)
 
     // register visitor
     Targets_emplace(targets, "print", new(target, 

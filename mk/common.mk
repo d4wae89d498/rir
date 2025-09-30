@@ -24,7 +24,7 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1) 
-	CFLAGS = $(CFLAGS) -g	-fsanitize=leak
+	CFLAGS += -g	-fsanitize=leak
 endif
 
 LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a 		\

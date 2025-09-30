@@ -11,7 +11,6 @@ typedef struct when
 } when;
 
 static void *when_visit(when *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis,  "when").ref)->second(
         &self->terminator.instr.node,
         ctx

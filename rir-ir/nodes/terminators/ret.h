@@ -9,7 +9,6 @@ struct ret
 };
 
 static void *ret_visit(ret *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis,  "ret").ref)->second(
         &self->terminator.instr.node,
         ctx

@@ -9,7 +9,6 @@ struct value {
 };
 
 static void *value_visit(value *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis, "value").ref)->second(
         &self->instr.node, 
         ctx

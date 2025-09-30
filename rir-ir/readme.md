@@ -22,8 +22,6 @@
 
 **instructions**
     var *Var(void)
-
-**???**
     var *DeRef(value *val)
 
 **exprs:**

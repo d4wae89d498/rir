@@ -9,7 +9,6 @@ struct jump
 };
 
 static void *jump_visit(jump *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis,  "jump").ref)->second(
         &self->terminator.instr.node,
         ctx

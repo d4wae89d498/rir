@@ -9,7 +9,6 @@ typedef struct arg
 } arg;
 
 static void *arg_visit(arg *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis,  "arg").ref)->second(
         &self->expr.node,
         ctx

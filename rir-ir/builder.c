@@ -21,7 +21,6 @@ void builder_end(void) {
 ////
 
 void builder_begin_function(function *f) {
-    trace();
     current_function = f;
 }
 
@@ -32,7 +31,6 @@ function *builder_get_function(void) {
 ////
 
 void builder_begin_block(block *b) {
-    trace();
     current_block = b;
     // TODO: if (current_function == NULL) Error
     if (!current_function->start) {
@@ -46,7 +44,6 @@ void builder_begin_block(block *b) {
 }
 
 void builder_attach_instr(instr *i) {
-    trace();
     block *b = current_block;
     printf("instr for b->name = %s\n", b->name);
     // TODO: if (b == NULL) Error

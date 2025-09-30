@@ -8,7 +8,6 @@ struct prog {
 };
 
 static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
-    trace();
     return (node_visitor_find(vis,  "prog").ref)->second(
         self,
         ctx

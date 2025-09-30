@@ -14,7 +14,7 @@ struct binop
 # define def_binop(NAME)                                                \
     static void * NAME ## _accept(node *self, node_visitor *vis, void *ctx) {\
         /* todo: find name for vis...*/                                 \
-        trace();                                                        \
+                                                                        \
         return (node_visitor_find(vis,  "binop").ref)->second(          \
             self,                                                       \
             ctx                                                         \

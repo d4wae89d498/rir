@@ -4,7 +4,7 @@ define run-in-dirs
 		for dir in $(MK_SUBDIRS); do \
 			$(MAKE) -C $$dir $(1) || status=1; \
 		done; \
-		echo "status:: $$status"; \
+		echo "make exit code: $$status"; \
 		exit $$status \
 	)
 endef
