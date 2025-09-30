@@ -30,5 +30,6 @@
 # include "./../rir-ir/nodes/terminator.h"
 # include "./../rir-ir/nodes/terminators/jump.h"
 # include "./../rir-ir/nodes/terminators/ret.h"
+# include "./../rir-ir/nodes/terminators/when.h"
 
 #endif

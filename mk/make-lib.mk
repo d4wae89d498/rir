@@ -19,16 +19,21 @@ TESTS_EXES=$(TESTS:.c=.out)
 tests/%.o: CSTD = $(CSTD_LATEST)
 tests/%.out: tests/%.o $(LIBS) $(NAME) FORCE
 	$(CC) $(CFLAGS) $< $(NAME) -o $@ $(LDFLAGS)
-	@echo "Running test $@..."
-	@./$@ ; \
-	if [ $$? -eq 0 ]; then \
-	    echo "$(NAME) tests SUCCESS"; \
-	else \
-	    echo "$(NAME) tests FAILED"; \
-	    exit 1; \
-	fi
 
 test: $(TESTS_EXES)
+	@echo "Running tests..."
+	@failed=0; \
+	for t in $(TESTS_EXES); do \
+	    echo "Running $$t..."; \
+	    if ! ./$$t; then \
+	        echo "$$t FAILED"; \
+	        failed=1; \
+	    else \
+	        echo "$$t SUCCESS"; \
+	    fi; \
+	done; \
+	exit $$failed
+
 
 ##################################
 

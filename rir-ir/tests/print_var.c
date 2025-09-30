@@ -13,6 +13,19 @@ int main() {
                 store(v1, x1);
 
                 call(resolve("printf"), strlit("hello %d"), intlit(2));
+                
+                block *true_case;
+                block *false_case;
+                value *x2;
+                
+                true_case = block("true_case");
+                x2 = mul(intlit(2), intlit(4));
+                false_case = block("false_case");
+                x2 = add(intlit(2), intlit(4));
+
+                when(intlit(1), true_case, false_case);
+
+
                 ret(x1);
     builder_end();
 

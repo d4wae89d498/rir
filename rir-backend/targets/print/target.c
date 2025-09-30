@@ -91,6 +91,13 @@ static void *visit_ret(ret *self, target_ctx *ctx)
     return 0;
 }
 
+static void *visit_when(when *self, target_ctx *ctx) 
+{
+    trace();
+    printf("when(temp%d, %s, %s)\n", self->cond->id, self->t->name, self->f->name);
+    return 0;
+}
+
 static void *visit_var(var *self, target_ctx *ctx) 
 {
     printf("init v%d\n", self->id);
@@ -140,6 +147,7 @@ void setup_print_target(Targets *targets)
     visitor_method(resolve)
     visitor_method(call)
     visitor_method(ret)
+    visitor_method(when)
 
     visitor_method(var)
     visitor_method(load)

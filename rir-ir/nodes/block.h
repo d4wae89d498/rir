@@ -20,6 +20,7 @@ static void *block_visit(block *self, node_visitor *vis, void *ctx) {
     );
 }
 
+// todo: ability to create forward declaration for blocks so that IR is easier to write
 static block *Block(const char *name) {
     block *out = new(block, 
         .node = {
