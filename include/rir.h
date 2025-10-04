@@ -16,8 +16,6 @@
 # include <stdio.h>
 # include <string.h>
 # include <time.h>
-# include <getopt.h>
-# include <unistd.h>
 
 // third party
 # include <stc/cstr.h>

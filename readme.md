@@ -1,14 +1,18 @@
 # Reflective IR
 
-Experimental compiler pipelines lib written in C99 using [STC](https://github.com/stclib/STC). 
-
-The CLI and tests are written in C23.
+Experimental compiler pipelines.
 
 ## Goals
 
 1) The IR should remain as simple as possible using a single type that is a native CPU word (inspired from B langauge).
 
-2) Demo frontend should do - lexing/parsing/first IR building - in a single pass and allow modification of the backend pipeline.
+2) Demo frontend should do - lexing/parsing/first IR building - in a single pass and allow modification of the entire compiler pipeline.
+
+## Implementation details
+
+ 
+Librairies are written in C99, while the CLI and tests are written in C23.
+The code do only use libc and [STC](https://github.com/stclib/STC), without POSIX or any other target-specific features. This design choice is to ensure that run-time extensions could easily interact with compiler internal using the well-known C-ABIs.
 
 ## Roadmap
 
