@@ -8,19 +8,13 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-Wno-newline-eof								\
 	-Wno-unused										\
 	-Wno-format-security							\
+	-Wno-empty-translation-unit						\
 	-I$(WORKSPACE_DIR)/include						\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 		\
 	-I$(WORKSPACE_DIR)/third-party/libbtp			\
 	-I$(WORKSPACE_DIR)/third-party/libstc/include
 
 # Wno-format-security: todo check why needed why fmt_printd 
-
-#-Di_static=1										\
-	-DSTC_HAS_TYPEOF=0								\
-													\
-	-DSTC_CSTR_UTF8=0								\
-	-DSTC_CSTR_IO=0									\
-	-DFMT_H_INCLUDED=1	
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1) 

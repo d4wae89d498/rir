@@ -5,4 +5,4 @@ Diagnostics:
     - field_incomplete_or_sizeless      # seems broken with reccursive headers
 
 CompileFlags:
-  Add: [-Wno-format-security]           # todo: check why this seem needed for libstc's fmt
+  Add: [-Wno-format-security, -Wno-empty-translation-unit]           # todo: check why this seem needed for libstc's fmt

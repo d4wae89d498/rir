@@ -10,9 +10,8 @@ Experimental compiler pipelines.
 
 ## Implementation details
 
- 
-Librairies are written in C99, while the CLI and tests are written in C23.
-The code do only use libc and [STC](https://github.com/stclib/STC), without POSIX or any other target-specific features. This design choice is to ensure that run-time extensions could easily interact with compiler internal using the well-known C-ABIs.
+Libraries are written in C99, while the CLI and tests are written in C23.
+The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX or any other target-specific features. This implementation choice ensures that run-time extensions can easily interact with compiler internals using the well-known C ABI.
 
 ## Roadmap
 

@@ -1,8 +1,6 @@
-#include "stc/common.h"
 #include <rir.h>
 #include <stc/coption.h>
 #include <stc/cstr.h>
-#include <string.h>
 
 typedef struct {
     char *name;
