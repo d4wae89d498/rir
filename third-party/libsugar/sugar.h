@@ -147,5 +147,4 @@ static void dump_cstr_to(FILE *dest, const char *s)
     }
 }
 
-
 #endif // SUGAR_H
