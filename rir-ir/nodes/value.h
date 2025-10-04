@@ -26,8 +26,10 @@ static value *Value(expr *e) {
     value *out = new(value, 
         .instr = {
             .node = {
-                .accept = (ir_node_method) &value_visit
+                .accept = (ir_node_method) &value_visit,
+                .type = "instr"
             },
+            .type = "value",
             .prev = 0,
             .next = 0,
         },

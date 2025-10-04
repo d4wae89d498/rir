@@ -14,22 +14,22 @@ static void *jump_visit(jump *self, node_visitor *vis, void *ctx) {
         ctx
     );
 }
-    
 
 static void Jump(block *dest) {
     jump *self = new(jump, 
         .terminator = {
             .type = "jump",
             .instr = {
-                .type = "terminator",
                 .node = {
-                    .accept = (ir_node_method) &jump_visit
-                }
+                    .accept = (ir_node_method) &jump_visit,
+                    .type = "instr"
+                },
+                .type = "terminator"
             }
         },
         .dest = dest
     );
-    terminator(&self->terminator);
+    builder_attach_instr(&self->terminator.instr); 
 }
 
 # define jump(x) Jump(x)

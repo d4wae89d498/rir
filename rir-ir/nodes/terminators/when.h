@@ -27,19 +27,20 @@ static void When(value *cond, block *t, block *f) {
     builder_set_block(current);
     when *self = new(when, 
         .terminator = {
-            .type = "when",
             .instr = {
-                .type = "terminator",
                 .node = {
-                    .accept = (ir_node_method) &when_visit
-                }
-            }
+                    .accept = (ir_node_method) &when_visit,
+                    .type = "instr"
+                },
+                .type = "terminator",
+            },
+            .type = "when",
         },
         .cond = cond,
         .t=t,
         .f=f
     );
-    terminator(&self->terminator);
+    builder_attach_instr(&self->terminator.instr); 
     builder_set_block(next);
 }
 # define when(a,b,c) When(a,b,c)

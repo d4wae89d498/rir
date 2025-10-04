@@ -18,10 +18,11 @@ static void *arg_visit(arg *self, node_visitor *vis, void *ctx) {
 static value *Arg(unsigned n) {
     expr *self = &(new(arg, 
         .expr = (expr){
-            .type = "arg",
             .node = {
-                .accept = (ir_node_method) &arg_visit
-            }
+                .accept = (ir_node_method) &arg_visit,
+                .type = "expr"
+            },
+            .type = "arg",
         },
         .n = n
     ))->expr;

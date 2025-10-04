@@ -3,31 +3,34 @@
 # include <rir.h>
 
 struct store {
-    expr    expr;
+    instr    instr;
     var     *dest;
     value   *v;
 };
 
 static void *store_visit(store *self, node_visitor *vis, void *ctx) {
     return (node_visitor_find(vis,  "store").ref)->second(
-        &self->expr.node,
+        &self->instr.node,
         ctx
     );
 }
 
-static value *Store(var *dest, value *v) 
+static void Store(var *dest, value *v) 
 {
     store *self = new(store, 
-        .expr = {
+        .instr = {
             .node = {
-                .accept = (ir_node_method) &store_visit
+                .accept = (ir_node_method) &store_visit,
+                .type = "instr"
             },
             .type = "store", 
         },
         .dest = dest, 
         .v = v
     );
-    return value(&self->expr);
+    builder_attach_instr(&self->instr);    
+
+    return;
 }
 
 # define store(d, v) Store(d, v)

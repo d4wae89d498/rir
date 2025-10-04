@@ -25,7 +25,8 @@ static var *Var(void) {
     var *out = new(var, 
         .instr = {
             .node = {
-                .accept = (ir_node_method)&var_visit
+                .accept = (ir_node_method)&var_visit,
+                .type = "instr"
             },
             .type = "var"
         },

@@ -21,11 +21,12 @@ struct binop
         );                                                              \
     }                                                                   \
                                                                         \
-    static value * NAME(value *left, value *right) {                    \
+    static value * NAME ## 2 (value *left, value *right) {                    \
         binop *self = new(binop,                                        \
             .expr = {                                                   \
                 .node = {                                               \
-                    .accept = (ir_node_method) & ( NAME ## _accept )    \
+                    .accept = (ir_node_method) & ( NAME ## _accept ),   \
+                    .type = "expr"                                      \
                 },                                                      \
                 .type = "binop",                                        \
             },                                                          \
@@ -39,7 +40,7 @@ struct binop
 def_binop(add)   // both operands signed or unsigned, same bitwise op, addition
 def_binop(sub)   // both operands signed or unsigned, same bitwise op, subtraction
 def_binop(mul)   // both operands unsigned, unsigned multiplication
-//def_binop(div)   // both operands unsigned, unsigned division
+def_binop(div)   // both operands unsigned, unsigned division
 def_binop(mod)   // both operands unsigned, unsigned remainder
 
 def_binop(imul)  // both operands signed, signed multiplication (two’s complement)

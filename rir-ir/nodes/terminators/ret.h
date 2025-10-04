@@ -20,15 +20,16 @@ static void Ret(value *value) {
         .terminator = {
             .type = "ret",
             .instr = {
-                .type = "terminator",
                 .node = {
-                    .accept = (ir_node_method) &ret_visit
-                }
+                    .accept = (ir_node_method) &ret_visit,
+                    .type = "instr"
+                },
+                .type = "terminator",
             }
         },
         .value = value
     );
-    terminator(&self->terminator);
+    builder_attach_instr(&self->terminator.instr); 
 }
 
 # define ret(x) Ret(x)

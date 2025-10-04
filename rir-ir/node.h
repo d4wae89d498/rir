@@ -4,6 +4,7 @@
 
 struct node {
     ir_node_method accept;
+    const char *type;
 };
 
 #endif

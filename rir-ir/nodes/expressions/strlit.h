@@ -19,7 +19,8 @@ static value *StrLit(const char *value) {
     strlit *self = new(strlit,
         .expr = {
             .node = {
-                .accept = (ir_node_method) &strlit_visit
+                .accept = (ir_node_method) &strlit_visit,
+                .type = "expr"
             },
             .type = "strlit"
         },

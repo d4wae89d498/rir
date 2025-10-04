@@ -5,9 +5,8 @@ int main() {
     prog *demo = prog();
     builder_begin(demo);
         function("main");
-            block("b1");
-                value *x1 = add(intlit(2), intlit(4));
-                ret(x1);
+            value *x1 = add2(intlit(2), intlit(4));
+            ret(x1);
     builder_end();
 
     // Print it
@@ -17,9 +16,17 @@ int main() {
         fmt_printd(stderr, "ERROR, print target not found.\n");
         exit(1);
     }
-    auto vis = e->second->vis;
-    dot(demo->node, accept, vis, 0);
-    fmt_println("Exiting... {}\n", (void*)vis);
+    auto visitor = e->second->visitor;
+    auto ctx = (print_target_ctx){
+        .depth = 0,
+        .ostream = tmpfile()
+    };
+    dot(demo->node, accept, visitor, &ctx);
+
+    fmt_println("-----\nGenerated IR:\n-");
+    dump_file_to(ctx.ostream, stdout);
+    fmt_println("-----");
+    fmt_println("Exiting... {}\n", (void*)visitor);
     return 0;
 }
 

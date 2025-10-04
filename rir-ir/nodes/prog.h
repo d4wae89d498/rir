@@ -17,7 +17,8 @@ static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
 static prog *Prog(void) {
     prog *out = new(prog, 
         .node = {
-            .accept = &prog_visit
+            .accept = &prog_visit,
+            .type = "prog"
         },
         .functions = functions_init(),
     );

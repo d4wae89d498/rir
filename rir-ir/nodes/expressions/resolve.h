@@ -19,7 +19,8 @@ static value *Resolve(const char *symbol_name) {
     resolve *self = new(resolve, 
         .expr = {
             .node = {
-                .accept = (ir_node_method) &resolve_visit
+                .accept = (ir_node_method) &resolve_visit,
+                .type = "expr"
             },
             .type = "resolve"
         },

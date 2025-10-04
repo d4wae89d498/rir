@@ -25,7 +25,8 @@ static void *function_visit(function *self, node_visitor *vis, void *ctx) {
 static function *Function(const char *name) {
     function *out = new(function, 
          .node = {
-            .accept = (ir_node_method) &function_visit
+            .accept = (ir_node_method) &function_visit,
+            .type = "function"
         },
         .name = name,
     );
@@ -34,7 +35,7 @@ static function *Function(const char *name) {
 
     prog *current_prog = builder_get_prog();
     functions_emplace(&(current_prog->functions), name, out);
-
+    block(0);
     return 0;
 }
 

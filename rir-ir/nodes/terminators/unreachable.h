@@ -17,16 +17,17 @@ static void *unreachable_visit(ret *self, node_visitor *vis, void *ctx) {
 static void Unreachable() {
     ret *self = new(ret, 
         .terminator = {
-            .type = "unreachable",
             .instr = {
-                .type = "terminator",
                 .node = {
-                    .accept = (ir_node_method) &unreachable_visit
-                }
-            }
+                    .accept = (ir_node_method) &unreachable_visit,
+                    .type = "instr"
+                },
+                .type = "terminator",
+            },
+            .type = "unreachable",
         },
     );
-    terminator(&self->terminator);
+    builder_attach_instr(&self->terminator.instr); 
 }
 #undef unreachable // maybe def in __stddef_unreachable... todo: checkwhy or rename..
 #define unreachable() Unreachable()

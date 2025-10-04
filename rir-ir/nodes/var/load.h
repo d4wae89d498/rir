@@ -19,7 +19,8 @@ static value *Load(var *v)
     load *self = new(load, 
         .expr = {
             .node = {
-                .accept = (ir_node_method) &load_visit
+                .accept = (ir_node_method) &load_visit,
+                .type = "expr"
             },
             .type = "load",
         }, 

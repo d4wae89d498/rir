@@ -95,4 +95,57 @@ static inline void *_new(size_t size, void *content) {
     }
 # endif
 
+///////////////
+/// OTHERS ////
+/////////////
+
+# include <ctype.h>
+
+static int dump_file_to(FILE *src, FILE *dst) {
+    if (fseek(src, 0L, SEEK_SET) != 0)
+        return -1;
+    char buf[BUFSIZ];
+    size_t n;
+    while ((n = fread(buf, 1, sizeof buf, src)) > 0) {
+        if (fwrite(buf, 1, n, dst) != n)
+            return -1;
+    }
+    if (ferror(src)) 
+        return -1;
+    if (fflush(dst) != 0) 
+        return -1;
+    return 0;
+}
+
+
+static void dump_cstr_to(FILE *dest, const char *s)
+{
+    for (; *s != '\0'; ++s) {
+        unsigned char c = *s;
+        switch (c) {
+        case '\\': fputs("\\\\", dest); break;
+        case '\"': fputs("\\\"", dest); break;
+        case '\n': fputs("\\n",  dest); break;
+        case '\r': fputs("\\r",  dest); break;
+        case '\t': fputs("\\t",  dest); break;
+        case '\b': fputs("\\b",  dest); break;
+        case '\f': fputs("\\f",  dest); break;
+        case '\v': fputs("\\v",  dest); break;
+        case '\a': fputs("\\a",  dest); break;
+        case '\0': fputs("\\0",  dest); break; /* defensive - won't happen due to loop condition */
+        default:
+            /* printable ASCII range (space .. ~) */
+            if (c >= 0x20 && c <= 0x7e) {
+                /* print as-is */
+                fputc(c, dest);
+            } else {
+                /* non-printable or non-ASCII byte: use \xHH */
+                /* Using %02x keeps two hex digits (lowercase) */
+                fprintf(dest, "\\x%02x", (unsigned) c);
+            }
+        }
+    }
+}
+
+
 #endif // SUGAR_H

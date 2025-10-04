@@ -7,15 +7,14 @@
 typedef struct target {
     const char      *name;
     const char      *descr;
-    node_visitor    *vis; 
+    node_visitor    *visitor; 
 } target;
 
 # define T Targets, cstr, target*, (c_keypro)
 # include <stc/hmap.h>
 typedef void (target_setup)(Targets*);
-# define visitor_method(W) \
-    node_visitor_emplace(vis, #W, (ir_visitor_method)& (visit_ ## W));
 
+/////////////////////
 
 # include "./targets/print/target.h"
 # include "./targets/c/target.h"
@@ -25,9 +24,8 @@ typedef void (target_setup)(Targets*);
 # include "./targets/linux-x86_32-elf/target.h"
 # include "./targets/linux-x86_32-jit/target.h"
 
-//extern target_setup setup_print_target;
-//void setup_print_target (Targets*);
-/* Setup standard targets */
+/////////////////////
+
 static Targets targets;
 static void setup_targets(void)
 {

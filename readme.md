@@ -21,11 +21,16 @@ The CLI and tests are written in C23.
 - [ ] IR
     - [x] finish node spec
     - [x] IR Builder tool
+    - [ ] visitors 
+        - [ ] delete visitor
+        - [ ] ability to detect if visitor implement all nodes or ERROR
 
 - [ ] BE
     - [ ] passes
+        - [ ] generic pass 'class' with dependencies etc
         - [ ] phi nodes / stack alloc insertions
-        - [ ] ...
+        - [ ] constant propagation
+        - [ ] dead code elimination
     - [ ] abstract machine decl / regalloc interface
     - [ ] targets 
         - [ ] quick interpreter that uses LIBFFI for C interop
@@ -36,8 +41,9 @@ The CLI and tests are written in C23.
 - [x] CLI
     - [x] a man page
     - [x] impl
-    - [ ] dynamic cli help & man page & target using an hmap for targets
-
+    - [x] dynamic cli help 
+    - [ ] dynamic man page generation  
+  
 ## See also
 
 - [GNU lightning](https://www.gnu.org/software/lightning/)

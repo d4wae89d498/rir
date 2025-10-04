@@ -21,7 +21,8 @@ static var *DeRef(value *val) {
     deref *self = new(deref,         
         .instr = {
             .node = {
-                .accept = (ir_node_method) &deref_visit
+                .accept = (ir_node_method) &deref_visit,
+                .type = "instr"
             },
             .type = "deref"
         },

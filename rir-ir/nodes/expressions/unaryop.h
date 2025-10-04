@@ -16,11 +16,12 @@ struct unaryop
         return 0;                                                           \
     }                                                                       \
                                                                             \
-    static value * NAME(value *operand) {                                   \
+    static value * NAME ## 1 (value *operand) {                                   \
         return value(&new(unaryop,                                          \
             .expr = {                                                       \
                 .node = {                                                   \
                     .accept = (ir_node_method)&NAME ## _accept,             \
+                    .type = "unaryop"                                       \
                 },                                                          \
                 .type = "unaryop"                                           \
             },                                                              \
@@ -33,6 +34,5 @@ struct unaryop
 def_unaryop(not)
 def_unaryop(inc)
 def_unaryop(dec)
-// operation for sign change ??
 
 #endif // RIR_UNARY_H

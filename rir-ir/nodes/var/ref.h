@@ -7,7 +7,7 @@ struct ref {
     var     *v;
 };
 
-static void *ref_visit(store *self, node_visitor *vis, void *ctx) {
+static void *ref_visit(ref *self, node_visitor *vis, void *ctx) {
     return (node_visitor_find(vis,  "load").ref)->second(
         &self->expr.node,
         ctx
@@ -19,9 +19,10 @@ static value *Ref(var *v) {
     ref *self = new(ref, 
         .expr = {
             .node = {
-                .accept = (ir_node_method) &ref_visit
+                .accept = (ir_node_method) &ref_visit,
+                .type = "instr"
             },
-            .type = "load"
+            .type = "ref"
         },
         .v = v
     );

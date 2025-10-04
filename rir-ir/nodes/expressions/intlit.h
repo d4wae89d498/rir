@@ -20,7 +20,8 @@ static value *IntLit(int value)
     intlit *e = new(intlit, 
         .expr = {
             .node = {
-                .accept = (ir_node_method) &intlit_visit
+                .accept = (ir_node_method) &intlit_visit,
+                .type = "expr"
             },
             .type = "intlit"
         },

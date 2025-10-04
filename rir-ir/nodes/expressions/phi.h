@@ -4,7 +4,7 @@
 
 typedef struct phi
 {
-    instr     instr; 
+    expr     expr; 
     value    **values;
     block    **blocks;
     value      *dest;
@@ -13,7 +13,7 @@ typedef struct phi
 
 static void *phi_accept(phi *self, node_visitor *vis, void *ctx) {
     return node_visitor_find(vis, "phi").ref->second(
-        &self->instr.node,
+        &self->expr.node,
         ctx
     );
 }
@@ -37,19 +37,25 @@ static value *Phi(value *v1, block *b2, ...)
         ++count;
     }
     va_end(ap);
-    phi *p = (phi*)calloc(1, sizeof(phi));
-    if (!p)
-        return NULL;
-    p->instr.node.accept = (ir_node_method) &phi_accept;
-    p->values = (value**)malloc(sizeof(value*) * count);
-    p->blocks = (block**)malloc(sizeof(block*) * count);
+    phi *p = new(phi, 
+        .expr = {
+            .node = {
+                .accept = (ir_node_method) &phi_accept,
+                .type = "instr"
+            },
+            .type = "phi"
+        },
+        .values = (value**)malloc(sizeof(value*) * count),
+        .blocks = (block**)malloc(sizeof(block*) * count),
+        .size = count,
+    );
+   
     if (!p->values || !p->blocks) {
         free(p->values);
         free(p->blocks);
         free(p);
         return NULL;
     }
-    p->size = count;
 
     /* second pass: fill arrays (first slot from fixed args) */
     p->values[0] = v1;
@@ -65,7 +71,7 @@ static value *Phi(value *v1, block *b2, ...)
         ++i;
     }
     va_end(ap);
-    builder_attach_instr(&p->instr);
+    value(&p->expr);
     return NULL;
 }
 

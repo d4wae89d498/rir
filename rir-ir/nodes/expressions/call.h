@@ -21,7 +21,8 @@ static value *Call(value *addr, ...) {
     call *self = new(call,
         .expr = {
             .node = {
-                .accept = (ir_node_method) &call_visit
+                .accept = (ir_node_method) &call_visit,
+                .type = "expr"
             },
             .type = "call"
         },

@@ -1,14 +1,4 @@
-/* rir_main.c
- * A simple CLI "main" implementing the behaviour described in the provided man page.
- *
- *
- * This is currently a CLI front-end stub — the actual compilation/interpretation
- * backends are left as TODOs for now.
- */
-
 #include <rir.h>
-
-////////////////////////
 
 char man_main_txt[] = {
 #embed  "templates/man_main.txt"
