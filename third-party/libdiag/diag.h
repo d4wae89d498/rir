@@ -1,9 +1,12 @@
 #ifndef RIR_DIAGNOSTIC_H
 # define RIR_DIAGNOSTIC_H
-# include <rir.h>
+# include <stdio.h>
+# if __STDC_VERSION__ >= 201112L
+#  include <c11/fmt.h>
+# endif
 
 // GLOBALS
-
+static char *exe_name = "a.out";
 static int errors = 0;
 static bool colors_enabled = true;
 static bool debug_enabled = true;
@@ -38,7 +41,7 @@ static void rir_print_common(const char *file, int line, const char *func, const
     const char *label_color   = colors_enabled ? label_color_tty : "";
     const char *reset = colors_enabled ? RESET : "";
     const char *white = colors_enabled ? BOLD_WHITE : "";
-    fprintf(stderr, "rir");
+    fprintf(stderr, "%s", exe_name);
     if (debug_enabled)
         fprintf(stderr, " @ %s:%i %s()", file, line, func);
     fprintf(stderr, ": %s%s: %s", label_color, label, white);

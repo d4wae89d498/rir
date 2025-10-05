@@ -10,7 +10,7 @@
 # include <errno.h>
 # include <limits.h>
 # include <math.h>
-#include <stdarg.h>
+# include <stdarg.h>
 # include <stdint.h>
 # include <stdbool.h>
 # include <stdlib.h>
@@ -21,15 +21,7 @@
 // third party
 # include <stc/cstr.h>
 # include <sugar.h>
-
-// optinal: make test file easier
-# if __STDC_VERSION__ >= 201112L
-#  include <c11/fmt.h>
-# endif
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////           COMMON         ////////////////////////////////////////
-#include "diagnostic.h"
+# include <diag.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////           IR             ////////////////////////////////////////

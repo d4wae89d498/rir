@@ -4,5 +4,5 @@ Diagnostics:
     - unused-includes                   # seems broken with a typedef defined outside header...
     - field_incomplete_or_sizeless      # seems broken with reccursive headers
 
-CompileFlags:
-  Add: [-Wno-format-security, -Wno-empty-translation-unit]           # todo: check why this seem needed for libstc's fmt
+#CompileFlags:
+#  Add: [-Wno-format-security, -Wno-empty-translation-unit]           # todo: check why this seem needed for libstc's fmt

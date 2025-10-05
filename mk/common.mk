@@ -10,9 +10,10 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-Wno-format-security							\
 	-Wno-empty-translation-unit						\
 	-I$(WORKSPACE_DIR)/include						\
+	-I$(WORKSPACE_DIR)/third-party/libstc/include	\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 		\
+	-I$(WORKSPACE_DIR)/third-party/libdiag 			\
 	-I$(WORKSPACE_DIR)/third-party/libbtp			\
-	-I$(WORKSPACE_DIR)/third-party/libstc/include
 
 # Wno-format-security: todo check why needed why fmt_printd 
 
