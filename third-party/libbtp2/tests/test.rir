@@ -1,0 +1,6 @@
+export main(ac, av) {
+
+    printf("hello world\n")
+
+    return 0
+}
