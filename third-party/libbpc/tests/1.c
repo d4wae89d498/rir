@@ -52,10 +52,8 @@ static int my_token(const char *str)
     return 0;
 }
 
-// btp_tk_match()
-
-////////////////////////////////////////////
-
+// todo:: move this out of usercode.. 
+// abstract way  to  peek / consume str ?
 static int _chris(void* arg)
 {
     int (*f)(int) = (int (*)(int))arg;
@@ -74,7 +72,10 @@ static int _chris(void* arg)
     }
     return output;
 }
-#define chris(f) plambda(&_chris, (void*)(bool (*)(int))&f)
+#define chris(f) plambda(&_chris, (void*)(int (*)(int))&f)
+#define skipws  rep(chris(isspace))
+
+////////////////////////////////////////////
 
 static int _id(void*)
 {
@@ -83,14 +84,33 @@ static int _id(void*)
         or(chris(isalpha), tk("_")),
         opt(rep(or(chris(isalnum), tk("_"))))
     ));
-    if (match_size > 0) {
-        strstack_push(&self->stack, strndup(start_ptr, match_size));
-        return match_size;
-    }
-    return -1;
+    if (match_size <= 0)
+        return -1;
+
+    strstack_push(&self->stack, strndup(start_ptr, match_size));
+    return match_size;
 }
 #define id rule(&_id)
 
+static int _func(void*)
+{
+    int match_size = papply(and(
+        opt(tk("export")),
+        id,
+        tk("("),
+        and(id, opt(rep(and(tk(","), id))),
+        tk(")")
+       // todo: stmt_block
+    )));
+    if (match_size < 0)
+        return -1;
+    // todo: pop first as a name, pop all remaining as arg names
+    // todo: push into ir tree
+    // todo: auto space skip before and after 'rule'
+    return match_size;
+
+}
+#define func rule(&_func)
 
 /////////////////////////////////////////
 
@@ -112,5 +132,17 @@ int main()
         printf("stack[]=%s\n", *i.ref);
     }
     assert(!strcmp(*strstack_top(&self->stack), "_test34"));
+    
+    test = (ctx) {
+        .src = "export main ( ac, av )",
+        .stack = strstack_init()
+    };
+    self = &test;
+    r = papply(func);
+    printf("%d\n", r);
+    for (c_each(i, strstack, self->stack)) {
+        printf("stack[]=%s\n", *i.ref);
+    }
+    assert(r == 22);
     return 0;
 }

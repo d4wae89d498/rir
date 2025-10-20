@@ -49,15 +49,12 @@ The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX 
 
 ## Dev env
 
-Windows: `vscode + wsl extension`
-Mac/linux: `codium`
+Windows: `vscode + wsl extension + clangd`
+Mac/linux: `codium + clangd`
 
-```bash
-apt install fswatch pipx
-pipx install compiledb
-```
+Install bear and then:
 
-*fswatch and compiledb is needed to make the vscode task that maintains `compile_commands.json` working.*
+`bear -- make re`
   
 ## See also
 

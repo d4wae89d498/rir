@@ -1,6 +1,6 @@
 #ifndef BTP2_H
 # define BTP2_H
-#include <stddef.h>
+# include <stddef.h>
 # include <string.h>
 # include <sugar.h>
 
@@ -111,7 +111,8 @@ int _rep(void *arg)
     return out;
 }
 
-# define rule(N) plambda(N, 0)
+// maybe find a better name than 'rule' if its skipws?
+# define rule(N) and(opt(skipws), plambda(N, 0), opt(skipws))
 # define tk(T) plambda(&_tk, T)
 # define opt(R) plambda(&_opt, R)
 # define rep(R) plambda(&_rep, R)
