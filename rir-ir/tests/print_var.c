@@ -26,7 +26,7 @@ int main() {
 
             when(intlit(1), true_case, false_case);
 
-            call(resolve("printf %d\n"), load(v2));
+            call(resolve("printf"), load(v2));
 
             ret(x1);
     builder_end();

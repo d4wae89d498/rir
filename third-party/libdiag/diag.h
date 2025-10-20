@@ -10,7 +10,6 @@ static char *exe_name = "a.out";
 static int errors = 0;
 static bool colors_enabled = true;
 static bool debug_enabled = true;
-static bool ansi_escape_codes_enabled = false;
 
 // COLORS
 

@@ -5,9 +5,8 @@ static node_visitor visitor;
 
 static void *visit_prog(prog *self, print_target_ctx *ctx) 
 {
-    for(c_each(i, functions, self->functions)) {
-        i.ref->second->node.accept(&i.ref->second->node, &visitor, ctx);
-    }
+    for (c_each(i, functions, self->functions))
+        dot(i.ref->second->node, accept, &visitor, ctx);
     return 0;
 }
 

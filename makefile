@@ -1,4 +1,7 @@
-MK_SUBDIRS := rir-ir rir-backend rir-cli # rir-backend
+MK_SUBDIRS := 	rir-parser\
+				rir-ir\
+				rir-backend\
+				rir-cli
 
 include ./mk/run-in-dirs.mk
 

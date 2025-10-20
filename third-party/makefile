@@ -1,3 +1,3 @@
-MK_SUBDIRS := libbtp libsugar
+MK_SUBDIRS := libbpc libsugar
 
 include ./../mk/run-in-dirs.mk

@@ -1,0 +1,13 @@
+export main(ac, av) {
+    extern printf
+
+    var i
+
+    i = 1 + 1 + 0
+
+    if ac == i {
+        printf("hello world %s\n", av[1])
+    } else {
+        printf("invalid usage.")
+    }
+}

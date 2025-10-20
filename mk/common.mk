@@ -13,13 +13,13 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-I$(WORKSPACE_DIR)/third-party/libstc/include	\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 		\
 	-I$(WORKSPACE_DIR)/third-party/libdiag 			\
-	-I$(WORKSPACE_DIR)/third-party/libbtp			\
+	-I$(WORKSPACE_DIR)/third-party/libbpc
 
 # Wno-format-security: todo check why needed why fmt_printd 
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1) 
-	CFLAGS += -g	-fsanitize=leak
+	CFLAGS += -g	-fsanitize=address
 endif
 
 LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a 		\

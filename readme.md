@@ -46,6 +46,18 @@ The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX 
     - [x] impl
     - [x] dynamic cli help 
     - [ ] dynamic man page generation  
+
+## Dev env
+
+Windows: `vscode + wsl extension`
+Mac/linux: `codium`
+
+```bash
+apt install fswatch pipx
+pipx install compiledb
+```
+
+*fswatch and compiledb is needed to make the vscode task that maintains `compile_commands.json` working.*
   
 ## See also
 
