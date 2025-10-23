@@ -4,22 +4,23 @@
 # include <string.h>
 # include <sugar.h>
 
+typedef int (bpc_parser)(void*);
 
 typedef struct bpc_implementation
 {
-    int     (*token)(void*);
-    void    *(*bkp)();
+    bpc_parser *token;
+    void    *(*bkp)(void);
     void    (*bkp_restore)(void*);
     void    (*bkp_del)(void*);
-    bool    (*eof)();
-    void    (*consume)();
-    int     (*peek)();
+    bool    (*eof)(void);
+    void    (*consume)(void);
+    int     (*peek)(void);
 } bpc_implementation;
 
 extern bpc_implementation *bpc;
 
 # define tk(T) closure(&_tk, T)
-int _tk(void *arg)
+static int _tk(void *arg)
 {
     int size;
     void *backup = bpc->bkp();
@@ -40,7 +41,7 @@ int _tk(void *arg)
                 ),\
                 &(closure*[]){__VA_ARGS__, 0}\
     ))))
-int _alt(void *arg)
+static int _alt(void *arg)
 {
     void *initial = bpc->bkp();
     void *longest_match_bkp = 0;
@@ -74,7 +75,7 @@ int _alt(void *arg)
                 ),\
                 &(closure*[]){__VA_ARGS__, 0}\
     ))))
-int _seq(void *arg)
+static int _seq(void *arg)
 {
     int match_size = 0;
     int candidate = 0;
@@ -97,7 +98,7 @@ int _seq(void *arg)
 }
 
 # define opt(R) closure(&_opt, R)
-int _opt(void *arg)
+static int _opt(void *arg)
 {
     closure* cl = (closure*)arg;
     int out = apply(cl);
@@ -107,7 +108,7 @@ int _opt(void *arg)
 }
 
 # define rep(R) closure(&_rep, R)
-int _rep(void *arg)
+static int _rep(void *arg)
 {
     closure* cl = (closure*)arg;
     int out = 0;

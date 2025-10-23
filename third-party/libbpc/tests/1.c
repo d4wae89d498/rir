@@ -26,7 +26,7 @@ static void rir_bkp_del(void *ptr)
     return;
 }
 
-static void* rir_bkp()
+static void* rir_bkp(void)
 {
     return new(ctx,
         .stack = strstack_clone(self->stack),
@@ -51,17 +51,17 @@ static int rir_token(void* arg)
     return 0;
 }
 
-static bool rir_eof()
+static bool rir_eof(void)
 {
     return (*self->src == 0);
 }
 
-static void rir_consume()
+static void rir_consume(void)
 {
     self->src += 1;
 }
 
-static int rir_peek()
+static int rir_peek(void)
 {
     return *self->src;
 }
