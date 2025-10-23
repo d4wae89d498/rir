@@ -24,7 +24,7 @@ int main() {
     dot(demo->node, accept, visitor, &ctx);
 
     fmt_println("-----\nGenerated IR:\n-");
-    dump_file_to(ctx.ostream, stdout);
+    dump_file(stdout, ctx.ostream);
     fmt_println("-----");
     fmt_println("Exiting... {}\n", (void*)visitor);
     return 0;

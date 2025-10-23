@@ -4,6 +4,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <stdarg.h>
+# include <ctype.h>
 
 //
 
@@ -117,11 +118,9 @@ typedef struct closure
 
 ///////////////
 /// OTHERS ////
-/////////////
+///////////////
 
-# include <ctype.h>
-
-static int dump_file_to(FILE *src, FILE *dst) {
+static int dump_file(FILE *dst, FILE *src) {
     if (fseek(src, 0L, SEEK_SET) != 0)
         return -1;
     char buf[BUFSIZ];
@@ -138,7 +137,7 @@ static int dump_file_to(FILE *src, FILE *dst) {
 }
 
 
-static void dump_cstr_to(FILE *dest, const char *s)
+static void dump_cstr(FILE *dest, const char *s)
 {
     for (; *s != '\0'; ++s) {
         unsigned char c = *s;

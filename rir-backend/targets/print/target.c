@@ -61,7 +61,7 @@ static void *visit_intlit(intlit *self, print_target_ctx *ctx)
 static void *visit_strlit(strlit *self, print_target_ctx *ctx) 
 {
     fprintf(ctx->ostream,"strlit(\"");
-    dump_cstr_to(ctx->ostream, self->value);
+    dump_cstr(ctx->ostream, self->value);
     fprintf(ctx->ostream, "\")");
     return 0;
 }
@@ -69,7 +69,7 @@ static void *visit_strlit(strlit *self, print_target_ctx *ctx)
 static void *visit_resolve(resolve *self, print_target_ctx *ctx) 
 {
     fprintf(ctx->ostream,"resolve(\"");
-    dump_cstr_to(ctx->ostream, self->symbol_name);
+    dump_cstr(ctx->ostream, self->symbol_name);
     fprintf(ctx->ostream, "\")");
     return 0;
 }

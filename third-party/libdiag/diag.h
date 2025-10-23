@@ -6,6 +6,7 @@
 # endif
 
 // GLOBALS
+
 static char *exe_name = "a.out";
 static int errors = 0;
 static bool colors_enabled = true;
@@ -53,7 +54,7 @@ static void rir_print_common(const char *file, int line, const char *func, const
         fprintf(stderr, "%s\n", RESET);\
     }
 
-
+// === error ===
 # define error(...)\
     if (1) {\
         errors += 1;\
@@ -65,19 +66,19 @@ static void rir_print_common(const char *file, int line, const char *func, const
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "error", BOLD_RED, __VA_ARGS__);\
     }
 
-
+// === warning ===
 # define warning(fmt, ...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fprintf, "warning", BOLD_YELLOW, __VA_ARGS__)
 # define fmt_warning(fmt, ...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "warning", BOLD_YELLOW, __VA_ARGS__)
 
-
+// === notice ===
 # define notice(fmt, ...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fprintf, "notice", BOLD_CYAN, __VA_ARGS__)
 # define fmt_notice(fmt, ...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "notice", BOLD_CYAN, __VA_ARGS__)
 
-
+// === debug ===
 # define debug(...)\
     if (debug_enabled) {\
         rir_print_impl(__FILE__, __LINE__, __func__ , fprintf, "debug", BOLD_MAGENTA, __VA_ARGS__);\
@@ -87,4 +88,4 @@ static void rir_print_common(const char *file, int line, const char *func, const
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "debug", BOLD_MAGENTA, __VA_ARGS__);\
     }
 
-#endif
+#endif // RIR_DIAGNOSTIC_H
