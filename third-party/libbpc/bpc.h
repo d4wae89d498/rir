@@ -1,107 +1,120 @@
-#ifndef BTP2_H
-# define BTP2_H
+#ifndef BPC_H
+# define BPC_H
 # include <stddef.h>
 # include <string.h>
 # include <sugar.h>
 
-# define papply(fu) (fu)->p((fu)->arg)
 
-
-typedef int (*parser)(void *arg);
-
-typedef struct plambda
+typedef struct bpc_implementation
 {
-    parser  p;
-    void    *arg;
-} plambda;
-# define plambda(A, B) new(plambda, A, B)
+    int     (*token)(void*);
+    void    *(*bkp)();
+    void    (*bkp_restore)(void*);
+    void    (*bkp_del)(void*);
+    bool    (*eof)();
+    void    (*consume)();
+    int     (*peek)();
+} bpc_implementation;
 
+extern bpc_implementation *bpc;
 
-int (*_bpc_token)(const  char *);
-void (*_bpc_restore)(void*);
-void (*_bpc_del)(void*);
-void *(*_bpc_backup)();
-
+# define tk(T) closure(&_tk, T)
 int _tk(void *arg)
 {
     int size;
-    void *backup = _bpc_backup();
-    const char *str = arg;
-    size = _bpc_token(str);
+    void *backup = bpc->bkp();
+    size = bpc->token(arg);
     if (!size) {
-        _bpc_restore(backup);
+        bpc->bkp_restore(backup);
         size = -1;
     }
-    _bpc_del(backup);
+    bpc->bkp_del(backup);
     return size;
 }
 
-int _or(void *arg)
+
+# define alt(...) closure(&_alt, \
+    ((closure*)(_new(\
+                sizeof(\
+                    (closure*[]){__VA_ARGS__, 0}\
+                ),\
+                &(closure*[]){__VA_ARGS__, 0}\
+    ))))
+int _alt(void *arg)
 {
-    void *initial = _bpc_backup();
+    void *initial = bpc->bkp();
     void *longest_match_bkp = 0;
     int longest_match = -1;
     int current_match;
 
-    plambda** lambdas = (plambda**)arg;
+    closure** cls = (closure**)arg;
     int i =  0;
-    while (lambdas[i])
+    while (cls[i])
     {
-        current_match = papply(lambdas[i]);
+        current_match = apply(cls[i]);
         if (current_match > longest_match) {
-            _bpc_del(longest_match_bkp);
-            longest_match_bkp = _bpc_backup();
+            bpc->bkp_del(longest_match_bkp);
+            longest_match_bkp = bpc->bkp();
             longest_match = current_match;
         }
-        _bpc_restore(initial);
+        bpc->bkp_restore(initial);
         i += 1;
     }
 
     if (longest_match_bkp)
-        _bpc_restore(longest_match_bkp);
+        bpc->bkp_restore(longest_match_bkp);
     return longest_match;
 }
 
-int _and(void *arg)
+
+# define seq(...) closure(&_seq, \
+    ((closure*)(_new(\
+                sizeof(\
+                    (closure*[]){__VA_ARGS__, 0}\
+                ),\
+                &(closure*[]){__VA_ARGS__, 0}\
+    ))))
+int _seq(void *arg)
 {
     int match_size = 0;
     int candidate = 0;
-    void *backup = _bpc_backup();
-    plambda** lambdas = (plambda**)arg;
+    void *backup = bpc->bkp();
+    closure** cls = (closure**)arg;
     int i =  0;
-    while (lambdas[i])
+    while (cls[i])
     {
-        candidate = papply(lambdas[i]);
+        candidate = apply(cls[i]);
         if (candidate < 0)
         {
-            _bpc_restore(backup);
-            _bpc_del(backup);
+            bpc->bkp_restore(backup);
             return -1;
         }
         match_size += candidate;
         i += 1;
     }
-    _bpc_del(backup);
+    bpc->bkp_del(backup);
     return match_size;
 }
 
+# define opt(R) closure(&_opt, R)
 int _opt(void *arg)
 {
-    plambda* lambda = (plambda*)arg;
-    int out = papply(lambda);
+    closure* cl = (closure*)arg;
+    int out = apply(cl);
     if (out < 0)
         out = 0;
     return out;
 }
 
+# define rep(R) closure(&_rep, R)
 int _rep(void *arg)
 {
-    plambda* lambda = (plambda*)arg;
+    closure* cl = (closure*)arg;
     int out = 0;
     int candidate;
     while (1)
     {
-        candidate = papply(lambda);
+        candidate = apply(cl);
         if (candidate < 0)
             break;
         out += candidate;
@@ -111,25 +124,26 @@ int _rep(void *arg)
     return out;
 }
 
-// maybe find a better name than 'rule' if its skipws?
-# define rule(N) and(opt(skipws), plambda(N, 0), opt(skipws))
-# define tk(T) plambda(&_tk, T)
-# define opt(R) plambda(&_opt, R)
-# define rep(R) plambda(&_rep, R)
-# define and(...) plambda(&_and, \
-    ((plambda*)(_new(\
-                sizeof(\
-                    (plambda*[]){__VA_ARGS__, 0}\
-                ),\
-                &(plambda*[]){__VA_ARGS__, 0}\
-    ))))
+# define rule(N) seq(opt(skipws), closure(N, 0), opt(skipws))
+# define skipws  rep(chris(isspace))
+# define chris(f) closure(&_chris, (void*)(int (*)(int))&f)
+static int _chris(void* arg)
+{
+    int (*f)(int) = (int (*)(int))arg;
+    int output;
 
-# define or(...) plambda(&_or, \
-    ((plambda*)(_new(\
-                sizeof(\
-                    (plambda*[]){__VA_ARGS__, 0}\
-                ),\
-                &(plambda*[]){__VA_ARGS__, 0}\
-    ))))
+    if (bpc->eof() || !f(bpc->peek()))
+    {
+        return -1;
+    }
+    output = 1;
+    bpc->consume();    
+    while(!bpc->eof() && f(bpc->peek()))
+    {
+        output += 1;
+        bpc->consume();
+    }
+    return output;
+}
 
-#endif
+#endif // BPC_H

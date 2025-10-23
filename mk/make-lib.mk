@@ -24,12 +24,13 @@ test: $(TESTS_EXES)
 	@echo "Running tests..."
 	@failed=0; \
 	for t in $(TESTS_EXES); do \
-	    echo "Running $$t..."; \
-	    if ! ./$$t; then \
-	        echo "$$t FAILED"; \
+	   	fullpath=$$(realpath $$t); \
+	    echo "Running $$fullpath..."; \
+	    if ! $$fullpath; then \
+	        echo "FAILED for $$fullpath"; \
 	        failed=1; \
 	    else \
-	        echo "$$t SUCCESS"; \
+	        echo "SUCCESS for $$fullpath"; \
 	    fi; \
 	done; \
 	exit $$failed

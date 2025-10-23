@@ -5,13 +5,14 @@
 # include <stdio.h>
 # include <stdarg.h>
 
+//
+
 # define dot(A, V, ...) (A).V(&(A), __VA_ARGS__)
 # define arrow(A, V, ...) (A)->V(A, __VA_ARGS__)
-# define new(T, ...) ((T*)(_new( sizeof(T) , &(T) { __VA_ARGS__ } )))
-# define ull unsigned long long
-# define trace() \
-    fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__)
 
+//
+
+# define new(T, ...) ((T*)(_new( sizeof(T) , &(T) { __VA_ARGS__ } )))
 static inline void *_new(size_t size, void *content) {
     void *ptr = malloc(size);
     if (ptr) {
@@ -21,6 +22,25 @@ static inline void *_new(size_t size, void *content) {
     }
     return ptr;
 }
+
+//
+
+typedef struct closure
+{
+    int (*f)(void *);
+    void        *ctx;
+} closure;
+# define closure(F, CTX) new(closure, .f=F, .ctx=CTX)
+
+//static _apply(const char *what, )
+
+# define apply(cl) (cl)->f((cl)->ctx)
+
+//
+
+# define ull unsigned long long
+# define trace() \
+    fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__)
 
 /////////////////////////////////////////////////////
 //         POSIX POLYFILS                          //

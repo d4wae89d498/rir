@@ -1,7 +1,8 @@
 MK_SUBDIRS := 	rir-parser\
 				rir-ir\
 				rir-backend\
-				rir-cli
+				rir-cli\
+				third-party
 
 include ./mk/run-in-dirs.mk
 

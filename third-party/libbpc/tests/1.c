@@ -1,34 +1,32 @@
-#include "stc/common.h"
+#include "sugar.h"
 #include <bpc.h>
 #include <ctype.h>
-
-char src[] = {
-#embed "test.rir"
-,0
-};
-
+#include <stdio.h>
 #define T strstack, const char*
 #include <stc/stack.h>
+
+////////////////////////////////////////////
+//  BPC char* to ir implementation 
+//
 
 typedef struct ctx 
 {
     size_t      match_length;
-    //  todo:irtree
+    //  todo: irtree
     strstack    stack;
     const char  *src;
 } ctx;
 
-ctx ctx_data;
-ctx *self= &ctx_data;
+ctx *self= &(ctx){};
 
-static void my_del(void *ptr)
+static void rir_bkp_del(void *ptr)
 {
     ctx *ctx_ptr  = ptr;
     //strstack_drop(&ctx_ptr->stack);
     return;
 }
 
-static void* my_backup()
+static void* rir_bkp()
 {
     return new(ctx,
         .stack = strstack_clone(self->stack),
@@ -36,13 +34,14 @@ static void* my_backup()
     );
 }
 
-static void my_restore(void* ptr)
+static void rir_bkp_restore(void* ptr)
 {
     self = (ctx*)ptr;
 }
 
-static int my_token(const char *str)
+static int rir_token(void* arg)
 {
+    const char *str = arg;
     int tklen = (int) strlen(str);
     if (!strncmp(str, self->src, tklen))
     {
@@ -52,37 +51,42 @@ static int my_token(const char *str)
     return 0;
 }
 
-// todo:: move this out of usercode.. 
-// abstract way  to  peek / consume str ?
-static int _chris(void* arg)
+static bool rir_eof()
 {
-    int (*f)(int) = (int (*)(int))arg;
-    int output;
-
-    if (!f(*self->src))
-    {
-        return -1;
-    }
-    output = 1;
-    self->src += 1;
-    while(f(*self->src))
-    {
-        output += 1;
-        self->src += 1;
-    }
-    return output;
+    return (*self->src == 0);
 }
-#define chris(f) plambda(&_chris, (void*)(int (*)(int))&f)
-#define skipws  rep(chris(isspace))
+
+static void rir_consume()
+{
+    self->src += 1;
+}
+
+static int rir_peek()
+{
+    return *self->src;
+}
+
+bpc_implementation *bpc = &(bpc_implementation) {
+    .token = &rir_token,
+    .bkp = &rir_bkp,
+    .bkp_restore = &rir_bkp_restore,
+    .bkp_del = &rir_bkp_del,
+    .eof = &rir_eof,
+    .consume = &rir_consume,
+    .peek = &rir_peek
+};
 
 ////////////////////////////////////////////
+// BPC language specifics
 
+
+#define id rule(&_id)
 static int _id(void*)
 {
     const char *start_ptr = self->src;
-    int match_size = papply(and(
-        or(chris(isalpha), tk("_")),
-        opt(rep(or(chris(isalnum), tk("_"))))
+    int match_size = apply(seq(
+        alt(chris(isalpha), tk("_")),
+        opt(rep(alt(chris(isalnum), tk("_"))))
     ));
     if (match_size <= 0)
         return -1;
@@ -90,15 +94,15 @@ static int _id(void*)
     strstack_push(&self->stack, strndup(start_ptr, match_size));
     return match_size;
 }
-#define id rule(&_id)
 
+#define func rule(&_func)
 static int _func(void*)
 {
-    int match_size = papply(and(
+    int match_size = apply(seq(
         opt(tk("export")),
         id,
         tk("("),
-        and(id, opt(rep(and(tk(","), id))),
+        seq(id, opt(rep(seq(tk(","), id))),
         tk(")")
        // todo: stmt_block
     )));
@@ -110,39 +114,44 @@ static int _func(void*)
     return match_size;
 
 }
-#define func rule(&_func)
 
 /////////////////////////////////////////
 
+char src[] = {
+#embed "test.rir"
+,0
+};
+
 int main()
 {
-    _bpc_backup = &my_backup;
-    _bpc_restore = &my_restore;
-    _bpc_token = &my_token;
-    _bpc_del = &my_del;
+    // TEST 1.
 
-    ctx test = {
+    printf("begin..\n");
+    self = &(ctx) {
         .src = "_test34",
         .stack = strstack_init()
     };
-    self = &test;
-    int r = papply(id);
+    //_id(0);
+    int r = apply(id);
     printf("result: %i\n", r);
     for (c_each(i, strstack, self->stack)) {
         printf("stack[]=%s\n", *i.ref);
     }
+    assert(r > 0);
     assert(!strcmp(*strstack_top(&self->stack), "_test34"));
     
-    test = (ctx) {
+    // TEST 2.
+
+    self = &(ctx) {
         .src = "export main ( ac, av )",
         .stack = strstack_init()
     };
-    self = &test;
-    r = papply(func);
+    r = apply(func);
     printf("%d\n", r);
     for (c_each(i, strstack, self->stack)) {
         printf("stack[]=%s\n", *i.ref);
     }
     assert(r == 22);
+    printf("BPC TESTS done.\n");
     return 0;
 }
