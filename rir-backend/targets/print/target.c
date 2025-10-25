@@ -1,5 +1,6 @@
 #include "./target.h"
 #include "rir.h"
+#include "sugar.h"
 
 static node_visitor visitor;
 
@@ -175,5 +176,4 @@ void setup_print_target(Targets *targets)
         .descr = "Print the IR in a human readable format.",
         .visitor = &visitor
     ));
-
 }

@@ -82,5 +82,10 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
 # include "./../rir-parser/parser.h"
 
+static void setup(void)
+{
+    setup_targets();
+    setup_visitors();
+}
 
 #endif // RIR_H

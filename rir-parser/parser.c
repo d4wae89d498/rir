@@ -1,5 +1,6 @@
 
 #include "parser.h"
+#include "rir.h"
 #include <ctype.h>
 #include <stdio.h>
 
@@ -246,7 +247,14 @@ static int unaryop_parser_impl(void *arg)
         opt(alt(tk("+"), tk("-"), tk("!"))),
         rule(intlit_parser)
     ));
-    return match_size > 0 ? match_size : -1;
+    if (match_size <= 0) 
+        return -1;
+    const char *tkval = *strstack_top(&self->stack);
+    strstack_pop(&self->stack);
+    if (!strcmp(tkval, "!")) {
+        //not1();
+    }
+    return match_size;
 }
 bpc_parser *unaryop_parser = &unaryop_parser_impl;
 
@@ -258,7 +266,8 @@ static int intlit_parser_impl(void *arg)
     int match_size = apply(rep(chris(isdigit)));
     if (match_size <= 0)
         return -1;
-    strstack_push(&self->stack, strndup(start_ptr, match_size));
+    const char *str = strndup(start_ptr, match_size);
+    intlit(atoi(str));
     return match_size;
 }
 bpc_parser *intlit_parser = &intlit_parser_impl;
@@ -275,7 +284,8 @@ static int strlit_parser_impl(void *arg)
     ));
     if (match_size <= 0)
         return -1;
-    strstack_push(&self->stack, strndup(start_ptr, match_size));
+    const char *str = strndup(start_ptr, match_size);
+    strlit(str);
     return match_size;
 }
 bpc_parser *strlit_parser = &strlit_parser_impl;

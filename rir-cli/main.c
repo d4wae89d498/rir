@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
     char *target = strdup("print");
 
     colors_enabled = !getenv("NO_COLOR");
-    setup_targets();
+    setup();
     parse_color_flags(argc, argv);
     while ((c = coption_get(&opt, argc, argv, shortopts, longopts)) != -1) {
         switch (c) {

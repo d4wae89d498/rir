@@ -10,7 +10,7 @@ int main() {
     builder_end();
 
     // Print it
-    setup_targets();
+    setup();
     auto e = Targets_find(&targets, "print").ref;
     if (!e) {
         fmt_printd(stderr, "ERROR, print target not found.\n");

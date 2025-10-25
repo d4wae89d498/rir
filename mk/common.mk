@@ -24,16 +24,20 @@ endif
 
 LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a 		\
 	 $(WORKSPACE_DIR)/rir-backend/librir-backend.a 							\
-	 $(WORKSPACE_DIR)/rir-backend/librir-backend.a 
+	 $(WORKSPACE_DIR)/rir-ir/librir-ir.a 									\
+	 $(WORKSPACE_DIR)/rir-parser/librir-parser.a 
 
 $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a:
 	make -C $(WORKSPACE_DIR)/third-party/libstc
 
+$(WORKSPACE_DIR)/rir-backend/librir-backend.a:
+	make -C $(WORKSPACE_DIR)/rir-backend
+
 $(WORKSPACE_DIR)/rir-ir/librir-ir.a:
 	make -C $(WORKSPACE_DIR)/rir-ir
 
-$(WORKSPACE_DIR)/rir-backend/librir-backend.a:
-	make -C $(WORKSPACE_DIR)/rir-backend
+$(WORKSPACE_DIR)/rir-parser/librir-parser.a:
+	make -C $(WORKSPACE_DIR)/rir-parser
 
 LDFLAGS ?= $(LIBS)
 

@@ -1,5 +1,6 @@
 #ifndef RIR_PROG_H
 # define RIR_PROG_H
+#include "sugar.h"
 # include <rir.h>
 
 struct prog {

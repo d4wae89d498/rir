@@ -1,5 +1,6 @@
 #ifndef RIR_BINOP_H
 # define RIR_BINOP_H
+#include "sugar.h"
 # include <rir.h>
 
 struct binop 
@@ -10,22 +11,19 @@ struct binop
     value       *right;
 };
 
+static void *binop_accept(node *self, node_visitor *vis, void *ctx) {
+    return (node_visitor_find(vis,  "binop").ref)->second(
+        self,
+        ctx
+    );
+}  
 
 # define def_binop(NAME)                                                \
-    static void * NAME ## _accept(node *self, node_visitor *vis, void *ctx) {\
-        /* todo: find name for vis...*/                                 \
-                                                                        \
-        return (node_visitor_find(vis,  "binop").ref)->second(          \
-            self,                                                       \
-            ctx                                                         \
-        );                                                              \
-    }                                                                   \
-                                                                        \
-    static value * NAME ## 2 (value *left, value *right) {                    \
-        binop *self = new(binop,                                        \
+    static value * NAME ## 2 (value *left, value *right) {              \
+        binop *self = new(binop,                               \
             .expr = {                                                   \
                 .node = {                                               \
-                    .accept = (ir_node_method) & ( NAME ## _accept ),   \
+                    .accept = (ir_node_method) & ( binop_accept ),      \
                     .type = "expr"                                      \
                 },                                                      \
                 .type = "binop",                                        \

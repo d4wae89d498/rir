@@ -2,7 +2,7 @@
 
 
 int main() {
-    fmt_println("==== testing vars ====");
+    fmt_println("==== testing clone ====");
 
     // Build the IR
     prog *demo = prog();
@@ -10,29 +10,24 @@ int main() {
         function("main");
             value *x1 = add2(intlit(2), intlit(4));
             var *v1 = var();
-
             store(v1, x1);
-
             call(resolve("printf"), strlit("hello %d"), intlit(2));
-            
             block *true_case;
             block *false_case;
             var *v2 = var();
-            
             true_case = block("true_case");
             store(v2, mul2(intlit(2), intlit(4)));
             false_case = block("false_case");
             store(v2, add2(intlit(2), intlit(4)));
-
             when(intlit(1), true_case, false_case);
-
             call(resolve("printf"), load(v2));
-
             ret(x1);
     builder_end();
 
+    printf("build done.\n");
     // Print it
     setup();
+
     auto e = Targets_find(&targets, "print").ref;
     if (!e) {
         fmt_printd(stderr, "ERROR, print target not found.\n");
@@ -49,6 +44,8 @@ int main() {
     dump_file(stdout, ctx.ostream);
     fmt_println("-----");
     fmt_println("Exiting... {}\n", (void*)visitor);
+
+    exit(1);
     return 0;
 }
 

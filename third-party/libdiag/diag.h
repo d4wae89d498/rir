@@ -36,6 +36,7 @@ static const char *RESET = "\x1b[0m";
 
 // IMPLS
 
+// === common ===
 static void rir_print_common(const char *file, int line, const char *func, const char *label, const char *label_color_tty) {
     
     const char *label_color   = colors_enabled ? label_color_tty : "";
