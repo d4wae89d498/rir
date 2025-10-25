@@ -15,7 +15,8 @@ static void *strlit_visit(strlit *self, node_visitor *vis, void *ctx) {
     );
 }
 
-static value *StrLit(const char *value) {
+static value *StrLit(const char *str) {
+    printf("hmm/..\n");
     strlit *self = new(strlit,
         .expr = {
             .node = {
@@ -24,9 +25,12 @@ static value *StrLit(const char *value) {
             },
             .type = "strlit"
         },
-        .value = value
+        .value = str
     );
-    return value(&self->expr);
+    printf("??\n");
+    value* val = value(&self->expr);
+    printf("end...\n");
+    return val;
 }
 
 # define strlit(v) StrLit(v)

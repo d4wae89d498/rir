@@ -1,6 +1,7 @@
 #ifndef RIR_DIAGNOSTIC_H
 # define RIR_DIAGNOSTIC_H
 # include <stdio.h>
+# include <stdbool.h>
 # if __STDC_VERSION__ >= 201112L
 #  include <c11/fmt.h>
 # endif

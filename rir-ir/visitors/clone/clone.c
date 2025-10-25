@@ -5,7 +5,9 @@ static node_visitor visitor;
 
 static void *visit_prog(prog *self, void *ctx) 
 {
+    TRACE
     prog *output = prog();
+    builder_begin(output);
     for (c_each(i, functions, self->functions))
         dot(i.ref->second->node, accept, &visitor, ctx);
     return output;
@@ -13,7 +15,9 @@ static void *visit_prog(prog *self, void *ctx)
 
 static void *visit_function(function *self, void *ctx) 
 {
+    TRACE
     function *output = function(self->name);
+    TRACE
     block *b = self->start;
     while (b) {
         (&b->node)->accept(&b->node, &visitor, ctx); 
@@ -24,6 +28,7 @@ static void *visit_function(function *self, void *ctx)
 
 static void *visit_block(block *self, void *ctx) 
 {
+    TRACE
     block *output = block(self->name);
     instr *i = self->start;
     while (i) {
@@ -35,11 +40,13 @@ static void *visit_block(block *self, void *ctx)
 
 static void *visit_value(value *self, void *ctx) 
 {
-    (&self->e->node)->accept(&self->e->node, &visitor, ctx); 
-    return 0;
+    TRACE
+    return (&self->e->node)->accept(&self->e->node, &visitor, ctx); 
 }
 
-static void *visit_arg(arg *self, void *ctx) {
+static void *visit_arg(arg *self, void *ctx)
+{
+    TRACE
     return arg(self->n);
 }
 
@@ -62,21 +69,25 @@ static void *visit_binop(binop *self, void *ctx)
 
 static void *visit_intlit(intlit *self, void *ctx) 
 {
+    TRACE
     return intlit(self->value);
 }
 
 static void *visit_strlit(strlit *self, void *ctx) 
 {
+    TRACE
     return strlit(self->value);
 }
 
 static void *visit_resolve(resolve *self, void *ctx) 
 {
+    TRACE
     return resolve(self->symbol_name);
 }
 
 static void *visit_call(call *self, void *ctx) 
 {
+    TRACE
     call *output = new(call,
         .expr = {
             .node = {
@@ -86,14 +97,24 @@ static void *visit_call(call *self, void *ctx)
             .type = "call"
         },
         .fp = self->fp,
-        .args = NULL,
+        .args = malloc(self->arg_count * sizeof(void*)),
         .arg_count = 0
     ); 
 
     int i = 0;
     while (i < self->arg_count)
     {
+        printf("---\n");
+        printf("expr.type: %s\n", self->args[i]->e->type);
+        printf("node.accept: %p\n", (void*) self->args[i]->e->node.accept);
+        printf("node.type: %s\n",  self->args[i]->e->node.type);
+
+
         output->args[i] = dot(self->args[i]->e->node, accept, &visitor, ctx);
+
+
+        //output->args[i] = dot(self->args[i]->e->node, accept, &visitor, ctx);
+        printf("done.\n");
         i += 1;
     }
     output->arg_count = i;
@@ -107,59 +128,67 @@ static void *visit_call(call *self, void *ctx)
 // issue: it may be clonned twice..
 static void *visit_jump(jump *self, void *ctx) 
 {
+    TRACE
     block *dest = dot(self->dest->node, accept, &visitor, ctx);
     jump(dest);
-    return 0;
+    return 0; // not an expr
 }
 
 static void *visit_ret(ret *self, void *ctx) 
 {
+    TRACE
     value *val = dot(self->value->e->node, accept, &visitor, ctx);
     ret(val);
-    return 0;
+    return 0; // not an expr
 }
 
 static void *visit_when(when *self, void *ctx) 
 {
+    TRACE
     value *cond = dot(self->cond->e->node, accept, &visitor, ctx);
     block *t = dot(self->t->node, accept, &visitor, ctx);
     block *f = dot(self->f->node, accept, &visitor, ctx);
     when(cond, t, f);
-    return 0;
+    return 0; // not an expr
 }
 
 static void *visit_var(var *self, void *ctx) 
 {
+    TRACE
     var *v = var();
     v->id = self->id;
     v->type = self->type;
-    return 0;
+    return v;
 }
 
 static void *visit_deref(deref *self, void *ctx) 
 {
+    TRACE
     value   *val = dot(self->v->e->node, accept, &visitor, ctx);
     return deref(val);
 }
 
 static void *visit_load(load *self, void *ctx)
 {   
+    TRACE
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return load(var);
 }
 
 static void *visit_ref(ref *self, void *ctx) 
 {
+    TRACE
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return ref(var);
 }
 
 static void *visit_store(store *self, void *ctx) 
 {
+    TRACE
     var *dest = dot(self->dest->instr.node, accept, &visitor, ctx);
     value *val = dot(self->v->e->node, accept, &visitor, ctx);
     store(dest, val);
-    return 0;
+    return 0; // not an expr 
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -4,6 +4,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 //////////////           COMMON         ////////////////////////////////////////
 
+//#define TRACE
+#define TRACE 1
+#if defined(TRACE) && TRACE == 1 
+# undef TRACE
+# define TRACE trace();
+#else 
+# ifdef TRACE 
+#  undef TRACE
+# endif 
+# define TRACE
+#endif
+
 // libc/system
 # include <assert.h>
 # include <ctype.h>

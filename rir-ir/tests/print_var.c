@@ -2,9 +2,10 @@
 
 
 int main() {
-    fmt_println("==== testing vars ====");
+    setup();
+    fmt_println("=== testing vars ===");
 
-    // Build the IR
+    // 1. build the IR
     prog *demo = prog();
     builder_begin(demo);
         function("main");
@@ -31,24 +32,14 @@ int main() {
             ret(x1);
     builder_end();
 
-    // Print it
-    setup();
-    auto e = Targets_find(&targets, "print").ref;
-    if (!e) {
-        fmt_printd(stderr, "ERROR, print target not found.\n");
-        exit(1);
-    }
-    auto visitor = e->second->visitor;
+    // 2. print it    
     auto ctx = (print_target_ctx){
         .depth = 0,
         .ostream = tmpfile()
     };
-    dot(demo->node, accept, visitor, &ctx);
-    
+    dot(demo->node, accept, print_visitor, &ctx);
     fmt_println("-----\nGenerated IR:\n-");
     dump_file(stdout, ctx.ostream);
-    fmt_println("-----");
-    fmt_println("Exiting... {}\n", (void*)visitor);
     return 0;
 }
 

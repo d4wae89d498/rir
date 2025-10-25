@@ -1,6 +1,5 @@
 #ifndef RIR_BINOP_H
 # define RIR_BINOP_H
-#include "sugar.h"
 # include <rir.h>
 
 struct binop 

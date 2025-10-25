@@ -1,4 +1,3 @@
-
 #include <rir.h>
 #ifndef RIR_CLONE_VIS_H
 # define RIR_CLONE_VIS_H

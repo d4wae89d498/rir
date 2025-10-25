@@ -1,6 +1,7 @@
 #ifndef RIR_VALUE_H
 # define RIR_VALUE_H
 # include <rir.h>
+#include <stdio.h>
 
 struct value {
     instr   instr;
@@ -15,8 +16,8 @@ static void *value_visit(value *self, node_visitor *vis, void *ctx) {
     );
 }
 
+# define value(v) Value(v)
 static value *Value(expr *e) {
-#   define value(v) Value(v)
 
     static int nb;
 
@@ -36,7 +37,10 @@ static value *Value(expr *e) {
         .id = nb,
         .e = e,
     );
+
+    printf("attachin..\n");
     builder_attach_instr(&out->instr);
+    printf("attached.\n");
     return out;
 }
 
