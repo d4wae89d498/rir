@@ -1,3 +1,4 @@
+#include "stcutils.h"
 #include <rir.h>
 
 
@@ -17,29 +18,36 @@ int main() {
     printf("build done.\n");
 
     // 2. print it first
-    auto ctx = (print_target_ctx){
+    print_target_ctx octx = {
         .depth = 0,
         .ostream = tmpfile()
     };
-    dot(demo->node, accept, print_visitor, &ctx);
+    dot(demo->node, accept, print_visitor, &octx);
     fmt_println("-----\nGenerated IR:\n-");
-    dump_file(stdout, ctx.ostream);
+    dump_file(stdout, octx.ostream);
     fmt_println("-----");
 
     // 3. clone it
     printf("clonning...\n");
+    clone_ctx ctx = {
+        .ptrmap = ptrmap_init()
+    };
     prog *clone = dot(demo->node, accept, clone_visitor, &ctx);
     printf("DONE.\n");
 
     // 4. print the clonned ir
-    ctx = (print_target_ctx){
+    print_target_ctx cctx = {
         .depth = 0,
         .ostream = tmpfile()
     };
-    dot(clone->node, accept, print_visitor, &ctx);
+    dot(clone->node, accept, print_visitor, &cctx);
     fmt_println("-----\nClonned IR:\n-");
-    dump_file(stdout, ctx.ostream);
+    dump_file(stdout, cctx.ostream);
     fmt_println("-----");
+
+    // 5. compare original and clonned ir
+    // TODO
+    
     return 0;
 }
 

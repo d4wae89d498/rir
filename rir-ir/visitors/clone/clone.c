@@ -1,4 +1,6 @@
 #include "clone.h"
+#include "rir.h"
+#include "stcutils.h"
 
 static node_visitor visitor;
 
@@ -46,7 +48,11 @@ static void *visit_block(block *self, clone_ctx *ctx)
 static void *visit_value(value *self, clone_ctx *ctx) 
 {
     TRACE;
-    return (&self->e->node)->accept(&self->e->node, &visitor, ctx); 
+    value *output = value(dot(self->e->node, accept, &visitor, ctx));
+    printf("value [%d] %p -> [%d] %p\n", self->id, self, output->id, output);
+   
+    ptrmap_insert(&ctx->ptrmap, self, output);
+    return output;
 }
 
 static void *visit_arg(arg *self, clone_ctx *ctx)
@@ -58,12 +64,9 @@ static void *visit_arg(arg *self, clone_ctx *ctx)
 static void *visit_binop(binop *self, clone_ctx *ctx) 
 {
     TRACE;
-
-    // TODO: fix me.. use ptrmap
-    ptrmap_iter l = ptrmap_find(&ctx->ptrmap, (void*) &self->left->e->node);
-    ptrmap_iter r = ptrmap_find(&ctx->ptrmap, (void*) &self->right->e->node);
+    ptrmap_iter l = ptrmap_find(&ctx->ptrmap, self->left);
+    ptrmap_iter r = ptrmap_find(&ctx->ptrmap, self->right);
    
-    printf("hmm...\n");
     if (!l.ref)
         error("Trying to clone a malformed LHS in a binop node.");
     if (!r.ref)
@@ -82,22 +85,28 @@ static void *visit_binop(binop *self, clone_ctx *ctx)
         .left = r.ref->second,
         .right = l.ref->second,
     );
-    value *val = value((expr*)e);
+    // value *val = value((expr*)e);
     //ptrmap_e
-    ptrmap_insert(&ctx->ptrmap, self, val);
-    return val;
+    // ptrmap_insert(&ctx->ptrmap, self, val);
+    return e;//val;
 }
 
 static void *visit_intlit(intlit *self, clone_ctx *ctx) 
 {
     TRACE;
-    return intlit(self->value);
+    return new(intlit, 
+        .expr = self->expr,
+        .value = self->value
+    );
 }
 
 static void *visit_strlit(strlit *self, clone_ctx *ctx) 
 {
     TRACE;
-    return strlit(self->value);
+    return new(strlit, 
+        .expr = self->expr,
+        .value = self->value
+    );
 }
 
 static void *visit_resolve(resolve *self, clone_ctx *ctx) 
@@ -158,8 +167,12 @@ static void *visit_jump(jump *self, clone_ctx *ctx)
 static void *visit_ret(ret *self, clone_ctx *ctx) 
 {
     TRACE;
-    value *val = dot(self->value->e->node, accept, &visitor, ctx);
-    ret(val);
+    ptrmap_iter v = ptrmap_find(&ctx->ptrmap, self->value);
+    if (!v.ref) {
+        error("Trying to ret an unknown temp");
+        exit(1);
+    }
+    ret(v.ref->second);
     return 0; // not an expr
 }
 
@@ -176,9 +189,14 @@ static void *visit_when(when *self, clone_ctx *ctx)
 static void *visit_var(var *self, clone_ctx *ctx) 
 {
     TRACE;
+    
     var *v = var();
+    
+    ptrmap_insert(&ctx->ptrmap, self, v);
+
     v->id = self->id;
     v->type = self->type;
+
     return v;
 }
 
@@ -206,9 +224,19 @@ static void *visit_ref(ref *self, clone_ctx *ctx)
 static void *visit_store(store *self, clone_ctx *ctx) 
 {
     TRACE;
-    var *dest = dot(self->dest->instr.node, accept, &visitor, ctx);
-    value *val = dot(self->v->e->node, accept, &visitor, ctx);
-    store(dest, val);
+
+    ptrmap_iter dest = ptrmap_find(&ctx->ptrmap, self->dest);
+    if (!dest.ref) {
+        error("Storing unknown var");
+        exit(1);
+    }
+    ptrmap_iter v = ptrmap_find(&ctx->ptrmap, self->v);
+    if (!v.ref) {
+        error("Storing unknown temp");
+        exit(1);
+    }
+
+    store(dest.ref->second, v.ref->second);
     return 0; // not an expr 
 }
 
