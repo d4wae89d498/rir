@@ -1,8 +1,7 @@
 #include <bpc.h>
 #include <ctype.h>
 #include <stdio.h>
-#define T strstack, const char*
-#include <stc/stack.h>
+#include <stcutils.h>
 
 ////////////////////////////////////////////
 //  BPC char* to ir implementation 

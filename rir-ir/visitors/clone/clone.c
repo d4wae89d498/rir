@@ -1,11 +1,10 @@
 #include "clone.h"
-#include "rir.h"
 
 static node_visitor visitor;
 
-static void *visit_prog(prog *self, void *ctx) 
+static void *visit_prog(prog *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     prog *output = prog();
     builder_begin(output);
     for (c_each(i, functions, self->functions))
@@ -13,11 +12,16 @@ static void *visit_prog(prog *self, void *ctx)
     return output;
 }
 
-static void *visit_function(function *self, void *ctx) 
+static void *visit_function(function *self, clone_ctx *ctx) 
 {
-    TRACE
-    function *output = function(self->name);
-    TRACE
+    TRACE;
+    function *output = function_decl(self->name);
+
+    builder_begin_function(output);
+    prog *current_prog = builder_get_prog();
+    functions_emplace(&(current_prog->functions), self->name, output);
+
+
     block *b = self->start;
     while (b) {
         (&b->node)->accept(&b->node, &visitor, ctx); 
@@ -26,9 +30,10 @@ static void *visit_function(function *self, void *ctx)
     return output;
 }
 
-static void *visit_block(block *self, void *ctx) 
+static void *visit_block(block *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
+    
     block *output = block(self->name);
     instr *i = self->start;
     while (i) {
@@ -38,21 +43,34 @@ static void *visit_block(block *self, void *ctx)
     return output;
 }
 
-static void *visit_value(value *self, void *ctx) 
+static void *visit_value(value *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     return (&self->e->node)->accept(&self->e->node, &visitor, ctx); 
 }
 
-static void *visit_arg(arg *self, void *ctx)
+static void *visit_arg(arg *self, clone_ctx *ctx)
 {
-    TRACE
+    TRACE;
     return arg(self->n);
 }
 
-static void *visit_binop(binop *self, void *ctx) 
+static void *visit_binop(binop *self, clone_ctx *ctx) 
 {
-    binop *output = new(binop,
+    TRACE;
+
+    // TODO: fix me.. use ptrmap
+    ptrmap_iter l = ptrmap_find(&ctx->ptrmap, (void*) &self->left->e->node);
+    ptrmap_iter r = ptrmap_find(&ctx->ptrmap, (void*) &self->right->e->node);
+   
+    printf("hmm...\n");
+    if (!l.ref)
+        error("Trying to clone a malformed LHS in a binop node.");
+    if (!r.ref)
+        error("Trying to clone a malformed RHS in a binop node.");
+    if (!l.ref || !r.ref)
+        exit(1);
+    binop *e = new(binop,
         .expr = {
             .node = {
                 .accept = (ir_node_method) & ( binop_accept ),
@@ -61,33 +79,36 @@ static void *visit_binop(binop *self, void *ctx)
             .type = "binop",
         },
         .type = self->type,
-        .left = dot(self->left->e->node, accept, &visitor, ctx),
-        .right = dot(self->right->e->node, accept, &visitor, ctx),
+        .left = r.ref->second,
+        .right = l.ref->second,
     );
-    return value((expr*)output);
+    value *val = value((expr*)e);
+    //ptrmap_e
+    ptrmap_insert(&ctx->ptrmap, self, val);
+    return val;
 }
 
-static void *visit_intlit(intlit *self, void *ctx) 
+static void *visit_intlit(intlit *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     return intlit(self->value);
 }
 
-static void *visit_strlit(strlit *self, void *ctx) 
+static void *visit_strlit(strlit *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     return strlit(self->value);
 }
 
-static void *visit_resolve(resolve *self, void *ctx) 
+static void *visit_resolve(resolve *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     return resolve(self->symbol_name);
 }
 
-static void *visit_call(call *self, void *ctx) 
+static void *visit_call(call *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     call *output = new(call,
         .expr = {
             .node = {
@@ -126,25 +147,25 @@ static void *visit_call(call *self, void *ctx)
 // todo : use block id to jump correctly...
 // check if clone with args above works... 
 // issue: it may be clonned twice..
-static void *visit_jump(jump *self, void *ctx) 
+static void *visit_jump(jump *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     block *dest = dot(self->dest->node, accept, &visitor, ctx);
     jump(dest);
     return 0; // not an expr
 }
 
-static void *visit_ret(ret *self, void *ctx) 
+static void *visit_ret(ret *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     value *val = dot(self->value->e->node, accept, &visitor, ctx);
     ret(val);
     return 0; // not an expr
 }
 
-static void *visit_when(when *self, void *ctx) 
+static void *visit_when(when *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     value *cond = dot(self->cond->e->node, accept, &visitor, ctx);
     block *t = dot(self->t->node, accept, &visitor, ctx);
     block *f = dot(self->f->node, accept, &visitor, ctx);
@@ -152,39 +173,39 @@ static void *visit_when(when *self, void *ctx)
     return 0; // not an expr
 }
 
-static void *visit_var(var *self, void *ctx) 
+static void *visit_var(var *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     var *v = var();
     v->id = self->id;
     v->type = self->type;
     return v;
 }
 
-static void *visit_deref(deref *self, void *ctx) 
+static void *visit_deref(deref *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     value   *val = dot(self->v->e->node, accept, &visitor, ctx);
     return deref(val);
 }
 
-static void *visit_load(load *self, void *ctx)
+static void *visit_load(load *self, clone_ctx *ctx)
 {   
-    TRACE
+    TRACE;
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return load(var);
 }
 
-static void *visit_ref(ref *self, void *ctx) 
+static void *visit_ref(ref *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return ref(var);
 }
 
-static void *visit_store(store *self, void *ctx) 
+static void *visit_store(store *self, clone_ctx *ctx) 
 {
-    TRACE
+    TRACE;
     var *dest = dot(self->dest->instr.node, accept, &visitor, ctx);
     value *val = dot(self->v->e->node, accept, &visitor, ctx);
     store(dest, val);
@@ -197,6 +218,7 @@ node_visitor *clone_visitor = &visitor;
 
 void setup_clone_visitor(void)
 {
+    TRACE;
     // Create and attach visitor
     visitor = node_visitor_init();
 

@@ -37,6 +37,19 @@ static const char *RESET = "\x1b[0m";
 
 // IMPLS
 
+// === trace ===
+#ifdef TRACE
+# if TRACE == 1
+#  undef TRACE
+#  define TRACE fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__);
+# else
+#  undef TRACE
+#  define TRACE 
+# endif 
+#else 
+# define TRACE  
+#endif
+
 // === common ===
 static void rir_print_common(const char *file, int line, const char *func, const char *label, const char *label_color_tty) {
     

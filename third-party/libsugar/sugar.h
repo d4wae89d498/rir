@@ -31,17 +31,9 @@ typedef struct closure
     int (*f)(void *);
     void        *ctx;
 } closure;
+
 # define closure(F, CTX) new(closure, .f=F, .ctx=CTX)
-
-//static _apply(const char *what, )
-
 # define apply(cl) (cl)->f((cl)->ctx)
-
-//
-
-# define ull unsigned long long
-# define trace() \
-    fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__)
 
 /////////////////////////////////////////////////////
 //         POSIX POLYFILS                          //

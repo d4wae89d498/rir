@@ -3,6 +3,7 @@ CSTD_LATEST = c23
 
 CC = clang #?= clang
 CSTD ?= $(CSTD_LATEST)
+TRACE ?= 0
 
 CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-Wno-newline-eof								\
@@ -13,7 +14,9 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-I$(WORKSPACE_DIR)/third-party/libstc/include	\
 	-I$(WORKSPACE_DIR)/third-party/libsugar 		\
 	-I$(WORKSPACE_DIR)/third-party/libdiag 			\
-	-I$(WORKSPACE_DIR)/third-party/libbpc
+	-I$(WORKSPACE_DIR)/third-party/libbpc			\
+	-I$(WORKSPACE_DIR)/third-party/libstcutils		\
+	-DTRACE=$(TRACE)
 
 # Wno-format-security: todo check why needed why fmt_printd 
 

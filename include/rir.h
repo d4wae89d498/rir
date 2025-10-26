@@ -4,18 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //////////////           COMMON         ////////////////////////////////////////
 
-//#define TRACE
-#define TRACE 1
-#if defined(TRACE) && TRACE == 1 
-# undef TRACE
-# define TRACE trace();
-#else 
-# ifdef TRACE 
-#  undef TRACE
-# endif 
-# define TRACE
-#endif
-
 // libc/system
 # include <assert.h>
 # include <ctype.h>
@@ -31,13 +19,13 @@
 # include <time.h>
 
 // third party
-# include <stc/cstr.h>
+# include <stcutils.h>
 # include <sugar.h>
 # include <diag.h>
 
+
 ////////////////////////////////////////////////////////////////////////////////
 //////////////           IR             ////////////////////////////////////////
-
 
 typedef struct node         node;
 

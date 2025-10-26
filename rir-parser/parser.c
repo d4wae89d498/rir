@@ -1,11 +1,5 @@
 
 #include "parser.h"
-#include "rir.h"
-#include <ctype.h>
-#include <stdio.h>
-
-#define T strstack, const char*
-#include <stc/stack.h>
 
 ////////////////////////////////////////////
 //  BPC char* to ir implementation 
