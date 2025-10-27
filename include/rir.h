@@ -43,6 +43,7 @@ typedef struct deref        deref;
 typedef struct terminator   terminator;
 
 // exprs
+typedef struct resolve      resolve;
 typedef struct arg          arg;
 typedef struct binop        binop;
 typedef struct unaryop      unaryop;
@@ -52,11 +53,13 @@ typedef struct intlit       intlit;
 typedef struct store        store;
 typedef struct load         load;
 typedef struct ref          ref;
+typedef struct phi          phi;
 
 // terminators 
 typedef struct ret          ret;
 typedef struct jump         jump;
-
+typedef struct when         when;
+typedef struct unreachable  unreachable;
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>

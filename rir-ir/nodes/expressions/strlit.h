@@ -2,35 +2,22 @@
 # define RIR_STRLIT_H
 # include <rir.h>
 
-struct strlit
-{
+struct strlit {
     expr        expr;
     const char  *value;
 };
 
-static void *strlit_visit(strlit *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "strlit").ref)->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, strlit, &self->expr.impl)
 
 static value *StrLit(const char *str) {
-    printf("hmm/..\n");
-    strlit *self = new(strlit,
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &strlit_visit,
-                .type = "expr"
-            },
+    strlit *output = new(strlit,
+        .expr = expr_impl(
+            .accept = &strlit_visit,
             .type = "strlit"
-        },
+        ),
         .value = str
     );
-    printf("??\n");
-    value* val = value(&self->expr);
-    printf("end...\n");
-    return val;
+    return value(&output->expr);
 }
 
 # define strlit(v) StrLit(v)

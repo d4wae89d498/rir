@@ -74,13 +74,10 @@ static void *visit_binop(binop *self, clone_ctx *ctx)
     if (!l.ref || !r.ref)
         exit(1);
     binop *e = new(binop,
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) & ( binop_accept ),
-                .type = "expr"
-            },
+        .expr = expr_impl(
+            .accept = & ( binop_visit),
             .type = "binop",
-        },
+        ),
         .type = self->type,
         .left = r.ref->second,
         .right = l.ref->second,
@@ -119,13 +116,10 @@ static void *visit_call(call *self, clone_ctx *ctx)
 {
     TRACE;
     call *output = new(call,
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &call_visit,
-                .type = "expr"
-            },
+        .expr = expr_impl(
+            .accept = (ir_node_method) &call_visit,
             .type = "call"
-        },
+        ),
         .fp = self->fp,
         .args = malloc(self->arg_count * sizeof(void*)),
         .arg_count = 0
@@ -135,8 +129,8 @@ static void *visit_call(call *self, clone_ctx *ctx)
     while (i < self->arg_count)
     {
         printf("---\n");
-        printf("expr.type: %s\n", self->args[i]->e->type);
-        printf("node.accept: %p\n", (void*) self->args[i]->e->node.accept);
+        printf("expr.impl.type: %s\n", self->args[i]->e->impl.type);
+        printf("expr.impl.accept: %p\n", (void*) self->args[i]->e->impl.accept);
         printf("node.type: %s\n",  self->args[i]->e->node.type);
 
 

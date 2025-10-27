@@ -2,23 +2,18 @@
 # define RIR_PHI_H
 # include <rir.h>
 
-typedef struct phi
-{
-    expr     expr; 
-    value    **values;
-    block    **blocks;
-    value      *dest;
-    unsigned   size;
-} phi;
+// TODO: make in an instr ??
+struct phi {
+    expr        expr; 
+    value       **values;
+    block       **blocks;
+    value       *dest;
+    unsigned    size;
+};
 
-static void *phi_accept(phi *self, node_visitor *vis, void *ctx) {
-    return node_visitor_find(vis, "phi").ref->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, phi, &self->expr.impl)
 
-static value *Phi(value *v1, block *b2, ...)
+static phi *phi_new(value *v1, block *b2, ...)
 {
     if (!v1 || !b2) {
         // TODO: error: impair
@@ -38,13 +33,10 @@ static value *Phi(value *v1, block *b2, ...)
     }
     va_end(ap);
     phi *p = new(phi, 
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &phi_accept,
-                .type = "instr"
-            },
+        .expr = expr_impl(
+            .accept = &phi_visit,
             .type = "phi"
-        },
+        ),
         .values = (value**)malloc(sizeof(value*) * count),
         .blocks = (block**)malloc(sizeof(block*) * count),
         .size = count,
@@ -71,10 +63,9 @@ static value *Phi(value *v1, block *b2, ...)
         ++i;
     }
     va_end(ap);
-    value(&p->expr);
-    return NULL;
+    return p;
 }
 
-# define phi(...) Phi(__VA_ARGS__, 0)
+# define phi(...) value(&phi_new(__VA_ARGS__, 0)->expr)
 
 #endif /* RIR_PHI_H */

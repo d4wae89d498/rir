@@ -7,23 +7,15 @@ struct ref {
     var     *v;
 };
 
-static void *ref_visit(ref *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "load").ref)->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, ref, &self->expr.impl)
 
 static value *Ref(var *v) {
     v->type = V_STACK;
     ref *self = new(ref, 
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &ref_visit,
-                .type = "instr"
-            },
+        .expr = expr_impl(
+            .accept = &ref_visit,
             .type = "ref"
-        },
+        ),
         .v = v
     );
     return value(&self->expr);

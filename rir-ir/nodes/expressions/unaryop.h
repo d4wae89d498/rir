@@ -2,34 +2,29 @@
 # define RIR_UNARY_H
 # include <rir.h>
 
-struct unaryop 
-{
+struct unaryop {
     expr        expr;
     const char  *type;
     value       *operand;
 };
 
+visitable(node_visitor, node, unaryop, &self->expr.impl)
 
-//     return hmap_find(visitor, "addw")(ctx);
 # define def_unaryop(NAME)                                                  \
-    static void * NAME ## _accept(void *visitor, void *ctx) {               \
-        return 0;                                                           \
+    static unaryop * NAME ## 1 ## _new (value *operand) {                     \
+        return new(unaryop,                                                 \
+            .expr = expr_impl(                                              \
+                .accept = &unaryop_visit,                                   \
+                .type = "unaryop"                                           \
+            ),                                                              \
+            .type = #NAME ,                                                 \
+            .operand = operand                                              \
+        );                                                                  \
     }                                                                       \
                                                                             \
-    static value * NAME ## 1 (value *operand) {                                   \
-        return value(&new(unaryop,                                          \
-            .expr = {                                                       \
-                .node = {                                                   \
-                    .accept = (ir_node_method)&NAME ## _accept,             \
-                    .type = "unaryop"                                       \
-                },                                                          \
-                .type = "unaryop"                                           \
-            },                                                              \
-            .type = #NAME ,                                                 \
-            .operand = operand,                                             \
-        )->expr);                                                           \
-    }   
-
+    static value * NAME ## 1 (value *operand) {                             \
+        return value(& NAME ## 1 ## _new (operand)->expr);                          \
+    }
 
 def_unaryop(not)
 def_unaryop(inc)

@@ -10,28 +10,22 @@ struct binop
     value       *right;
 };
 
-static void *binop_accept(node *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "binop").ref)->second(
-        self,
-        ctx
-    );
-}  
+visitable(node_visitor, node, binop, &self->expr.impl)
 
 # define def_binop(NAME)                                                \
-    static value * NAME ## 2 (value *left, value *right) {              \
-        binop *self = new(binop,                               \
-            .expr = {                                                   \
-                .node = {                                               \
-                    .accept = (ir_node_method) & ( binop_accept ),      \
-                    .type = "expr"                                      \
-                },                                                      \
+    static binop * NAME ## 2 ## _new (value *left, value *right) {      \
+       return new(binop,                                                \
+            .expr = expr_impl(                                          \
+                .accept = & ( binop_visit ),                            \
                 .type = "binop",                                        \
-            },                                                          \
+            ),                                                          \
             .type = #NAME,                                              \
             .left = left,                                               \
             .right = right,                                             \
         );                                                              \
-        return value((expr*)self);                                      \
+    }                                                                   \
+    static value * NAME ## 2 (value *left, value *right) {              \
+        return value(& NAME ## 2 ## _new (left, right)->expr);          \
     }
 
 def_binop(add)   // both operands signed or unsigned, same bitwise op, addition
@@ -61,7 +55,5 @@ def_binop(slt)   // signed less than, boolean result
 def_binop(sle)   // signed less or equal, boolean result
 def_binop(sgt)   // signed greater than, boolean result
 def_binop(sge)   // signed greater or equal, boolean result
-
-
 
 #endif // RIR_BINOP_H

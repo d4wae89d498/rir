@@ -8,28 +8,19 @@ struct store {
     value   *v;
 };
 
-static void *store_visit(store *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "store").ref)->second(
-        &self->instr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, store, &self->instr.impl)
 
 static void Store(var *dest, value *v) 
 {
     store *self = new(store, 
-        .instr = {
-            .node = {
-                .accept = (ir_node_method) &store_visit,
-                .type = "instr"
-            },
+        .instr = instr_impl(
+            .accept = &store_visit,
             .type = "store", 
-        },
+        ),
         .dest = dest, 
         .v = v
     );
-    builder_attach_instr(&self->instr);    
-
+    builder_attach_instr(&self->instr);
     return;
 }
 

@@ -2,30 +2,21 @@
 # define RIR_CALL_H
 # include <rir.h>
 
-struct call 
-{
+struct call {
     expr        expr;
     value       *fp;
     value       **args;
     int         arg_count;
 };
 
-static void *call_visit(call *self, node_visitor *vis, void *ctx) {
-    return node_visitor_find(vis, "call").ref->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, call, &self->expr.impl)
 
-static value *Call(value *addr, ...) {
+static call *call_new(value *addr, ...) {
     call *self = new(call,
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &call_visit,
-                .type = "expr"
-            },
+        .expr = expr_impl(
+            .accept = (ir_node_method) &call_visit,
             .type = "call"
-        },
+        ),
         .fp = addr,
         .args = NULL,
         .arg_count = 0
@@ -55,10 +46,9 @@ static value *Call(value *addr, ...) {
     }
 
     va_end(ap);
-
-    return value(&self->expr);
+    return self;
 }
 
-# define call(...) Call(__VA_ARGS__, 0);
+# define call(...) value(&call_new(__VA_ARGS__, 0)->expr)
 
 #endif // RIR_CALL_H

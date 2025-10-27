@@ -7,23 +7,15 @@ struct load {
     var     *v;
 };
 
-static void *load_visit(load *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "load").ref)->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, load, &self->expr.impl)
 
 static value *Load(var *v) 
 {
     load *self = new(load, 
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &load_visit,
-                .type = "expr"
-            },
-            .type = "load",
-        }, 
+        .expr = expr_impl(
+            .accept = &load_visit,
+            .type = "load"
+        ), 
         .v = v
     );
     return value(&self->expr);

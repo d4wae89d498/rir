@@ -2,34 +2,23 @@
 # define RIR_UNREACHABLE_H
 # include <rir.h>
 
-typedef struct unreachable 
-{
+struct unreachable {
     terminator terminator;
-} unreachable;
+};
 
-static void *unreachable_visit(ret *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "unreachable").ref)->second(
-        &self->terminator.instr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, unreachable, &self->terminator.impl)
 
-static void Unreachable() {
+static ret *unreachable_new(void) {
     ret *self = new(ret, 
-        .terminator = {
-            .instr = {
-                .node = {
-                    .accept = (ir_node_method) &unreachable_visit,
-                    .type = "instr"
-                },
-                .type = "terminator",
-            },
+        .terminator = terminator_impl(
+            .accept = &unreachable_visit,
             .type = "unreachable",
-        },
+        ),
     );
     builder_attach_instr(&self->terminator.instr); 
+    return self;
 }
 #undef unreachable // maybe def in __stddef_unreachable... todo: checkwhy or rename..
-#define unreachable() Unreachable()
+#define unreachable() unreachable_new()
 
 #endif // RIR_UNREACHABLE_H

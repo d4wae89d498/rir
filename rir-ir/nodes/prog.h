@@ -7,12 +7,7 @@ struct prog {
     functions   functions;
 };
 
-static void *prog_visit(node *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "prog").ref)->second(
-        self,
-        ctx
-    );
-}
+visitable(node_visitor, node, prog, self)
 
 static prog *Prog(void) {
     prog *out = new(prog, 
@@ -22,14 +17,9 @@ static prog *Prog(void) {
         },
         .functions = functions_init(),
     );
-
     return out;
 }
+
 # define prog() Prog()
-
-
-
-
-// by default ... we should call main ?
 
 #endif // RIR_PROG_H

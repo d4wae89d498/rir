@@ -2,34 +2,24 @@
 # define RIR_INTLIT_H
 # include <rir.h>
 
-struct intlit
-{
+struct intlit {
     expr    expr;
     int     value;
 };
 
-static void *intlit_visit(intlit *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "intlit").ref)->second(
-        &self->expr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, intlit, &self->expr.impl)
 
-static value *IntLit(int value) 
+static intlit *intlit_new(int value) 
 {
-    intlit *e = new(intlit, 
-        .expr = {
-            .node = {
-                .accept = (ir_node_method) &intlit_visit,
-                .type = "expr"
-            },
+    return new(intlit, 
+        .expr = expr_impl(
+            .accept = &intlit_visit,
             .type = "intlit"
-        },
+        ),
         .value = value
     );
-    return value(&e->expr);
 }
 
-# define intlit(X) IntLit(X)
+# define intlit(X) value(&intlit_new(X)->expr)
 
 #endif // RIR_INTLIT_H

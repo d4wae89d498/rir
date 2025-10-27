@@ -2,8 +2,7 @@
 # define RIR_BLOCK_H
 # include <rir.h>
 
-struct block 
-{
+struct block {
     node        node;
     block       *prev;
     block       *next;
@@ -12,17 +11,12 @@ struct block
     instr       *last;  // check later if its a terminator
 };
 
-static void *block_visit(block *self, node_visitor *vis, void *ctx) {
-    return node_visitor_find(vis, "block").ref->second(
-        &self->node,
-        ctx
-    );
-}
+visitable(node_visitor, node, block, self)
 
 static block *block_decl(const char *name) {
     return new(block, 
         .node = {
-            .accept = (ir_node_method) &block_visit,
+            .accept = &block_visit,
             .type = "block"
         },
         .name = name,

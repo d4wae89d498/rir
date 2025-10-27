@@ -2,36 +2,25 @@
 # define RIR_RET_H
 # include <rir.h>
 
-struct ret
-{
+struct ret {
     terminator  terminator;
     value       *value;
 };
 
-static void *ret_visit(ret *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "ret").ref)->second(
-        &self->terminator.instr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, ret, &self->terminator.impl)
 
-static void Ret(value *value) {
+static ret *ret_new(value *value) {
     ret *self = new(ret, 
-        .terminator = {
-            .type = "ret",
-            .instr = {
-                .node = {
-                    .accept = (ir_node_method) &ret_visit,
-                    .type = "instr"
-                },
-                .type = "terminator",
-            }
-        },
+        .terminator = terminator_impl(
+            .accept = &ret_visit,
+            .type = "ret"
+        ),
         .value = value
     );
     builder_attach_instr(&self->terminator.instr); 
+    return self;
 }
 
-# define ret(x) Ret(x)
+# define ret(x) ret_new(x)
 
 #endif // RIR_RET_H

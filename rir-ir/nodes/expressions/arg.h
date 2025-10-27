@@ -8,27 +8,18 @@ struct arg
     unsigned    n;
 };
 
-static void *arg_visit(arg *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "arg").ref)->second(
-        &self->expr.node,
-        ctx
+visitable(node_visitor, node, arg, &self->expr.impl)
+
+static arg *arg_new(unsigned n) {
+    return new(arg, 
+        .expr = expr_impl(
+            .accept = &arg_visit,
+            .type = "arg",
+        ),
+        .n = n
     );
 }
 
-static value *Arg(unsigned n) {
-    expr *self = &(new(arg, 
-        .expr = (expr){
-            .node = {
-                .accept = (ir_node_method) &arg_visit,
-                .type = "expr"
-            },
-            .type = "arg",
-        },
-        .n = n
-    ))->expr;
-    return value(self);
-}
-
-# define arg(n) Arg(n)
+# define arg(n) value(&arg_new(n)->expr)
 
 #endif // RIR_ARG_H

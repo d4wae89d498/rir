@@ -12,25 +12,17 @@ struct var {
     }           type;
 };
 
-static void *var_visit(var *self, node_visitor *vis, void *ctx) {
-    return (node_visitor_find(vis,  "var").ref)->second(
-        &self->instr.node,
-        ctx
-    );
-}
+visitable(node_visitor, node, var, &self->instr.impl)
 
 static var *Var(void) {
     static unsigned id;
-    id += 1;
+
     var *out = new(var, 
-        .instr = {
-            .node = {
-                .accept = (ir_node_method)&var_visit,
-                .type = "instr"
-            },
+        .instr = instr_impl(
+            .accept = &var_visit, 
             .type = "var"
-        },
-        .id = id, 
+        ),
+        .id = id++, 
         .type = V_REG
     );
     builder_attach_instr(&out->instr);
