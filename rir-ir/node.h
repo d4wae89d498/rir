@@ -2,9 +2,9 @@
 # define RIR_NODE_H
 # include <rir.h>
 
-struct node {
-    ir_node_method accept;
-    const char *type;
-};
+//struct node {
+//    ir_node_method accept;
+//    const char *type;
+//};
 
-#endif
+#endif // RIR_NODE_H

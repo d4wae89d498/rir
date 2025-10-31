@@ -17,12 +17,11 @@ static void *visit_prog(prog *self, clone_ctx *ctx)
 static void *visit_function(function *self, clone_ctx *ctx) 
 {
     TRACE;
-    function *output = function_decl(self->name);
+    function *output = function_new(self->name);
 
     builder_begin_function(output);
     prog *current_prog = builder_get_prog();
     functions_emplace(&(current_prog->functions), self->name, output);
-
 
     block *b = self->start;
     while (b) {
@@ -35,7 +34,6 @@ static void *visit_function(function *self, clone_ctx *ctx)
 static void *visit_block(block *self, clone_ctx *ctx) 
 {
     TRACE;
-    
     block *output = block(self->name);
     instr *i = self->start;
     while (i) {
@@ -48,9 +46,7 @@ static void *visit_block(block *self, clone_ctx *ctx)
 static void *visit_value(value *self, clone_ctx *ctx) 
 {
     TRACE;
-    value *output = value(dot(self->e->node, accept, &visitor, ctx));
-    printf("value [%d] %p -> [%d] %p\n", self->id, self, output->id, output);
-   
+    value *output = value(dot(self->e->node, accept, &visitor, ctx));   
     ptrmap_insert(&ctx->ptrmap, self, output);
     return output;
 }

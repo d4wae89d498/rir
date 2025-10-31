@@ -14,22 +14,25 @@ struct var {
 
 visitable(node_visitor, node, var, &self->instr.impl)
 
-static var *Var(void) {
-    static unsigned id;
-
-    var *out = new(var, 
+static var *var_new(int id) {
+    return new(var, 
         .instr = instr_impl(
             .accept = &var_visit, 
             .type = "var"
         ),
-        .id = id++, 
+        .id = id, 
         .type = V_REG
     );
+}
+
+static var *Var(void) {
+    static unsigned id;
+
+    var *out = var_new(id++);
     builder_attach_instr(&out->instr);
     return out;
 }
 
 # define var() Var()
-
 
 #endif // RIR_VAR_H

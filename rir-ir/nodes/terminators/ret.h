@@ -10,17 +10,15 @@ struct ret {
 visitable(node_visitor, node, ret, &self->terminator.impl)
 
 static ret *ret_new(value *value) {
-    ret *self = new(ret, 
+    return new(ret, 
         .terminator = terminator_impl(
             .accept = &ret_visit,
             .type = "ret"
         ),
         .value = value
     );
-    builder_attach_instr(&self->terminator.instr); 
-    return self;
 }
 
-# define ret(x) ret_new(x)
+# define ret(x) builder_attach_instr(&ret_new(x)->terminator.instr); 
 
 #endif // RIR_RET_H

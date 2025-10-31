@@ -11,7 +11,7 @@ struct unaryop {
 visitable(node_visitor, node, unaryop, &self->expr.impl)
 
 # define def_unaryop(NAME)                                                  \
-    static unaryop * NAME ## 1 ## _new (value *operand) {                     \
+    static unaryop * NAME ## 1 ## _new (value *operand) {                   \
         return new(unaryop,                                                 \
             .expr = expr_impl(                                              \
                 .accept = &unaryop_visit,                                   \
@@ -21,7 +21,7 @@ visitable(node_visitor, node, unaryop, &self->expr.impl)
             .operand = operand                                              \
         );                                                                  \
     }                                                                       \
-                                                                            \
+    /*no _build??*/                                                         \
     static value * NAME ## 1 (value *operand) {                             \
         return value(& NAME ## 1 ## _new (operand)->expr);                          \
     }

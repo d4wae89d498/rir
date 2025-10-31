@@ -9,15 +9,19 @@ struct ref {
 
 visitable(node_visitor, node, ref, &self->expr.impl)
 
-static value *Ref(var *v) {
+static ref *ref_new(var *v) {
     v->type = V_STACK;
-    ref *self = new(ref, 
+    return new(ref, 
         .expr = expr_impl(
             .accept = &ref_visit,
             .type = "ref"
         ),
         .v = v
     );
+}
+
+static value *Ref(var *v) {
+    ref *self = ref_new(v);
     return value(&self->expr);
 }
 

@@ -10,14 +10,13 @@ struct prog {
 visitable(node_visitor, node, prog, self)
 
 static prog *Prog(void) {
-    prog *out = new(prog, 
+    return new(prog, 
         .node = {
             .accept = &prog_visit,
             .type = "prog"
         },
         .functions = functions_init(),
     );
-    return out;
 }
 
 # define prog() Prog()

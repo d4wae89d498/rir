@@ -13,7 +13,7 @@ struct block {
 
 visitable(node_visitor, node, block, self)
 
-static block *block_decl(const char *name) {
+static block *block_new(const char *name) {
     return new(block, 
         .node = {
             .accept = &block_visit,
@@ -26,10 +26,11 @@ static block *block_decl(const char *name) {
 }
 
 static block *Block(const char *name) {
-    block *out = block_decl(name);
+    block *out = block_new(name);
     builder_begin_block(out);
     return out;
 }
+
 # define block(name) Block(name)
 
 #endif // RIR_BLOCK_H

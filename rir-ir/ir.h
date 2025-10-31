@@ -1,11 +1,18 @@
 #ifndef RIR_IR_H
 # define RIR_IR_H
+#include <rir.h>
 
 ///////////////////////////////////////////////////
 /////// NODES /////////////////////////////////////
+// TODO: find why clangd report a false positive if struct node is in a separat-
+// ed header
+struct node {
+    ir_node_method accept;
+    const char *type;
+};
+//# include "./../rir-ir/node.h"
 
 # include "./../rir-ir/builder.h"
-# include "./../rir-ir/node.h"
 
 # include "./../rir-ir/nodes/prog.h"
 # include "./../rir-ir/nodes/block.h"

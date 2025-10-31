@@ -12,14 +12,7 @@ struct when {
 visitable(node_visitor, node, when, &self->terminator.impl)
 
 static when *when_new(value *cond, block *t, block *f) {
-    block *current = builder_get_block();
-    block *next = block("next");
-    builder_set_block(t);
-    jump(next);
-    builder_set_block(f);
-    jump(next);
-    builder_set_block(current);
-    when *self = new(when, 
+    return new(when, 
         .terminator = terminator_impl(
             .accept = (ir_node_method) &when_visit,
             .type = "when",
@@ -28,10 +21,21 @@ static when *when_new(value *cond, block *t, block *f) {
         .t = t,
         .f = f
     );
+}
+
+static void When(value *cond, block *t, block *f) {
+    when *self = when_new(cond, t, f);
+    block *current = builder_get_block();
+    block *next = block(0);
+    builder_set_block(self->t);
+    jump(next);
+    builder_set_block(self->f);
+    jump(next);
+    builder_set_block(current);
     builder_attach_instr(&self->terminator.instr); 
     builder_set_block(next);
-    return self;
 }
-# define when(a,b,c) when_new(a,b,c)
+
+# define when(a,b,c) When(a,b,c)
 
 #endif // RIR_WHEN_H

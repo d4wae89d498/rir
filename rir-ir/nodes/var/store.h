@@ -10,9 +10,8 @@ struct store {
 
 visitable(node_visitor, node, store, &self->instr.impl)
 
-static void Store(var *dest, value *v) 
-{
-    store *self = new(store, 
+static store *store_new(var *dest, value *v) {
+    return new(store, 
         .instr = instr_impl(
             .accept = &store_visit,
             .type = "store", 
@@ -20,6 +19,10 @@ static void Store(var *dest, value *v)
         .dest = dest, 
         .v = v
     );
+}
+
+static void Store(var *dest, value *v) {
+    store *self = store_new(dest, v);
     builder_attach_instr(&self->instr);
     return;
 }

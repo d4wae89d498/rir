@@ -10,22 +10,24 @@ struct deref {
 
 visitable(node_visitor, node, deref, &self->instr.impl)
 
-// todo:: make it better... if __new suffix, maybe use an helper func?
-static var *deref_new(value *val) {
-    var *out = var();
-    out->type = V_PTR;
-    deref *self = new(deref,         
+static deref *deref_new(var *dest, value *val) {
+    dest->type = V_PTR; // todo:: check if type was not changed from ptr to sometthing else ? or let it silent as is..
+    return new(deref,         
         .instr = instr_impl(
             .accept = &deref_visit,
             .type = "deref" 
         ),
         .v = val,
-        .dest = out
+        .dest = dest
     );
-    builder_attach_instr(&self->instr);    
-    return out;
 }
 
-# define deref(x) deref_new(x)
+static var *Deref(value *x) {
+    deref *self = deref_new(var(), x);
+    builder_attach_instr(&self->instr);
+    return self->dest;
+}
+
+# define deref(x) Deref(x)
 
 #endif // RIR_DEREF_H

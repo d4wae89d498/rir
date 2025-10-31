@@ -1,6 +1,6 @@
-#include <rir.h>
 #ifndef RIR_VISITOR_H
 # define RIR_VISITOR_H
+# include <rir.h>
 
 #include "./visitors/clone/clone.h"
 #include "./visitors/default/default.h"

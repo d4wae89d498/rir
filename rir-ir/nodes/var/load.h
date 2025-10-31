@@ -9,15 +9,19 @@ struct load {
 
 visitable(node_visitor, node, load, &self->expr.impl)
 
-static value *Load(var *v) 
+static load *load_new(var *v) 
 {
-    load *self = new(load, 
+    return new(load, 
         .expr = expr_impl(
             .accept = &load_visit,
             .type = "load"
         ), 
         .v = v
     );
+}
+
+static value *Load(var *v) {
+    load *self = load_new(v);
     return value(&self->expr);
 }
 

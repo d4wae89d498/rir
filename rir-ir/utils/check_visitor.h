@@ -1,32 +1,39 @@
 #ifndef RIR_CHECK_VISITOR_H
 # define RIR_CHECK_VISITOR_H
-
-#include <iso646.h>
-#include <rir.h>
+# include <rir.h>
 
 // TODO: use an STC vector so that this lis would be extensible
 
 static char *methods[] = {
-    "ref",
+    // pure abstracts 
+    "expr",
+    "inst",
+    "terminator",
+
+    // pieces
+    "prog",
+    "function",
+    "block",
+
+    // instrs
     "deref",
     "var",
+
+    // exprs
+    "ref",
     "intlit",
     "strlit",
     "call",
     "arg",
     "binop",
-    "prog",
-    "function",
     "value",
+    // "phi"
+    // "unaryop",
+
 
     // terminators
     "jump",
     "ret",
-
-    // TODO:
-
-    //    "phi",
-    //"unaryop",
     // "unreachable",
     0
 };

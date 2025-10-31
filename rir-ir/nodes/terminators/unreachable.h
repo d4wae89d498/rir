@@ -8,17 +8,16 @@ struct unreachable {
 
 visitable(node_visitor, node, unreachable, &self->terminator.impl)
 
-static ret *unreachable_new(void) {
-    ret *self = new(ret, 
+static unreachable *unreachable_new(void) {
+    return new(unreachable, 
         .terminator = terminator_impl(
             .accept = &unreachable_visit,
             .type = "unreachable",
         ),
     );
-    builder_attach_instr(&self->terminator.instr); 
-    return self;
 }
+
 #undef unreachable // maybe def in __stddef_unreachable... todo: checkwhy or rename..
-#define unreachable() unreachable_new()
+#define unreachable() builder_attach_instr(&unreachable_new()->terminator.instr); 
 
 #endif // RIR_UNREACHABLE_H

@@ -9,20 +9,9 @@ struct function {
     block       *end;
 };
 
-///////
+visitable(node_visitor, node, function, self)
 
-# include "prog.h"
-
-static void *function_visit(function *self, node_visitor *vis, void *ctx) {
-    printf("-- %s start %p\n", self->name, (void*)self->start);
-
-    return node_visitor_find(vis, "function").ref->second(
-        &self->node,
-        ctx
-    );
-}
-
-static function *function_decl(const char *name) {
+static function *function_new(const char *name) {
     return new(function, 
          .node = {
             .accept = (ir_node_method) &function_visit,
@@ -33,13 +22,12 @@ static function *function_decl(const char *name) {
 }
 
 static function *Function(const char *name) {
-    function *out = function_decl(name);
-    
+    function *out = function_new(name);
     builder_begin_function(out);
     prog *current_prog = builder_get_prog();
     functions_emplace(&(current_prog->functions), name, out);
     block(0);
-    return 0;
+    return out;
 }
 
 # define function(name) Function(name);
