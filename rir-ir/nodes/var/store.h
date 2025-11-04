@@ -21,10 +21,10 @@ static store *store_new(var *dest, value *v) {
     );
 }
 
-static void Store(var *dest, value *v) {
+static store *Store(var *dest, value *v) {
     store *self = store_new(dest, v);
     builder_attach_instr(&self->instr);
-    return;
+    return self;
 }
 
 # define store(d, v) Store(d, v)

@@ -17,7 +17,13 @@ static unreachable *unreachable_new(void) {
     );
 }
 
+static unreachable *Unreachable(void) {
+    unreachable *self = unreachable_new();
+    builder_attach_instr(&self->terminator.instr); 
+    return self;
+}
+
 #undef unreachable // maybe def in __stddef_unreachable... todo: checkwhy or rename..
-#define unreachable() builder_attach_instr(&unreachable_new()->terminator.instr); 
+#define unreachable() Unreachable()
 
 #endif // RIR_UNREACHABLE_H

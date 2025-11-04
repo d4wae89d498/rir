@@ -21,7 +21,6 @@ visitable(node_visitor, node, unaryop, &self->expr.impl)
             .operand = operand                                              \
         );                                                                  \
     }                                                                       \
-    /*no _build??*/                                                         \
     static value * NAME ## 1 (value *operand) {                             \
         return value(& NAME ## 1 ## _new (operand)->expr);                          \
     }

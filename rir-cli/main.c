@@ -70,6 +70,7 @@ static define parse_define(const char *arg) {
     };
 }
 
+// TODO: parse if debug flag and pass it to libdiag
 int main(int argc, char **argv) {
     static coption_long  longopts[] = {
         { "target", coption_required_argument, 't' },

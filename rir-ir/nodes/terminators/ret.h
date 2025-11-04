@@ -19,6 +19,12 @@ static ret *ret_new(value *value) {
     );
 }
 
-# define ret(x) builder_attach_instr(&ret_new(x)->terminator.instr); 
+static ret *Ret(value *value) {
+    ret *self = ret_new(value);
+    builder_attach_instr(&self->terminator.instr); 
+    return self;
+}
+
+# define ret(x) Ret(x)
 
 #endif // RIR_RET_H

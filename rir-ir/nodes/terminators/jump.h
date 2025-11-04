@@ -19,6 +19,12 @@ static jump *jump_new(block *dest) {
     );
 }
 
-# define jump(x) builder_attach_instr(&jump_new(x)->terminator.instr)
+static jump* Jump(block *dest) {
+    jump *self = jump_new(dest);
+    builder_attach_instr(&self->terminator.instr);
+    return self;
+}
+
+# define jump(x) Jump(x)
 
 #endif // RIR_jump_H

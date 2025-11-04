@@ -6,6 +6,14 @@
 # include <stdarg.h>
 # include <ctype.h>
 
+// PURE MACRO THINGS
+/////////////
+
+# define stringify_defined2(x) #x
+# define stringify_defined(x) stringify_defined2(x)
+
+//////
+
 //
 
 # define dot(A, V, ...) (A).V(&(A), __VA_ARGS__)
@@ -156,6 +164,54 @@ static void dump_cstr(FILE *dest, const char *s)
             }
         }
     }
+}
+
+// normalize a path that is already not relative,
+// but still contains .. or . or //
+static char *normalize_path(const char *path) {
+    if (!path) return NULL;
+
+    size_t len = strlen(path);
+    char *res = malloc(len + 1);
+    if (!res) return NULL;
+
+    size_t i = 0, j = 0;
+    while (i < len) {
+        // Ignore multiple '/'
+        if (path[i] == '/' && (j != 0 && res[j-1] == '/')) {
+            i++;
+            continue;
+        }
+
+        // Handle "./"
+        if (path[i] == '.' && (i+1 == len || path[i+1] == '/')) {
+            i += 1;
+            if (i < len && path[i] == '/') i++;
+            continue;
+        }
+
+        // Handle "../"
+        if (path[i] == '.' && i+1 < len && path[i+1] == '.' &&
+            (i+2 == len || path[i+2] == '/')) {
+            i += 2;
+            if (j > 0) {
+                // Remove last path component
+                j--;
+                while (j > 0 && res[j-1] != '/') j--;
+            }
+            if (i < len && path[i] == '/') i++;
+            continue;
+        }
+
+        // Copy normal character
+        res[j++] = path[i++];
+    }
+
+    // Remove trailing '/' except for root
+    if (j > 1 && res[j-1] == '/') j--;
+    res[j] = '\0';
+
+    return res;
 }
 
 #endif // SUGAR_H

@@ -1,14 +1,19 @@
-WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
-
-all: $(NAME)
+WORKSPACE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
 include $(WORKSPACE_DIR)/mk/common.mk
 
-%.o: %.c $(HDRS)
-	$(CC) $(CFLAGS) -c $< -o $@
+all: $(NAME)
+
+$(REL_BUILD_DIR)/%.o: %.c
+	mkdir -p $(dir $(REL_BUILD_DIR)/$@)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(AR) -rcs $(NAME)  $(OBJS) 
+
+$(NAME): $(OBJS)
+	if test $$(realpath $(NAME)) != $$(realpath  $(REL_BUILD_DIR)); then \
+		$(AR) -rcs $(NAME)  $(OBJS); \
+	fi;
 
 ##################################
 
@@ -22,9 +27,13 @@ TESTS=$(wildcard tests/*.c)
 TESTS_EXES=$(TESTS:.c=.out)
 endif
 
-tests/%.o: CSTD = $(CSTD_LATEST)
-tests/%.o: tests/%.c
-tests/%.out: tests/%.o $(LIBS) $(NAME) FORCE
+TESTS_EXES := $(patsubst %.out,$(REL_BUILD_DIR)/%.out,$(TESTS_EXES))
+
+
+$(REL_BUILD_DIR)/tests/%.o: CSTD = $(CSTD_LATEST)
+$(REL_BUILD_DIR)/tests/%.o: tests/%.c
+
+$(REL_BUILD_DIR)/tests/%.out: $(REL_BUILD_DIR)/tests/%.o $(LIBS) $(NAME) FORCE
 	$(CC) $(CFLAGS) $< $(NAME) -o $@ $(LDFLAGS)
 
 test: $(TESTS_EXES)
@@ -46,7 +55,12 @@ test: $(TESTS_EXES)
 ##################################
 
 clean:
-	$(RM) $(TESTS_EXES) $(OBJS) $(NAME)
+	if test $$(echo $(TESTS_EXES) | wc -c) != 1; then \
+		$(RM) $(TESTS_EXES) $(OBJS) $(DEPS); \
+	fi; \
+	if test -f $(NAME); then \
+		$(RM) $(NAME); \
+	fi;
 
 re: clean all
 

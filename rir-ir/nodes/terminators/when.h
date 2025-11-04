@@ -23,7 +23,7 @@ static when *when_new(value *cond, block *t, block *f) {
     );
 }
 
-static void When(value *cond, block *t, block *f) {
+static when* When(value *cond, block *t, block *f) {
     when *self = when_new(cond, t, f);
     block *current = builder_get_block();
     block *next = block(0);
@@ -34,6 +34,7 @@ static void When(value *cond, block *t, block *f) {
     builder_set_block(current);
     builder_attach_instr(&self->terminator.instr); 
     builder_set_block(next);
+    return self;
 }
 
 # define when(a,b,c) When(a,b,c)

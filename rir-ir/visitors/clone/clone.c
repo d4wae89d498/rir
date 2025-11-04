@@ -14,6 +14,21 @@ static void *visit_prog(prog *self, clone_ctx *ctx)
     return output;
 }
 
+static void *visit_instr(instr *self, clone_ctx *ctx) 
+{
+    return dot(self->impl, accept, clone_visitor, ctx);
+}
+
+static void *visit_terminator(terminator *self, clone_ctx *ctx) 
+{
+    return dot(self->impl, accept, clone_visitor, ctx);
+}
+
+static void *visit_expr(expr *self, clone_ctx *ctx) 
+{
+    return dot(self->impl, accept, clone_visitor, ctx);
+}
+
 static void *visit_function(function *self, clone_ctx *ctx) 
 {
     TRACE;
@@ -142,16 +157,11 @@ static void *visit_call(call *self, clone_ctx *ctx)
     return value(&output->expr);
 }
 
-
-// todo : use block id to jump correctly...
-// check if clone with args above works... 
-// issue: it may be clonned twice..
 static void *visit_jump(jump *self, clone_ctx *ctx) 
 {
     TRACE;
     block *dest = dot(self->dest->node, accept, &visitor, ctx);
-    jump(dest);
-    return 0; // not an expr
+    return jump(dest);
 }
 
 static void *visit_ret(ret *self, clone_ctx *ctx) 
@@ -162,8 +172,7 @@ static void *visit_ret(ret *self, clone_ctx *ctx)
         error("Trying to ret an unknown temp");
         exit(1);
     }
-    ret(v.ref->second);
-    return 0; // not an expr
+    return ret(v.ref->second);
 }
 
 static void *visit_when(when *self, clone_ctx *ctx) 
@@ -172,8 +181,7 @@ static void *visit_when(when *self, clone_ctx *ctx)
     value *cond = dot(self->cond->e->node, accept, &visitor, ctx);
     block *t = dot(self->t->node, accept, &visitor, ctx);
     block *f = dot(self->f->node, accept, &visitor, ctx);
-    when(cond, t, f);
-    return 0; // not an expr
+    return when(cond, t, f);
 }
 
 static void *visit_var(var *self, clone_ctx *ctx) 
@@ -183,7 +191,6 @@ static void *visit_var(var *self, clone_ctx *ctx)
     var *v = var();
     
     ptrmap_insert(&ctx->ptrmap, self, v);
-
     v->id = self->id;
     v->type = self->type;
 
@@ -226,8 +233,7 @@ static void *visit_store(store *self, clone_ctx *ctx)
         exit(1);
     }
 
-    store(dest.ref->second, v.ref->second);
-    return 0; // not an expr 
+    return store(dest.ref->second, v.ref->second);
 }
 
 ///////////////////////////////////////////////////////////////////////

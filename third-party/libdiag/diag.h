@@ -2,16 +2,29 @@
 # define RIR_DIAGNOSTIC_H
 # include <stdio.h>
 # include <stdbool.h>
+# include <sugar.h>
 # if __STDC_VERSION__ >= 201112L
 #  include <c11/fmt.h>
 # endif
 
+#ifndef WS_DIR
+# define WS_DIR
+#endif 
+
+#ifndef NAME 
+# define NAME a.out
+#endif
+
+// SOURCES
+
+static char *exe_name = stringify_defined(NAME) ;
+static char *workspace_dir = stringify_defined(WS_DIR) ;
+
 // GLOBALS
 
-static char *exe_name = "a.out";
-static int errors = 0;
-static bool colors_enabled = true;
-static bool debug_enabled = true;
+extern int errors;
+extern bool colors_enabled;
+extern bool debug_enabled;
 
 // COLORS
 
@@ -51,20 +64,22 @@ static const char *RESET = "\x1b[0m";
 #endif
 
 // === common ===
-static void rir_print_common(const char *file, int line, const char *func, const char *label, const char *label_color_tty) {
+static void diag_print_common(const char *file, int line, const char *func, const char *label, const char *label_color_tty) {
     
     const char *label_color   = colors_enabled ? label_color_tty : "";
     const char *reset = colors_enabled ? RESET : "";
     const char *white = colors_enabled ? BOLD_WHITE : "";
+    char *nf = normalize_path(file);
     fprintf(stderr, "%s", exe_name);
     if (debug_enabled)
-        fprintf(stderr, " @ %s:%i %s()", file, line, func);
-    fprintf(stderr, ": %s%s: %s", label_color, label, white);
+        fprintf(stderr, " %s:%i %s()", nf + (strlen(workspace_dir) ? strlen(workspace_dir) + 1 : 0), line, func);
+    fprintf(stderr, " %s%s: %s", label_color, label, white);
+    free(nf);
 }
 
 # define rir_print_impl(file, line, func, verb, label, color, ...)\
     if (1) {\
-        rir_print_common(file, line, func, label, color);\
+        diag_print_common(file, line, func, label, color);\
         verb(stderr, __VA_ARGS__);\
         fprintf(stderr, "%s\n", RESET);\
     }

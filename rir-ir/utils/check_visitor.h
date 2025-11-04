@@ -45,7 +45,7 @@ static void ensure_visitor_completed(const char *name, node_visitor *vis)
     while (methods[i]) {
         node_visitor_iter r = node_visitor_find(vis, methods[i]);
         if (!r.ref) {
-            fprintf(stderr, "ERROR: method %s not implemented for visitor %s (%p)\n", methods[i], name, (void*)vis);
+            error("method %s not implemented for visitor %s (%p)", methods[i], name, (void*)vis);
             should_exit = 1;
         }
         i += 1;

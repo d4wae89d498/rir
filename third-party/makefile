@@ -1,3 +1,3 @@
-MK_SUBDIRS := libbpc libsugar
+MK_SUBDIRS := libbpc libsugar libdiag libstcutils
 
 include ./../mk/run-in-dirs.mk

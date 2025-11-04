@@ -1,15 +1,16 @@
-WORKSPACE_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
-
-all: $(NAME)
+WORKSPACE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/..)
 
 include $(WORKSPACE_DIR)/mk/common.mk
 
+all: $(NAME)
+
+$(REL_BUILD_DIR)/%.o: CSTD = $(CSTD_LATEST)
+$(REL_BUILD_DIR)/%.o: %.c
+	mkdir -p $(dir $(REL_BUILD_DIR)/$@)
+	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $< -o $@
+
 $(NAME): $(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
-
-%.o: CSTD = $(CSTD_LATEST)
-%.o: %.c $(HDRS)
-	$(CC) $(CFLAGS) -c $< -o $@
 
 ##################################
 
@@ -31,7 +32,7 @@ test: all $(LIBS) $(TESTS)
 ##################################
 
 clean:
-	$(RM) $(OBJS) $(NAME)
+	$(RM) $(OBJS) $(NAME) $(DEPS)
 
 re: clean all
 
