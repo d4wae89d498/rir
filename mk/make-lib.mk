@@ -9,8 +9,6 @@ $(REL_BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $< -o $@
 
 $(NAME): $(OBJS)
-
-$(NAME): $(OBJS)
 	if test $$(realpath $(NAME)) != $$(realpath  $(REL_BUILD_DIR)); then \
 		$(AR) -rcs $(NAME)  $(OBJS); \
 	fi;
