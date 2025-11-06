@@ -2,7 +2,7 @@ define run-in-dirs
 	@( \
 		status=0; \
 		for dir in $(MK_SUBDIRS); do \
-			$(MAKE) -C $$dir $(1) || status=1; \
+			$(MAKE) -j$(nproc) -C $$dir $(1) || status=1; \
 		done; \
 		echo "make exit code: $$status"; \
 		exit $$status \

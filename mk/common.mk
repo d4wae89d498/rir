@@ -32,7 +32,7 @@ ifeq ($(DEBUG), 1)
 	CFLAGS += -g	-fsanitize=address
 endif
 
-LIBS ?= $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a 	\
+LIBS := $(WORKSPACE_DIR)/third-party/libstc/build/Linux_clang/libstc.a 	\
 	 $(BUILD_DIR)/third-party/libdiag/libdiag.a 						\
 																		\
 	 $(BUILD_DIR)/rir-backend/librir-backend.a 							\
@@ -61,7 +61,7 @@ ifneq ($(NAME),librir-parser.a)
 $(BUILD_DIR)/rir-parser/librir-parser.a:
 	make -C $(WORKSPACE_DIR)/rir-parser
 endif
-LDFLAGS ?= $(LIBS)
+LDFLAGS := $(LIBS)
 
 AR ?= ar
 RM ?= rm -f

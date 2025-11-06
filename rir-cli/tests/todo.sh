@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Define the RIR path relative to this script’s directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RIR=$(abspath "$SCRIPT_DIR/../rir")
+RIR=$(realpath "$SCRIPT_DIR/../rir")
 
 # Run a command and check it returns 0
 if "$RIR" test.rir -tprint; then

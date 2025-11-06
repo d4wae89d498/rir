@@ -1,3 +1,5 @@
+#include "diag.h"
+
 int errors = 0;
 
 bool colors_enabled = true;

@@ -5,7 +5,7 @@ include $(WORKSPACE_DIR)/mk/common.mk
 all: $(NAME)
 
 $(REL_BUILD_DIR)/%.o: %.c
-	mkdir -p $(dir $(REL_BUILD_DIR)/$@)
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $< -o $@
 
 $(NAME): $(OBJS)
@@ -33,8 +33,8 @@ TESTS_EXES := $(patsubst %.out,$(REL_BUILD_DIR)/%.out,$(TESTS_EXES))
 $(REL_BUILD_DIR)/tests/%.o: CSTD = $(CSTD_LATEST)
 $(REL_BUILD_DIR)/tests/%.o: tests/%.c
 
-$(REL_BUILD_DIR)/tests/%.out: $(REL_BUILD_DIR)/tests/%.o $(LIBS) $(NAME) FORCE
-	$(CC) $(CFLAGS) $< $(NAME) -o $@ $(LDFLAGS)
+$(REL_BUILD_DIR)/tests/%.out: $(REL_BUILD_DIR)/tests/%.o $(LIBS) FORCE
+	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
 
 test: $(TESTS_EXES)
 	@echo "Running tests..."
