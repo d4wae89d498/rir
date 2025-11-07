@@ -2,7 +2,7 @@
 # define RIR_STORE_H
 # include <rir.h>
 
-struct __attribute__((packed)) store {
+struct  store {
     instr    instr;
     var     *dest;
     value   *v;

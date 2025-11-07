@@ -2,7 +2,7 @@
 # define RIR_INSTR_H
 # include <rir.h>
 
-struct __attribute__((packed)) instr {
+struct  instr {
     node            node;
     struct instr    *prev;
     struct instr    *next;

@@ -2,7 +2,7 @@
 # define RIR_JUMP_H
 # include <rir.h>
 
-struct __attribute__((packed)) jump {
+struct  jump {
     terminator  terminator;
     block       *dest;
 };

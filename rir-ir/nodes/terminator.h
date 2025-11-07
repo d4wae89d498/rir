@@ -2,7 +2,7 @@
 # define RIR_TERMINATOR_H
 # include <rir.h>
 
-struct __attribute__((packed)) terminator {
+struct  terminator {
     instr       instr;
     node        impl;
 };

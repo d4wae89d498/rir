@@ -2,7 +2,7 @@
 # define RIR_UNREACHABLE_H
 # include <rir.h>
 
-struct __attribute__((packed)) unreachable {
+struct  unreachable {
     terminator terminator;
 };
 

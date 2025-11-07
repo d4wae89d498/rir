@@ -2,7 +2,7 @@
 # define RIR_UNARY_H
 # include <rir.h>
 
-struct __attribute__((packed)) unaryop {
+struct  unaryop {
     expr        expr;
     const char  *type;
     value       *operand;

@@ -2,7 +2,7 @@
 # define RIR_STRLIT_H
 # include <rir.h>
 
-struct __attribute__((packed)) strlit {
+struct  strlit {
     expr        expr;
     const char  *value;
 };

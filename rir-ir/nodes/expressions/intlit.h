@@ -2,7 +2,7 @@
 # define RIR_INTLIT_H
 # include <rir.h>
 
-struct __attribute__((packed)) intlit {
+struct  intlit {
     expr    expr;
     int     value;
 };

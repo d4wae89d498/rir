@@ -2,7 +2,7 @@
 # define RIR_ARG_H
 # include <rir.h>
 
-struct __attribute__((packed)) arg
+struct  arg
 {
     expr        expr;
     unsigned    n;

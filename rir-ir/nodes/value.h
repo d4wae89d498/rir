@@ -2,7 +2,7 @@
 # define RIR_VALUE_H
 # include <rir.h>
 
-struct __attribute__((packed)) value {
+struct  value {
     instr   instr;
     int     id;
     expr    *e;

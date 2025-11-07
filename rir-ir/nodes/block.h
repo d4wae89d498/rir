@@ -2,7 +2,7 @@
 # define RIR_BLOCK_H
 # include <rir.h>
 
-struct __attribute__((packed)) block {
+struct  block {
     node        node;
     block       *prev;
     block       *next;

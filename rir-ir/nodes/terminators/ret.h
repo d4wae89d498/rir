@@ -2,7 +2,7 @@
 # define RIR_RET_H
 # include <rir.h>
 
-struct __attribute__((packed)) ret {
+struct  ret {
     terminator  terminator;
     value       *value;
 };

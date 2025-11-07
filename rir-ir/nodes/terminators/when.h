@@ -2,7 +2,7 @@
 # define RIR_WHEN_H
 # include <rir.h>
 
-struct __attribute__((packed)) when {
+struct  when {
     terminator  terminator;
     value       *cond;
     block       *t;

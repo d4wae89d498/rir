@@ -2,7 +2,7 @@
 # define RIR_REF_H
 # include <rir.h>
 
-struct __attribute__((packed)) ref {
+struct  ref {
     expr    expr;
     var     *v;
 };

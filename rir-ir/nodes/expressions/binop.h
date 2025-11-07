@@ -2,7 +2,7 @@
 # define RIR_BINOP_H
 # include <rir.h>
 
-struct __attribute__((packed)) binop 
+struct  binop 
 {
     expr        expr;
     const char  *type;

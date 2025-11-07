@@ -3,7 +3,7 @@
 # include <rir.h>
 
 // TODO: make in an instr ??
-struct __attribute__((packed)) phi {
+struct  phi {
     expr        expr; 
     value       **values;
     block       **blocks;

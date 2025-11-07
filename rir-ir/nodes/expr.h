@@ -2,7 +2,7 @@
 # define RIR_EXPR_H
 # include <rir.h>
 
-struct __attribute__((packed)) expr {
+struct  expr {
     node        node;
     node        impl;
 };

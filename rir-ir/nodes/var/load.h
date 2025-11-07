@@ -2,7 +2,7 @@
 # define RIR_LOAD_H
 # include <rir.h>
 
-struct __attribute__((packed)) load {
+struct  load {
     expr    expr;
     var     *v;
 };

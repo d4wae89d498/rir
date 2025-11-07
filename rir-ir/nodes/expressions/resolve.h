@@ -2,7 +2,7 @@
 # define RIR_RESOLVE_H
 # include <rir.h>
 
-struct __attribute__((packed)) resolve {
+struct  resolve {
     expr        expr;
     const char  *symbol_name;
 };

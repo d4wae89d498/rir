@@ -2,7 +2,7 @@
 # define RIR_CALL_H
 # include <rir.h>
 
-struct __attribute__((packed)) call {
+struct  call {
     expr        expr;
     value       *fp;
     value       **args;

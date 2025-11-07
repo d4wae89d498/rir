@@ -2,7 +2,7 @@
 # define RIR_VAR_H
 # include <rir.h>
 
-struct __attribute__((packed)) var {
+struct  var {
     instr       instr;
     unsigned    id;
     enum var_type {

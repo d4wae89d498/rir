@@ -2,7 +2,7 @@
 # define RIR_DEREF_H
 # include <rir.h>
 
-struct __attribute__((packed)) deref {
+struct  deref {
     instr   instr;
     value   *v;
     var     *dest;
