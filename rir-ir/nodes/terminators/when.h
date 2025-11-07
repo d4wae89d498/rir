@@ -2,14 +2,14 @@
 # define RIR_WHEN_H
 # include <rir.h>
 
-struct when {
+struct __attribute__((packed)) when {
     terminator  terminator;
     value       *cond;
     block       *t;
     block       *f;
 };
 
-visitable(node_visitor, node, when, &self->terminator.impl)
+visitable(node_visitor, node, when, self)
 
 static when *when_new(value *cond, block *t, block *f) {
     return new(when, 

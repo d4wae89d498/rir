@@ -2,12 +2,12 @@
 # define RIR_INTLIT_H
 # include <rir.h>
 
-struct intlit {
+struct __attribute__((packed)) intlit {
     expr    expr;
     int     value;
 };
 
-visitable(node_visitor, node, intlit, &self->expr.impl)
+visitable(node_visitor, node, intlit, self)
 
 static intlit *intlit_new(int value) 
 {

@@ -2,14 +2,14 @@
 # define RIR_CALL_H
 # include <rir.h>
 
-struct call {
+struct __attribute__((packed)) call {
     expr        expr;
     value       *fp;
     value       **args;
     int         arg_count;
 };
 
-visitable(node_visitor, node, call, &self->expr.impl)
+visitable(node_visitor, node, call, self)
 
 static call *call_new(value *addr, ...) {
     call *self = new(call,

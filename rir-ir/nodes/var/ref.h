@@ -2,12 +2,12 @@
 # define RIR_REF_H
 # include <rir.h>
 
-struct ref {
+struct __attribute__((packed)) ref {
     expr    expr;
     var     *v;
 };
 
-visitable(node_visitor, node, ref, &self->expr.impl)
+visitable(node_visitor, node, ref, self)
 
 static ref *ref_new(var *v) {
     v->type = V_STACK;

@@ -2,7 +2,7 @@
 # define RIR_FUNCTION_H
 # include <rir.h>
 
-struct function {
+struct __attribute__((packed)) function {
     node        node;
     const char  *name;
     block       *start;

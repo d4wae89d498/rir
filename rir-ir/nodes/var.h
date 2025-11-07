@@ -2,7 +2,7 @@
 # define RIR_VAR_H
 # include <rir.h>
 
-struct var {
+struct __attribute__((packed)) var {
     instr       instr;
     unsigned    id;
     enum var_type {
@@ -12,7 +12,7 @@ struct var {
     }           type;
 };
 
-visitable(node_visitor, node, var, &self->instr.impl)
+visitable(node_visitor, node, var, self)
 
 static var *var_new(int id) {
     return new(var, 

@@ -4,7 +4,7 @@
 
 static node_visitor visitor;
 
-static void *visit_prog(prog *self, clone_ctx *ctx) 
+static void *visit_prog(prog *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     prog *output = prog();
@@ -14,22 +14,25 @@ static void *visit_prog(prog *self, clone_ctx *ctx)
     return output;
 }
 
-static void *visit_instr(instr *self, clone_ctx *ctx) 
+static void *visit_expr(expr *self, print_visitor_ctx *ctx) 
 {
-    return dot(self->impl, accept, clone_visitor, ctx);
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
 }
 
-static void *visit_terminator(terminator *self, clone_ctx *ctx) 
+static void *visit_instr(instr *self, print_visitor_ctx *ctx) 
 {
-    return dot(self->impl, accept, clone_visitor, ctx);
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
 }
 
-static void *visit_expr(expr *self, clone_ctx *ctx) 
+static void *visit_terminator(terminator *self, print_visitor_ctx *ctx) 
 {
-    return dot(self->impl, accept, clone_visitor, ctx);
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
 }
 
-static void *visit_function(function *self, clone_ctx *ctx) 
+static void *visit_function(function *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     function *output = function_new(self->name);
@@ -46,7 +49,7 @@ static void *visit_function(function *self, clone_ctx *ctx)
     return output;
 }
 
-static void *visit_block(block *self, clone_ctx *ctx) 
+static void *visit_block(block *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     block *output = block(self->name);
@@ -58,7 +61,7 @@ static void *visit_block(block *self, clone_ctx *ctx)
     return output;
 }
 
-static void *visit_value(value *self, clone_ctx *ctx) 
+static void *visit_value(value *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     value *output = value(dot(self->e->node, accept, &visitor, ctx));   
@@ -66,13 +69,13 @@ static void *visit_value(value *self, clone_ctx *ctx)
     return output;
 }
 
-static void *visit_arg(arg *self, clone_ctx *ctx)
+static void *visit_arg(arg *self, clone_visitor_ctx *ctx)
 {
     TRACE;
     return arg(self->n);
 }
 
-static void *visit_binop(binop *self, clone_ctx *ctx) 
+static void *visit_binop(binop *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     ptrmap_iter l = ptrmap_find(&ctx->ptrmap, self->left);
@@ -99,7 +102,7 @@ static void *visit_binop(binop *self, clone_ctx *ctx)
     return e;//val;
 }
 
-static void *visit_intlit(intlit *self, clone_ctx *ctx) 
+static void *visit_intlit(intlit *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     return new(intlit, 
@@ -108,22 +111,22 @@ static void *visit_intlit(intlit *self, clone_ctx *ctx)
     );
 }
 
-static void *visit_strlit(strlit *self, clone_ctx *ctx) 
+static void *visit_strlit(strlit *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     return new(strlit, 
         .expr = self->expr,
-        .value = self->value
+        .value = strdup(self->value)
     );
 }
 
-static void *visit_resolve(resolve *self, clone_ctx *ctx) 
+static void *visit_resolve(resolve *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     return resolve(self->symbol_name);
 }
 
-static void *visit_call(call *self, clone_ctx *ctx) 
+static void *visit_call(call *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     call *output = new(call,
@@ -157,14 +160,14 @@ static void *visit_call(call *self, clone_ctx *ctx)
     return value(&output->expr);
 }
 
-static void *visit_jump(jump *self, clone_ctx *ctx) 
+static void *visit_jump(jump *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     block *dest = dot(self->dest->node, accept, &visitor, ctx);
     return jump(dest);
 }
 
-static void *visit_ret(ret *self, clone_ctx *ctx) 
+static void *visit_ret(ret *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     ptrmap_iter v = ptrmap_find(&ctx->ptrmap, self->value);
@@ -175,7 +178,7 @@ static void *visit_ret(ret *self, clone_ctx *ctx)
     return ret(v.ref->second);
 }
 
-static void *visit_when(when *self, clone_ctx *ctx) 
+static void *visit_when(when *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     value *cond = dot(self->cond->e->node, accept, &visitor, ctx);
@@ -184,7 +187,7 @@ static void *visit_when(when *self, clone_ctx *ctx)
     return when(cond, t, f);
 }
 
-static void *visit_var(var *self, clone_ctx *ctx) 
+static void *visit_var(var *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     
@@ -197,28 +200,28 @@ static void *visit_var(var *self, clone_ctx *ctx)
     return v;
 }
 
-static void *visit_deref(deref *self, clone_ctx *ctx) 
+static void *visit_deref(deref *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     value   *val = dot(self->v->e->node, accept, &visitor, ctx);
     return deref(val);
 }
 
-static void *visit_load(load *self, clone_ctx *ctx)
+static void *visit_load(load *self, clone_visitor_ctx *ctx)
 {   
     TRACE;
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return load(var);
 }
 
-static void *visit_ref(ref *self, clone_ctx *ctx) 
+static void *visit_ref(ref *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
     var *var = dot(self->v->instr.node, accept, &visitor, ctx);
     return ref(var);
 }
 
-static void *visit_store(store *self, clone_ctx *ctx) 
+static void *visit_store(store *self, clone_visitor_ctx *ctx) 
 {
     TRACE;
 
@@ -247,6 +250,11 @@ void setup_clone_visitor(void)
     visitor = node_visitor_init();
 
     visitor_method(prog)
+
+    visitor_method(expr)
+    visitor_method(instr)
+    visitor_method(terminator)
+
     visitor_method(function)
     visitor_method(block)
     visitor_method(value)

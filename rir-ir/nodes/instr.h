@@ -2,14 +2,14 @@
 # define RIR_INSTR_H
 # include <rir.h>
 
-struct instr {
+struct __attribute__((packed)) instr {
     node            node;
     struct instr    *prev;
     struct instr    *next;
     node            impl;
 };
 
-visitable(node_visitor, node, instr, &self->node)
+visitable(node_visitor, node, instr, self)
 
 static instr InstrImpl(node impl) {
     return (instr) {

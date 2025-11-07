@@ -7,7 +7,7 @@
 static char *methods[] = {
     // pure abstracts 
     "expr",
-    "inst",
+    "instr",
     "terminator",
 
     // pieces

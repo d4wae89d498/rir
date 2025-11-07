@@ -2,13 +2,13 @@
 # define RIR_UNARY_H
 # include <rir.h>
 
-struct unaryop {
+struct __attribute__((packed)) unaryop {
     expr        expr;
     const char  *type;
     value       *operand;
 };
 
-visitable(node_visitor, node, unaryop, &self->expr.impl)
+visitable(node_visitor, node, unaryop, self)
 
 # define def_unaryop(NAME)                                                  \
     static unaryop * NAME ## 1 ## _new (value *operand) {                   \

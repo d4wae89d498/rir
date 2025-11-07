@@ -2,13 +2,13 @@
 # define RIR_VALUE_H
 # include <rir.h>
 
-struct value {
+struct __attribute__((packed)) value {
     instr   instr;
     int     id;
     expr    *e;
 };
 
-visitable(node_visitor, node, value, &self->instr.impl)
+visitable(node_visitor, node, value, self)
 
 static value *value_new(int id, expr *e) {
     return new(value, 

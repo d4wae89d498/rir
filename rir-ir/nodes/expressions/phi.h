@@ -3,7 +3,7 @@
 # include <rir.h>
 
 // TODO: make in an instr ??
-struct phi {
+struct __attribute__((packed)) phi {
     expr        expr; 
     value       **values;
     block       **blocks;
@@ -11,7 +11,7 @@ struct phi {
     unsigned    size;
 };
 
-visitable(node_visitor, node, phi, &self->expr.impl)
+visitable(node_visitor, node, phi, self)
 
 static phi *phi_new(value *v1, block *b2, ...)
 {

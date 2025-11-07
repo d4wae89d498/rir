@@ -2,12 +2,12 @@
 # define RIR_RET_H
 # include <rir.h>
 
-struct ret {
+struct __attribute__((packed)) ret {
     terminator  terminator;
     value       *value;
 };
 
-visitable(node_visitor, node, ret, &self->terminator.impl)
+visitable(node_visitor, node, ret, self)
 
 static ret *ret_new(value *value) {
     return new(ret, 

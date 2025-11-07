@@ -2,13 +2,13 @@
 # define RIR_STORE_H
 # include <rir.h>
 
-struct store {
+struct __attribute__((packed)) store {
     instr    instr;
     var     *dest;
     value   *v;
 };
 
-visitable(node_visitor, node, store, &self->instr.impl)
+visitable(node_visitor, node, store, self)
 
 static store *store_new(var *dest, value *v) {
     return new(store, 

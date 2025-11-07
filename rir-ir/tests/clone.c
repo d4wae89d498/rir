@@ -12,15 +12,15 @@ int main() {
         function("main");
             value *const x1 = add2(intlit(2), intlit(4));
             var *v1 = var();
-            store(v1, x1);
+            store* s = store(v1, x1);
             ret(x1);
     builder_end();
     printf("build done.\n");
 
     // 2. print it first
-    print_target_ctx octx = {
+    print_visitor_ctx octx = {
         .depth = 0,
-        .ostream = tmpfile()
+        .ostream = stdout,//tmpfile()
     };
     dot(demo->node, accept, print_visitor, &octx);
     fmt_println("-----\nGenerated IR:\n-");
@@ -29,14 +29,14 @@ int main() {
 
     // 3. clone it
     printf("clonning...\n");
-    clone_ctx ctx = {
+    clone_visitor_ctx ctx = {
         .ptrmap = ptrmap_init()
     };
     prog *clone = dot(demo->node, accept, clone_visitor, &ctx);
     printf("DONE.\n");
 
     // 4. print the clonned ir
-    print_target_ctx cctx = {
+    print_visitor_ctx cctx = {
         .depth = 0,
         .ostream = tmpfile()
     };

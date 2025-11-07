@@ -2,11 +2,11 @@
 # define RIR_UNREACHABLE_H
 # include <rir.h>
 
-struct unreachable {
+struct __attribute__((packed)) unreachable {
     terminator terminator;
 };
 
-visitable(node_visitor, node, unreachable, &self->terminator.impl)
+visitable(node_visitor, node, unreachable, self)
 
 static unreachable *unreachable_new(void) {
     return new(unreachable, 

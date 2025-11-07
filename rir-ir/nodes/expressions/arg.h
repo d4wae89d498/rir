@@ -2,13 +2,13 @@
 # define RIR_ARG_H
 # include <rir.h>
 
-struct arg
+struct __attribute__((packed)) arg
 {
     expr        expr;
     unsigned    n;
 };
 
-visitable(node_visitor, node, arg, &self->expr.impl)
+visitable(node_visitor, node, arg, self)
 
 static arg *arg_new(unsigned n) {
     return new(arg, 

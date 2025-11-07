@@ -69,10 +69,11 @@ static void diag_print_common(const char *file, int line, const char *func, cons
     const char *label_color   = colors_enabled ? label_color_tty : "";
     const char *reset = colors_enabled ? RESET : "";
     const char *white = colors_enabled ? BOLD_WHITE : "";
-    char *nf = normalize_path(file);
+    char *nf = file;//normalize_path(file);
     fprintf(stderr, "%s", exe_name);
     if (debug_enabled)
-        fprintf(stderr, " %s:%i %s()", nf + (strlen(workspace_dir) ? strlen(workspace_dir) + 1 : 0), line, func);
+       fprintf(stderr, " %s:%i %s()", nf, line, func);
+       // fprintf(stderr, " %s:%i %s()", nf + (strlen(workspace_dir) ? strlen(workspace_dir) + 1 : 0), line, func);
     fprintf(stderr, " %s%s: %s", label_color, label, white);
     free(nf);
 }

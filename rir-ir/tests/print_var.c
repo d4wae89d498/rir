@@ -33,7 +33,7 @@ int main() {
     builder_end();
 
     // 2. print it    
-    auto ctx = (print_target_ctx){
+    auto ctx = (print_visitor_ctx){
         .depth = 0,
         .ostream = tmpfile()
     };

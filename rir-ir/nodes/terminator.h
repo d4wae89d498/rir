@@ -2,16 +2,19 @@
 # define RIR_TERMINATOR_H
 # include <rir.h>
 
-struct terminator {
+struct __attribute__((packed)) terminator {
     instr       instr;
     node        impl;
 };
 
-visitable(node_visitor, node, terminator, &self->instr.impl)
+visitable(node_visitor, node, terminator, self)
 
 static terminator TerminatorImpl(node impl) {
     return (terminator) {
-        .instr = instr_impl(terminator_visit, "terminator"),
+        .instr = instr_impl(
+            .accept = &terminator_visit, 
+            .type = "terminator"
+        ),
         .impl = impl
     };
 }

@@ -2,12 +2,12 @@
 # define RIR_RESOLVE_H
 # include <rir.h>
 
-struct resolve {
+struct __attribute__((packed)) resolve {
     expr        expr;
     const char  *symbol_name;
 };
 
-visitable(node_visitor, node, resolve, &self->expr.impl)
+visitable(node_visitor, node, resolve, self)
 
 static resolve *resolve_new(const char *symbol_name) {
     return new(resolve, 

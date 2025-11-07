@@ -2,7 +2,7 @@
 # define RIR_BINOP_H
 # include <rir.h>
 
-struct binop 
+struct __attribute__((packed)) binop 
 {
     expr        expr;
     const char  *type;
@@ -10,7 +10,7 @@ struct binop
     value       *right;
 };
 
-visitable(node_visitor, node, binop, &self->expr.impl)
+visitable(node_visitor, node, binop, self)
 
 # define def_binop(NAME)                                                \
     static binop * NAME ## 2 ## _new (value *left, value *right) {      \

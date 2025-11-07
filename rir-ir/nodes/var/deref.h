@@ -2,13 +2,13 @@
 # define RIR_DEREF_H
 # include <rir.h>
 
-struct deref {
+struct __attribute__((packed)) deref {
     instr   instr;
     value   *v;
     var     *dest;
 };
 
-visitable(node_visitor, node, deref, &self->instr.impl)
+visitable(node_visitor, node, deref, self)
 
 static deref *deref_new(var *dest, value *val) {
     dest->type = V_PTR; // todo:: check if type was not changed from ptr to sometthing else ? or let it silent as is..

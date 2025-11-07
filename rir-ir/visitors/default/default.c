@@ -10,6 +10,24 @@ static void *visit_prog(prog *self, void *ctx)
     return 0;
 }
 
+static void *visit_expr(expr *self, print_visitor_ctx *ctx) 
+{
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
+}
+
+static void *visit_instr(instr *self, print_visitor_ctx *ctx) 
+{
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
+}
+
+static void *visit_terminator(terminator *self, print_visitor_ctx *ctx) 
+{
+    TRACE;
+    return self->impl.accept(self, &visitor, ctx);
+}
+
 static void *visit_function(function *self, void *ctx) 
 {
     TRACE;
@@ -136,6 +154,11 @@ void setup_default_visitor(void)
     visitor = node_visitor_init();
 
     visitor_method(prog)
+
+    visitor_method(expr)
+    visitor_method(instr)
+    visitor_method(terminator)
+
     visitor_method(function)
     visitor_method(block)
     visitor_method(value)

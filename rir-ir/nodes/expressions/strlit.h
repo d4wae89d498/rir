@@ -2,12 +2,12 @@
 # define RIR_STRLIT_H
 # include <rir.h>
 
-struct strlit {
+struct __attribute__((packed)) strlit {
     expr        expr;
     const char  *value;
 };
 
-visitable(node_visitor, node, strlit, &self->expr.impl)
+visitable(node_visitor, node, strlit, self)
 
 static strlit *strlit_new(const char *str) {
     return new(strlit,
@@ -19,6 +19,6 @@ static strlit *strlit_new(const char *str) {
     );
 }
 
-# define strlit(v) value(&strlit_new(v)->expr)
+# define strlit(v) value(&(strlit_new(v)->expr))
 
 #endif // RIR_STRLIT_H

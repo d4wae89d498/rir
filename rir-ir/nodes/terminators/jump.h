@@ -2,12 +2,12 @@
 # define RIR_JUMP_H
 # include <rir.h>
 
-struct jump {
+struct __attribute__((packed)) jump {
     terminator  terminator;
     block       *dest;
 };
 
-visitable(node_visitor, node, jump, &self->terminator.impl)
+visitable(node_visitor, node, jump, self)
 
 static jump *jump_new(block *dest) {
     return new(jump, 

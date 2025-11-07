@@ -2,7 +2,7 @@
 # define RIR_PROG_H
 # include <rir.h>
 
-struct prog {
+struct __attribute__((packed))  prog {
     node        node;
     functions   functions;
 };

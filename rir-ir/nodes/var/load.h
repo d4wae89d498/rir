@@ -2,12 +2,12 @@
 # define RIR_LOAD_H
 # include <rir.h>
 
-struct load {
+struct __attribute__((packed)) load {
     expr    expr;
     var     *v;
 };
 
-visitable(node_visitor, node, load, &self->expr.impl)
+visitable(node_visitor, node, load, self)
 
 static load *load_new(var *v) 
 {
