@@ -14,7 +14,7 @@ visitable(node_visitor, node, when, self)
 static when *when_new(value *cond, block *t, block *f) {
     return new(when, 
         .terminator = terminator_impl(
-            .accept = (ir_node_method) &when_visit,
+            .accept = (node_method) &when_visit,
             .type = "when",
         ),
         .cond = cond,

@@ -14,7 +14,7 @@ visitable(node_visitor, node, call, self)
 static call *call_new(value *addr, ...) {
     call *self = new(call,
         .expr = expr_impl(
-            .accept = (ir_node_method) &call_visit,
+            .accept = (node_method) &call_visit,
             .type = "call"
         ),
         .fp = addr,

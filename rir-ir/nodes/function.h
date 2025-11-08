@@ -14,7 +14,7 @@ visitable(node_visitor, node, function, self)
 static function *function_new(const char *name) {
     return new(function, 
          .node = {
-            .accept = (ir_node_method) &function_visit,
+            .accept = (node_method) &function_visit,
             .type = "function"
         },
         .name = name,

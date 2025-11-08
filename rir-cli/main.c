@@ -1,3 +1,4 @@
+#include "diag.h"
 #include <rir.h>
 #include <stc/coption.h>
 
@@ -28,6 +29,10 @@ char cli_target_txt[] = {
 };
 
 ////////////////////////
+
+static void version() {
+    notice("rir v0.0.1");
+}
 
 static void usage() {
     cstr result = cstr_init();
@@ -75,9 +80,10 @@ int main(int argc, char **argv) {
     static coption_long  longopts[] = {
         { "target", coption_required_argument, 't' },
         { "help",   coption_no_argument,       'h' },
+        { "version",coption_no_argument,       'v' },
         { 0 }
     };
-    const char *shortopts = "f:D:t:h";
+    const char *shortopts = "f:D:t:h:v";
     coption opt = coption_init();
     int c;
 
@@ -102,6 +108,9 @@ int main(int argc, char **argv) {
                 break;
             case 'h':
                 usage();
+                return 0;
+            case 'v':
+                version();
                 return 0;
             case '?':
                 fmt_error("unknown argument: '{}'", opt.arg);

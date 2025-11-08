@@ -133,7 +133,7 @@ static void *visit_call(call *self, node_visitor *visitor, clone_visitor_ctx *ct
     TRACE;
     call *output = new(call,
         .expr = expr_impl(
-            .accept = (ir_node_method) &call_visit,
+            .accept = (node_method) &call_visit,
             .type = "call"
         ),
         .fp = self->fp,
@@ -251,17 +251,12 @@ void setup_clone_visitor(void)
     clone_visitor = &visitor;
 
     if (!default_visitor) {
-        // TODO: error, default shall be setup first
+        error("default_visitor shall be built first.");
+        exit(1);
     }
-    // Create and attach visitor
-    printf("%p\n", default_visitor);
     visitor = node_visitor_clone(*default_visitor);
 
     visitor_method(prog)
-
-    //visitor_method(expr)
-    //visitor_method(instr)
-    //visitor_method(terminator)
 
     visitor_method(function)
     visitor_method(block)
@@ -284,6 +279,4 @@ void setup_clone_visitor(void)
 
 
     ensure_visitor_completed("clone", &visitor);
-
-
 }

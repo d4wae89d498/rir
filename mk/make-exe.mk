@@ -7,7 +7,7 @@ all: $(NAME)
 $(REL_BUILD_DIR)/%.o: CSTD = $(CSTD_LATEST)
 $(REL_BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -MP -MF $(REL_BUILD_DIR)/$*.d -c $$(realpath $<) -o $$(realpath $@)
 
 $(NAME): $(OBJS) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)

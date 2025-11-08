@@ -17,7 +17,7 @@
 
 // SOURCES
 
-static char *exe_name = stringify_defined(NAME) ;
+static char *target_name = stringify_defined(NAME) ;
 static char *workspace_dir = stringify_defined(WS_DIR) ;
 
 // GLOBALS
@@ -69,13 +69,12 @@ static void diag_print_common(const char *file, int line, const char *func, cons
     const char *label_color   = colors_enabled ? label_color_tty : "";
     const char *reset = colors_enabled ? RESET : "";
     const char *white = colors_enabled ? BOLD_WHITE : "";
-    char *nf = file;//normalize_path(file);
-    fprintf(stderr, "%s", exe_name);
+    if (!strncmp(file, workspace_dir, strlen(workspace_dir))) {
+        file += strlen(workspace_dir) + 1;
+    }
     if (debug_enabled)
-       fprintf(stderr, " %s:%i %s()", nf, line, func);
-       // fprintf(stderr, " %s:%i %s()", nf + (strlen(workspace_dir) ? strlen(workspace_dir) + 1 : 0), line, func);
-    fprintf(stderr, " %s%s: %s", label_color, label, white);
-    free(nf);
+       fprintf(stderr, "%s:%i %s() ", file, line, func);
+    fprintf(stderr, "%s%s: %s", label_color, label, white);
 }
 
 # define rir_print_impl(file, line, func, verb, label, color, ...)\
@@ -98,15 +97,15 @@ static void diag_print_common(const char *file, int line, const char *func, cons
     }
 
 // === warning ===
-# define warning(fmt, ...)\
+# define warning(...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fprintf, "warning", BOLD_YELLOW, __VA_ARGS__)
-# define fmt_warning(fmt, ...)\
+# define fmt_warning(...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "warning", BOLD_YELLOW, __VA_ARGS__)
 
 // === notice ===
-# define notice(fmt, ...)\
+# define notice(...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fprintf, "notice", BOLD_CYAN, __VA_ARGS__)
-# define fmt_notice(fmt, ...)\
+# define fmt_notice(...)\
         rir_print_impl(__FILE__, __LINE__, __func__ , fmt_printd, "notice", BOLD_CYAN, __VA_ARGS__)
 
 // === debug ===

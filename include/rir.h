@@ -23,11 +23,23 @@
 # include <sugar.h>
 # include <diag.h>
 
+typedef struct node         node;
+
+struct node_visitor;
+
+typedef void *(*node_method )(struct node *, struct node_visitor*, void*);
+# define T node_visitor, cstr, node_method, (c_keypro)
+# include <stc/hmap.h>
+# define visitor_method(W) \
+    node_visitor_put(&visitor, #W, (node_method)& (visit_ ## W));
+
+struct node {
+    node_method accept;
+    const char *type;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////           IR             ////////////////////////////////////////
-
-typedef struct node         node;
 
 typedef struct prog         prog;
 typedef struct function     function;
@@ -64,13 +76,6 @@ typedef struct unreachable  unreachable;
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
 
-struct node_visitor;
-
-typedef void *(*ir_node_method )(node *, struct node_visitor*, void*);
-# define T node_visitor, cstr, ir_node_method, (c_keypro)
-# include <stc/hmap.h>
-# define visitor_method(W) \
-    node_visitor_put(&visitor, #W, (ir_node_method)& (visit_ ## W));
 
 # include "./../rir-ir/ir.h"
 

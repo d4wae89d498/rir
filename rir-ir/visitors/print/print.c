@@ -186,14 +186,12 @@ void setup_print_visitor(void)
     static node_visitor visitor;
     print_visitor = &visitor;
 
-    // Create and attach visitor
-    visitor = node_visitor_init();
 
-    visitor_method(prog)
-
-    visitor_method(expr)
-    visitor_method(instr)
-    visitor_method(terminator)
+    if (!default_visitor) {
+        error("default_visitor shall be built first.");
+        exit(1);
+    }
+    visitor = node_visitor_clone(*default_visitor);
 
     visitor_method(function)
     visitor_method(block)
@@ -213,7 +211,6 @@ void setup_print_visitor(void)
     visitor_method(deref)
     visitor_method(ref)
     visitor_method(store)
-
 
     ensure_visitor_completed("print", &visitor);
 }

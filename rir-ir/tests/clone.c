@@ -20,7 +20,7 @@ int main() {
     // 2. print it first
     print_visitor_ctx octx = {
         .depth = 0,
-        .ostream = stdout,//tmpfile()
+        .ostream = tmpfile()
     };
     dot(demo->node, accept, print_visitor, &octx);
     fmt_println("-----\nGenerated IR:\n-");
