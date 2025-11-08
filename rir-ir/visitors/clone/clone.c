@@ -1,6 +1,4 @@
-#include "clone.h"
-#include "rir.h"
-#include "stcutils.h"
+#include <rir.h>
 
 node_visitor *clone_visitor;
 
