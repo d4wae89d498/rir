@@ -26,9 +26,7 @@ static var *var_new(int id) {
 }
 
 static var *Var(void) {
-    static unsigned id;
-
-    var *out = var_new(id++);
+    var *out = var_new(var_id++);
     builder_attach_instr(&out->instr);
     return out;
 }

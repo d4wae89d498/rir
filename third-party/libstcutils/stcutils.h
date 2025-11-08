@@ -15,4 +15,12 @@ static void * type ##  _visit(node *f, visitor *vis, void *ctx) {\
     );\
 }
 
+static void *ptrmap_hit(ptrmap *map, void *ptr) {
+    ptrmap_iter arg_at_i = ptrmap_find(map, ptr);
+    if (!arg_at_i.ref) {
+        return 0;
+    }
+    return arg_at_i.ref->second;
+}
+
 #endif

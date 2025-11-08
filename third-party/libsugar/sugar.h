@@ -5,6 +5,7 @@
 # include <stdio.h>
 # include <stdarg.h>
 # include <ctype.h>
+# include <stdbool.h>
 
 // PURE MACRO THINGS
 /////////////
@@ -42,6 +43,7 @@ typedef struct closure
 
 # define closure(F, CTX) new(closure, .f=F, .ctx=CTX)
 # define apply(cl) (cl)->f((cl)->ctx)
+
 
 /////////////////////////////////////////////////////
 //         POSIX POLYFILS                          //
@@ -165,5 +167,40 @@ static void dump_cstr(FILE *dest, const char *s)
         }
     }
 }
+
+/////////////////////////////////////////////////////
+//         MIXED                                   //
+/////////////////////////////////////////////////////
+
+static bool files_equal(FILE *a, FILE *b) {
+    if (!a || !b) return false;
+
+    int ca, cb;
+
+    // Rewind so both start at the beginning
+    long posa = ftell(a);
+    long posb = ftell(b);
+    rewind(a);
+    rewind(b);
+
+    do {
+        ca = fgetc(a);
+        cb = fgetc(b);
+        if (ca != cb) {
+            // restore positions
+            fseek(a, posa, SEEK_SET);
+            fseek(b, posb, SEEK_SET);
+            return false;
+        }
+    } while (ca != EOF && cb != EOF);
+
+    // restore positions
+    fseek(a, posa, SEEK_SET);
+    fseek(b, posb, SEEK_SET);
+
+    return true;
+}
+
+
 
 #endif // SUGAR_H

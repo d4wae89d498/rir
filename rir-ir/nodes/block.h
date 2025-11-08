@@ -6,31 +6,31 @@ struct  block {
     node        node;
     block       *prev;
     block       *next;
-    const char  *name;
+    int         id;
     instr       *start;
     instr       *last;  // check later if its a terminator
 };
 
 visitable(node_visitor, node, block, self)
 
-static block *block_new(const char *name) {
+static block *block_new(int id) {
     return new(block, 
         .node = {
             .accept = &block_visit,
             .type = "block"
         },
-        .name = name,
+        .id = id,
         .start = 0,
         .last = 0,
     );
 }
 
-static block *Block(const char *name) {
-    block *out = block_new(name);
+static block *Block(void) {
+    block *out = block_new(block_id++);
     builder_begin_block(out);
     return out;
 }
 
-# define block(name) Block(name)
+# define block() Block()
 
 #endif // RIR_BLOCK_H

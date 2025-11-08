@@ -10,9 +10,26 @@ int main() {
     prog *demo = prog();
     builder_begin(demo);
         function("main");
-            value *const x1 = add2(intlit(2), intlit(4));
+            value *x1 = add2(intlit(2), intlit(4));
             var *v1 = var();
-            store* s = store(v1, x1);
+
+            store(v1, x1);
+
+            call(resolve("printf"), strlit("hello %d"), intlit(2));
+            
+            block *true_case;
+            block *false_case;
+            var *v2 = var();
+            
+            true_case = block();
+            store(v2, mul2(intlit(2), intlit(4)));
+            false_case = block();
+            store(v2, add2(intlit(2), intlit(4)));
+
+            when(intlit(1), true_case, false_case);
+
+            call(resolve("printf"), load(v2));
+
             ret(x1);
     builder_end();
     printf("build done.\n");
@@ -46,7 +63,10 @@ int main() {
     fmt_println("-----");
 
     // 5. compare original and clonned ir
-    // TODO
+    if (!files_equal(octx.ostream, cctx.ostream)) {
+        error("original and clonned ir dump differs !");
+        exit(1);
+    }
     
     return 0;
 }

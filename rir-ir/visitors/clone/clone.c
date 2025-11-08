@@ -4,7 +4,17 @@
 
 node_visitor *clone_visitor;
 
+
 ///////////////////////////////////////////////////////////////////////
+
+static block *clone_block_ref(clone_visitor_ctx *ctx, block *b) {
+    block *output = ptrmap_hit(&ctx->ptrmap, b);
+    if (output)
+        return output;
+    output = block_new(b->id);
+    ptrmap_insert(&ctx->ptrmap, b, output);
+    return output;
+}
 
 static void *visit_prog(prog *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
@@ -14,24 +24,6 @@ static void *visit_prog(prog *self, node_visitor *visitor, clone_visitor_ctx *ct
     for (c_each(i, functions, self->functions))
         dot(i.ref->second->node, accept, visitor, ctx);
     return output;
-}
-
-static void *visit_expr(expr *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->node, visitor, ctx);
-}
-
-static void *visit_instr(instr *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->node, visitor, ctx);
-}
-
-static void *visit_terminator(terminator *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->instr.node, visitor, ctx);
 }
 
 static void *visit_function(function *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
@@ -54,10 +46,16 @@ static void *visit_function(function *self, node_visitor *visitor, clone_visitor
 static void *visit_block(block *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    block *output = block(self->name);
+
+    block *output = clone_block_ref(ctx, self);
+
+    builder_begin_block(output);
+
     instr *i = self->start;
     while (i) {
-        (&i->node)->accept(&i->node, visitor, ctx); 
+        instr *clonned_instr = (&i->node)->accept(&i->node, visitor, ctx); 
+        builder_attach_instr(clonned_instr);
+
         i = i->next;
     }
     return output;
@@ -66,7 +64,8 @@ static void *visit_block(block *self, node_visitor *visitor, clone_visitor_ctx *
 static void *visit_value(value *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    value *output = value(dot(self->e->node, accept, visitor, ctx));   
+    expr *e = dot(self->e->node, accept, visitor, ctx);
+    value *output = value_new(self->id, e);   
     ptrmap_insert(&ctx->ptrmap, self, output);
     return output;
 }
@@ -74,7 +73,7 @@ static void *visit_value(value *self, node_visitor *visitor, clone_visitor_ctx *
 static void *visit_arg(arg *self, node_visitor *visitor, clone_visitor_ctx *ctx)
 {
     TRACE;
-    return arg(self->n);
+    return arg_new(self->n);
 }
 
 static void *visit_binop(binop *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
@@ -95,37 +94,28 @@ static void *visit_binop(binop *self, node_visitor *visitor, clone_visitor_ctx *
             .type = "binop",
         ),
         .type = self->type,
-        .left = r.ref->second,
-        .right = l.ref->second,
+        .left = l.ref->second,
+        .right = r.ref->second,
     );
-    // value *val = value((expr*)e);
-    //ptrmap_e
-    // ptrmap_insert(&ctx->ptrmap, self, val);
-    return e;//val;
+    return e;
 }
 
 static void *visit_intlit(intlit *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    return new(intlit, 
-        .expr = self->expr,
-        .value = self->value
-    );
+    return intlit_new(self->value);
 }
 
 static void *visit_strlit(strlit *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    return new(strlit, 
-        .expr = self->expr,
-        .value = strdup(self->value)
-    );
+    return strlit_new(strdup(self->value));
 }
 
 static void *visit_resolve(resolve *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    return resolve(self->symbol_name);
+    return resolve_new(strdup(self->symbol_name));
 }
 
 static void *visit_call(call *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
@@ -140,63 +130,63 @@ static void *visit_call(call *self, node_visitor *visitor, clone_visitor_ctx *ct
         .args = malloc(self->arg_count * sizeof(void*)),
         .arg_count = 0
     ); 
-
     int i = 0;
     while (i < self->arg_count)
     {
-        printf("---\n");
-        printf("expr.impl.type: %s\n", self->args[i]->e->impl.type);
-        printf("expr.impl.accept: %p\n", (void*) self->args[i]->e->impl.accept);
-        printf("node.type: %s\n",  self->args[i]->e->node.type);
-
-
-        output->args[i] = dot(self->args[i]->e->node, accept, visitor, ctx);
-
-
-        //output->args[i] = dot(self->args[i]->e->node, accept, &visitor, ctx);
-        printf("done.\n");
+        ptrmap_iter arg_at_i = ptrmap_find(&ctx->ptrmap, self->args[i]);
+        if (!arg_at_i.ref) {
+            error("Trying to call using an unknown arg at pos %d", i);
+            exit(1);
+        }
+        output->args[i] = arg_at_i.ref->second;
         i += 1;
     }
     output->arg_count = i;
-    
-    return value(&output->expr);
+    return output;
 }
 
 static void *visit_jump(jump *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    block *dest = dot(self->dest->node, accept, visitor, ctx);
-    return jump(dest);
+
+    block *dest = clone_block_ref(ctx, self->dest);
+
+    return jump_new(dest);
 }
 
 static void *visit_ret(ret *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    ptrmap_iter v = ptrmap_find(&ctx->ptrmap, self->value);
-    if (!v.ref) {
+    value *v = ptrmap_hit(&ctx->ptrmap, self->value);
+    if (!v) {
         error("Trying to ret an unknown temp");
         exit(1);
     }
-    return ret(v.ref->second);
+    return ret_new(v);
 }
 
 static void *visit_when(when *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    value *cond = dot(self->cond->e->node, accept, visitor, ctx);
-    block *t = dot(self->t->node, accept, visitor, ctx);
-    block *f = dot(self->f->node, accept, visitor, ctx);
-    return when(cond, t, f);
+    value *cond = ptrmap_hit(&ctx->ptrmap, self->cond);
+    if (!cond) {
+        error("Trying to jump when with an unknown cond");
+        exit(1);
+    }
+
+    block *t = clone_block_ref(ctx, self->t);
+    block *f = clone_block_ref(ctx, self->f);
+    
+    return when_new(cond, t, f);
 }
 
 static void *visit_var(var *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
     
-    var *v = var();
+    var *v = var_new(self->id);
     
     ptrmap_insert(&ctx->ptrmap, self, v);
-    v->id = self->id;
     v->type = self->type;
 
     return v;
@@ -205,40 +195,53 @@ static void *visit_var(var *self, node_visitor *visitor, clone_visitor_ctx *ctx)
 static void *visit_deref(deref *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    value   *val = dot(self->v->e->node, accept, visitor, ctx);
-    return deref(val);
+    value *f = ptrmap_hit(&ctx->ptrmap, self->v);
+    if (!f) {
+        error("Trying to deref an unknown temp");
+        exit(1);
+    }
+    return  deref_new(var_new(self->dest->id), f);
 }
 
 static void *visit_load(load *self, node_visitor *visitor, clone_visitor_ctx *ctx)
 {   
     TRACE;
-    var *var = dot(self->v->instr.node, accept, visitor, ctx);
-    return load(var);
+    var *v = ptrmap_hit(&ctx->ptrmap, self->v);
+    if (!v) {
+        error("Trying to load an unknown var");
+        exit(1);
+    }
+    return load_new(v);
 }
 
 static void *visit_ref(ref *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    var *var = dot(self->v->instr.node, accept, visitor, ctx);
-    return ref(var);
+    var *v = ptrmap_hit(&ctx->ptrmap, v);
+    if (!v) {
+        error("Trying to ref an unknown var");
+        exit(1);
+    }
+    return ref_new(v);
 }
 
 static void *visit_store(store *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
 
-    ptrmap_iter dest = ptrmap_find(&ctx->ptrmap, self->dest);
-    if (!dest.ref) {
+    var *dest = ptrmap_hit(&ctx->ptrmap, self->dest);
+    if (!dest) {
         error("Storing unknown var");
         exit(1);
     }
-    ptrmap_iter v = ptrmap_find(&ctx->ptrmap, self->v);
-    if (!v.ref) {
+
+    value *temp = ptrmap_hit(&ctx->ptrmap, self->v);
+    if (!temp) {
         error("Storing unknown temp");
         exit(1);
     }
 
-    return store(dest.ref->second, v.ref->second);
+    return store_new(dest, temp);
 }
 
 ///////////////////////////////////////////////////////////////////////

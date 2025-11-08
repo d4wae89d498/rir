@@ -22,9 +22,7 @@ static value *value_new(int id, expr *e) {
 }
 
 static value *Value(expr *e) {
-    static int id;
-
-    value *out = value_new(id++, e);
+    value *out = value_new(temp_id++, e);
     builder_attach_instr(&out->instr);
     return out;
 }

@@ -20,4 +20,9 @@ void builder_attach_instr(instr *i);
 block *builder_get_block(void);
 void builder_set_block(block*);
 
+//// IDs
+extern int var_id;
+extern int block_id;
+extern int temp_id;
+
 #endif

@@ -26,7 +26,7 @@ static function *Function(const char *name) {
     builder_begin_function(out);
     prog *current_prog = builder_get_prog();
     functions_emplace(&(current_prog->functions), name, out);
-    block(0);
+    block();
     return out;
 }
 

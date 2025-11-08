@@ -20,9 +20,9 @@ int main() {
             block *false_case;
             var *v2 = var();
             
-            true_case = block("true_case");
+            true_case = block();
             store(v2, mul2(intlit(2), intlit(4)));
-            false_case = block("false_case");
+            false_case = block();
             store(v2, add2(intlit(2), intlit(4)));
 
             when(intlit(1), true_case, false_case);

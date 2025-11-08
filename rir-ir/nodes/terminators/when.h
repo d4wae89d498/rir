@@ -26,7 +26,7 @@ static when *when_new(value *cond, block *t, block *f) {
 static when* When(value *cond, block *t, block *f) {
     when *self = when_new(cond, t, f);
     block *current = builder_get_block();
-    block *next = block(0);
+    block *next = block();
     builder_set_block(self->t);
     jump(next);
     builder_set_block(self->f);

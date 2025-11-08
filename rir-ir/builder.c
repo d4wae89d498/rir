@@ -6,8 +6,20 @@ static prog        *current_prog;
 static function    *current_function;
 static block       *current_block;
 
+//
+
+int var_id = 0;
+int block_id = 0;
+int temp_id = 0;
+
+//
+
 void builder_begin(prog *p) {
     current_prog = p;
+
+    var_id = 0;
+    block_id = 0;
+    temp_id = 0;
 }
 
 prog *builder_get_prog(void) {

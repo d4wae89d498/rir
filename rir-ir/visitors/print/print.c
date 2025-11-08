@@ -5,32 +5,6 @@ node_visitor *print_visitor;
 
 ///////////////////////////////////////////////////////////////////////
 
-static void *visit_prog(prog *self, node_visitor *visitor, print_visitor_ctx *ctx) 
-{
-    TRACE;
-    for (c_each(i, functions, self->functions))
-        dot(i.ref->second->node, accept, visitor, ctx);
-    return 0;
-}
-
-static void *visit_expr(expr *self, node_visitor *visitor, print_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->node, visitor, ctx);
-}
-
-static void *visit_instr(instr *self, node_visitor *visitor, print_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->node, visitor, ctx);
-}
-
-static void *visit_terminator(terminator *self, node_visitor *visitor, print_visitor_ctx *ctx) 
-{
-    TRACE;
-    return self->impl.accept(&self->instr.node, visitor, ctx);
-}
-
 static void *visit_function(function *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
@@ -47,7 +21,7 @@ static void *visit_function(function *self, node_visitor *visitor, print_visitor
 static void *visit_block(block *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "%s: \n", self->name);
+    fprintf(ctx->ostream, "block%d: \n", self->id);
     instr *i = self->start;
     while (i) {
         dot(i->node, accept, visitor, ctx);
@@ -59,7 +33,6 @@ static void *visit_block(block *self, node_visitor *visitor, print_visitor_ctx *
 static void *visit_value(value *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    return 0;
     fprintf(ctx->ostream,"temp%i = ", self->id);
     dot(self->e->node, accept, visitor, ctx);
     fprintf(ctx->ostream,"\n");
@@ -124,7 +97,7 @@ static void *visit_call(call *self, node_visitor *visitor, print_visitor_ctx *ct
 static void *visit_jump(jump *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "jump %s\n", self->dest->name);
+    fprintf(ctx->ostream, "jump block%d\n", self->dest->id);
     return 0;
 }
 
@@ -138,42 +111,42 @@ static void *visit_ret(ret *self, node_visitor *visitor, print_visitor_ctx *ctx)
 static void *visit_when(when *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "when(temp%d, %s, %s)\n", self->cond->id, self->t->name, self->f->name);
+    fprintf(ctx->ostream, "when(temp%d, block%d, block%d)\n", self->cond->id, self->t->id, self->f->id);
     return 0;
 }
 
 static void *visit_var(var *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "init v%d\n", self->id);
+    fprintf(ctx->ostream, "init var%d\n", self->id);
     return 0;
 }
 
 static void *visit_deref(deref *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "v%d = deref tmp%d\n", self->dest->id, self->v->id);
+    fprintf(ctx->ostream, "var%d = deref tmp%d\n", self->dest->id, self->v->id);
     return 0;
 }
 
 static void *visit_load(load *self, node_visitor *visitor, print_visitor_ctx *ctx)
 {
     TRACE;
-    fprintf(ctx->ostream, "load v%d", self->v->id);
+    fprintf(ctx->ostream, "load var%d", self->v->id);
     return 0;
 }
 
 static void *visit_ref( ref *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "ref v%d", self->v->id);
+    fprintf(ctx->ostream, "ref var%d", self->v->id);
     return 0;
 }
 
 static void *visit_store(store *self, node_visitor *visitor, print_visitor_ctx *ctx) 
 {
     TRACE;
-    fprintf(ctx->ostream, "v%d = temp%d\n", self->dest->id, self->v->id);
+    fprintf(ctx->ostream, "var%d = temp%d\n", self->dest->id, self->v->id);
     return 0;
 }
 
