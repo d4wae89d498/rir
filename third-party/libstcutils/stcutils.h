@@ -9,7 +9,8 @@
 static void * type ##  _visit(node *f, visitor *vis, void *ctx) {\
     type *self = (type*)f;\
     return (visitor ## _find(vis, #type ).ref)->second(\
-        (node*)(access), \
+        (node*)(access),\
+        vis,\
         ctx\
     );\
 }

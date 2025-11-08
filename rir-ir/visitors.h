@@ -10,10 +10,12 @@
 
 static void setup_visitors(void)
 {
-    setup_clone_visitor();
+    TRACE;
+
     setup_default_visitor();
-//    setup_delete_visitor();
     setup_print_visitor();
+    setup_clone_visitor();
+    //    setup_delete_visitor();
 }
 
 #endif

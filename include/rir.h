@@ -63,12 +63,14 @@ typedef struct unreachable  unreachable;
 
 # define T functions, cstr, function*, (c_keypro)
 # include <stc/hmap.h>
-typedef void *(*ir_visitor_method )(node *, void*);
-# define T node_visitor, cstr, ir_visitor_method, (c_keypro)
+
+struct node_visitor;
+
+typedef void *(*ir_node_method )(node *, struct node_visitor*, void*);
+# define T node_visitor, cstr, ir_node_method, (c_keypro)
 # include <stc/hmap.h>
-typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 # define visitor_method(W) \
-    node_visitor_emplace(&visitor, #W, (ir_visitor_method)& (visit_ ## W));
+    node_visitor_put(&visitor, #W, (ir_node_method)& (visit_ ## W));
 
 # include "./../rir-ir/ir.h"
 
@@ -91,6 +93,7 @@ typedef void *(*ir_node_method )(node *, node_visitor*, void*);
 
 static void setup(void)
 {
+    TRACE;
     setup_passes();
     setup_targets();
     setup_visitors();
