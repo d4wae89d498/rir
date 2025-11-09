@@ -1,8 +1,10 @@
+#include "stcutils.h"
 #include <rir.h>
+#include <stdio.h>
 
 int main() {
     setup();
-    fmt_println("=== testing clone ===");
+    notice("=== testing clone ===");
 
     // 1. build the IR
     prog *demo = prog();
@@ -37,9 +39,9 @@ int main() {
         .ostream = tmpfile()
     };
     dot(demo->node, accept, print_visitor, &octx);
-    fmt_println("-----\nGenerated IR:\n-");
+    notice("-----\nGenerated IR:\n-");
     dump_file(stdout, octx.ostream);
-    fmt_println("-----");
+    notice("-----");
 
     // 3. clone it
     printf("clonning...\n");
@@ -55,16 +57,33 @@ int main() {
         .ostream = tmpfile()
     };
     dot(clone->node, accept, print_visitor, &cctx);
-    fmt_println("-----\nClonned IR:\n-");
+    notice("-----\nClonned IR:\n-");
     dump_file(stdout, cctx.ostream);
-    fmt_println("-----");
+    notice("-----");
 
     // 5. compare original and clonned ir
     if (!files_equal(octx.ostream, cctx.ostream)) {
         error("original and clonned ir dump differs !");
         exit(1);
+    } else {
+        notice("OK -- clonned and original dump are equal")
     }
-    
+
+    // 6. free both
+    delete_visitor_ctx delete_ctx = {
+        .ptrset = ptrset_init()
+    };
+    dot(demo->node, accept, delete_visitor, &delete_ctx);
+    dot(clone->node, accept, delete_visitor, &delete_ctx);
+
+    delete_visitor_flush(&delete_ctx);
+    ptrset_drop(&delete_ctx.ptrset);
+
+    ptrmap_drop(&ctx.ptrmap);
+
+    fclose(octx.ostream);
+    fclose(cctx.ostream);
+
     return 0;
 }
 

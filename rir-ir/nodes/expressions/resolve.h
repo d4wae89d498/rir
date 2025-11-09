@@ -19,6 +19,6 @@ static resolve *resolve_new(const char *symbol_name) {
     );
 }
 
-# define resolve(name) value(&resolve_new(name)->expr)
+# define resolve(name) value(&resolve_new(strdup(name))->expr)
 
 #endif // RIR_RESOLVE_H

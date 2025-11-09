@@ -3,6 +3,8 @@
 # include <stc/cstr.h>
 # define T ptrmap, void*, void*
 # include <stc/hmap.h>
+# define T ptrset, void*
+# include <stc/hashset.h>
 # define T strstack, const char*
 # include <stc/stack.h>
 # define visitable(visitor, node, type, access)  \

@@ -23,7 +23,8 @@ static when *when_new(value *cond, block *t, block *f) {
     );
 }
 
-
+//////////////////////////////
+// When Builder
 
 typedef struct when_frame {
     block *true_branch;

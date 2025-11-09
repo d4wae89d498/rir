@@ -19,6 +19,6 @@ static strlit *strlit_new(const char *str) {
     );
 }
 
-# define strlit(v) value(&(strlit_new(v)->expr))
+# define strlit(v) value(&(strlit_new(strdup(v))->expr))
 
 #endif // RIR_STRLIT_H
