@@ -10,8 +10,9 @@ Experimental compiler pipelines.
 
 ## Implementation details
 
-Libraries are written in C99, while the CLI and tests are written in C23.
-The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX or any other target-specific features. This implementation choice ensures that run-time extensions can easily interact with compiler internals using the well-known C ABI.
+Libraries are written in C99, while the CLI and tests are written in C23. This implementation choice ensures that run-time extensions can easily interact with compiler internals using the well-known C ABI.
+
+The code uses only libc and [STC](https://github.com/stclib/STC) without POSIX or any other target-specific features and thus shall be cross-platform.
 
 ## Roadmap
 
@@ -24,9 +25,9 @@ The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX 
 - [ ] IR
     - [x] finish node spec
     - [x] IR Builder tool
-    - [ ] visitors 
-        - [ ] delete visitor
-        - [ ] ability to detect if visitor implement all nodes or ERROR
+    - [x] visitors 
+        - [x] print / clone / delete visitors
+        - [x] ability to detect if visitor implement all nodes or ERROR
 
 - [ ] BE
     - [ ] passes
@@ -36,8 +37,8 @@ The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX 
         - [ ] dead code elimination
     - [ ] abstract machine decl / regalloc interface
     - [ ] targets 
-        - [ ] quick interpreter that uses LIBFFI for C interop
-        - [x] Print visitor
+        - [ ] (wip) interpreter that uses LIBFFI for C interop
+        - [x] Print target
         - [ ] Graph visitor (emit a CFG)
         - [ ] C
 
@@ -50,10 +51,10 @@ The code uses only libc and [STC](https://github.com/stclib/STC), without POSIX 
 ## Dev env
 
 Windows: `vscode + wsl extension + clangd`
+
 Mac/linux: `codium + clangd`
 
 Install bear and then:
-
 `bear -- make re`
   
 ## See also
