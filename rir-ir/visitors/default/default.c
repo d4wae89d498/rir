@@ -46,7 +46,7 @@ static void *visit_block(block *self, node_visitor *visitor, void *ctx)
     TRACE;
     instr *i = self->start;
     while (i) {
-        (&i->node)->accept(&i->node, default_visitor, ctx); 
+        (&i->node)->accept(&i->node, visitor, ctx); 
         i = i->next;
     }
     return 0;
@@ -151,7 +151,7 @@ void setup_default_visitor(void)
 {
     TRACE;
 
-    printf("setup default...\n");
+    printf("setup default visitor...\n");
     static node_visitor visitor;
     default_visitor = &visitor;
 

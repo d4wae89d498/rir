@@ -5,6 +5,9 @@
 
 typedef struct interpret_ctx {
     int depth;
+
+    ptrmap ptrmap;
+    // todo: a map for values and vars
 } interpret_ctx;
 
 extern node_visitor *interpret_visitor;
