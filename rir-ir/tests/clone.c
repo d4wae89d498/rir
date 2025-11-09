@@ -1,6 +1,4 @@
-#include "stcutils.h"
 #include <rir.h>
-
 
 int main() {
     setup();

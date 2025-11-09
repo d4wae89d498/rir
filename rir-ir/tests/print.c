@@ -1,4 +1,3 @@
-#include "diag.h"
 #include <rir.h>
 
 int main() {

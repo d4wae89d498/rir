@@ -1,6 +1,4 @@
-#include "clone.h"
-#include "rir.h"
-#include "stcutils.h"
+#include <rir.h>
 
 node_visitor *clone_visitor;
 
@@ -79,14 +77,14 @@ static void *visit_arg(arg *self, node_visitor *visitor, clone_visitor_ctx *ctx)
 static void *visit_binop(binop *self, node_visitor *visitor, clone_visitor_ctx *ctx) 
 {
     TRACE;
-    ptrmap_iter l = ptrmap_find(&ctx->ptrmap, self->left);
-    ptrmap_iter r = ptrmap_find(&ctx->ptrmap, self->right);
+    value *l = ptrmap_hit(&ctx->ptrmap, self->left);
+    value *r = ptrmap_hit(&ctx->ptrmap, self->right);
    
-    if (!l.ref)
+    if (!l)
         error("Trying to clone a malformed LHS in a binop node.");
-    if (!r.ref)
+    if (!r)
         error("Trying to clone a malformed RHS in a binop node.");
-    if (!l.ref || !r.ref)
+    if (!l || !r)
         exit(1);
     binop *e = new(binop,
         .expr = expr_impl(
@@ -94,8 +92,8 @@ static void *visit_binop(binop *self, node_visitor *visitor, clone_visitor_ctx *
             .type = "binop",
         ),
         .type = self->type,
-        .left = l.ref->second,
-        .right = r.ref->second,
+        .left = l,
+        .right = r,
     );
     return e;
 }
