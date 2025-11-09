@@ -16,17 +16,15 @@ int main() {
 
             call(resolve("printf"), strlit("hello %d"), intlit(2));
             
-            block *true_case;
-            block *false_case;
             var *v2 = var();
             
-            true_case = block();
-            store(v2, mul2(intlit(2), intlit(4)));
-            false_case = block();
-            store(v2, add2(intlit(2), intlit(4)));
 
-            when(intlit(1), true_case, false_case);
-
+            when(intlit(1));
+                store(v2, mul2(intlit(2), intlit(4)));
+            otherwise
+                store(v2, add2(intlit(2), intlit(4)));
+            endwhen
+            
             call(resolve("printf"), load(v2));
 
             ret(x1);
