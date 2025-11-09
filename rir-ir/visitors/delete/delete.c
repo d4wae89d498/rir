@@ -1,6 +1,6 @@
 #include "delete.h"
 #include "stc/common.h"
-#include "stcutils.h"
+
 
 node_visitor *delete_visitor;
 

@@ -9,7 +9,7 @@ struct   prog {
 
 visitable(node_visitor, node, prog, self)
 
-static prog *Prog(void) {
+static prog *prog_new(void) {
     return new(prog, 
         .node = {
             .accept = &prog_visit,
@@ -17,6 +17,13 @@ static prog *Prog(void) {
         },
         .functions = functions_init(),
     );
+}
+
+
+static prog *Prog(void) {
+    prog *self = prog_new();
+    builder_begin(self);
+    return self;
 }
 
 # define prog() Prog()

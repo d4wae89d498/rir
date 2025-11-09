@@ -131,8 +131,8 @@ static void *visit_call(call *self, node_visitor *visitor, interpret_ctx *ctx)
 
     // need ffi for builtins 
 
-    // for internals : two solutions -> FFI trampoline or special switch ... \
-        But FFi Trampoline needed for export table // passing func ptr anyway..
+    // for internals : two solutions -> FFI trampoline or special switch ...
+    // but FFi Trampoline needed for export table // passing func ptr anyway..
 
     
     return 0;

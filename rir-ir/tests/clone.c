@@ -1,4 +1,4 @@
-#include "stcutils.h"
+
 #include <rir.h>
 #include <stdio.h>
 
@@ -8,30 +8,21 @@ int main() {
 
     // 1. build the IR
     prog *demo = prog();
-    builder_begin(demo);
-        function("main");
-            value *x1 = add2(intlit(2), intlit(4));
-            var *v1 = var();
+    function("main");
+        value *x1 = add2(intlit(2), intlit(4));
+        var *v1 = var();
+        store(v1, x1);
+        call(resolve("printf"), strlit("hello %d"), x1);
+        var *v2 = var();
+        when(intlit(1))
+            store(v2, mul2(intlit(2), intlit(4)));
+        otherwise
+            store(v2, add2(intlit(2), intlit(4)));
+        endwhen
+        call(resolve("printf"), load(v2));
+        ret(x1);
 
-            store(v1, x1);
-
-            call(resolve("printf"), strlit("hello %d"), x1);
-
-            
-            var *v2 = var();
-
-            
-            when(intlit(1))
-                store(v2, mul2(intlit(2), intlit(4)));
-            otherwise
-                store(v2, add2(intlit(2), intlit(4)));
-            endwhen
-
-            call(resolve("printf"), load(v2));
-
-            ret(x1);
-    builder_end();
-    printf("build done.\n");
+    notice("build done.\n");
 
     // 2. print it first
     print_visitor_ctx octx = {
@@ -44,12 +35,12 @@ int main() {
     notice("-----");
 
     // 3. clone it
-    printf("clonning...\n");
+    notice("clonning...\n");
     clone_visitor_ctx ctx = {
         .ptrmap = ptrmap_init()
     };
     prog *clone = dot(demo->node, accept, clone_visitor, &ctx);
-    printf("DONE.\n");
+    notice("DONE.\n");
 
     // 4. print the clonned ir
     print_visitor_ctx cctx = {
