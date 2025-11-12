@@ -1,3 +1,5 @@
+f(x) return x*x
+
 export main(ac, av) {
     extern printf
 
@@ -5,9 +7,8 @@ export main(ac, av) {
 
     i = 1 + 1 + 0
 
-    if ac == i {
+    if ac == i 
         printf("hello world %s\n", av[1])
-    } else {
+    else
         printf("invalid usage.")
-    }
 }

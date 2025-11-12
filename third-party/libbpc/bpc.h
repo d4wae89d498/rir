@@ -125,6 +125,27 @@ static int _rep(void *arg)
     return out;
 }
 
+# define toggle(R) closure(&_toggle, R)
+static int _toggle(void *ptr) {
+    bool *v = ptr;
+    *v = true;
+    return 0;
+}
+
+struct setval_ctx {
+    int *ptr;
+    int value;
+};
+
+
+
+# define setval(P, V) closure(&_setval, (&(struct setval_ctx){P, V}) )
+static int _setval(void *ptr) {
+    struct setval_ctx *self = (struct setval_ctx*) ptr;
+    *self->ptr = self->value;
+    return 0;
+}
+
 # define rule(N) seq(opt(skipws), closure(N, 0), opt(skipws))
 # define skipws  rep(chris(isspace))
 # define chris(f) closure(&_chris, (void*)(int (*)(int))&f)
