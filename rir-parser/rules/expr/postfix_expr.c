@@ -4,7 +4,7 @@
 static int postfix_expr_impl(void *arg)
 {
     (void) arg;
-    int match_size = apply(seq(primary_expr_rule, opt(rep(postfix_suffix_rule))));
+    int match_size = apply(seq(primary_expr_rule, orep(postfix_suffix_rule)));
     return match_size > 0 ? match_size : -1;
 }
 bpc_parser *postfix_expr_parser = &postfix_expr_impl;

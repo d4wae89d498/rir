@@ -5,8 +5,8 @@ static int ret_parser_impl(void *arg)
 {
     (void) arg;
     int match_size = apply(seq(
-        tk("return"),
-        opt(rule(expr_parser))
+        punc("return"),
+        opt(expr_rule)
     ));
     return match_size > 0 ? match_size : -1;
 }

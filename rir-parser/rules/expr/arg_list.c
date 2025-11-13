@@ -4,10 +4,18 @@
 static int arg_list_parser_impl(void *arg)
 {
     (void) arg;
+
+    // store stack sizes
+
     int match_size = apply(seq(
         expr_rule,
-        opt(rep(seq(alt(tk(","), expr_rule)))))
-    );
-    return match_size > 0 ? match_size : -1;
+        orep(seq(alt(punc(","), expr_rule)))
+    ));
+    if (match_size < 0)
+        return -1;
+
+    // fpr each captured items..
+    
+    return match_size;
 }
 bpc_parser *arg_list_parser = &arg_list_parser_impl;

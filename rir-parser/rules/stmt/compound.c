@@ -5,9 +5,9 @@ static int stmt_block_parser_impl(void *arg)
 {
     (void) arg;
     int match_size = apply(seq(
-        tk("{"),
+        punc("{"),
         rep(stmt_rule),
-        tk("}")
+        punc("}")
     ));
     return match_size > 0 ? match_size : -1;
 }

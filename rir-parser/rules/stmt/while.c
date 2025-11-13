@@ -5,11 +5,11 @@ static int while_parser_impl(void *arg)
 {
     (void) arg;
     int match_size = apply(seq(
-        tk("while"),
-        tk("("),
-        rule(expr_parser),
-        tk(")"),
-        rule(stmt_parser)
+        punc("while"),
+        punc("("),
+        expr_rule,
+        punc(")"),
+        stmt_rule
     ));
     return match_size > 0 ? match_size : -1;
 }

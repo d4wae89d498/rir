@@ -9,11 +9,12 @@ typedef int (bpc_parser)(void*);
 typedef struct bpc_implementation
 {
     bpc_parser *token;
+    bpc_parser *punctuation;
     void    *(*bkp)(void);
     void    (*bkp_restore)(void*);
     void    (*bkp_del)(void*);
     bool    (*eof)(void);
-    void    (*consume)(void);
+    void    (*consume)(int);
     int     (*peek)(void);
 } bpc_implementation;
 
@@ -25,6 +26,20 @@ static int _tk(void *arg)
     int size;
     void *backup = bpc->bkp();
     size = bpc->token(arg);
+    if (!size) {
+        bpc->bkp_restore(backup);
+        size = -1;
+    }
+    bpc->bkp_del(backup);
+    return size;
+}
+
+# define punc(T) closure(&_punc, T)
+static int _punc(void *arg)
+{
+    int size;
+    void *backup = bpc->bkp();
+    size = bpc->punctuation(arg);
     if (!size) {
         bpc->bkp_restore(backup);
         size = -1;
@@ -137,8 +152,6 @@ struct setval_ctx {
     int value;
 };
 
-
-
 # define setval(P, V) closure(&_setval, (&(struct setval_ctx){P, V}) )
 static int _setval(void *ptr) {
     struct setval_ctx *self = (struct setval_ctx*) ptr;
@@ -159,13 +172,15 @@ static int _chris(void* arg)
         return -1;
     }
     output = 1;
-    bpc->consume();    
+    bpc->consume(1);    
     while(!bpc->eof() && f(bpc->peek()))
     {
         output += 1;
-        bpc->consume();
+        bpc->consume(1);
     }
     return output;
 }
+
+# define orep(x) opt(rep(x))
 
 #endif // BPC_H

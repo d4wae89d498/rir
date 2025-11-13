@@ -8,10 +8,10 @@ static int mul_expr_parser_impl(void *arg)
 
     int match_size = apply(seq(
         unary_expr_rule,
-        opt(rep(seq(
+        orep(seq(
             alt(tk("*"), tk("/"), tk("%")),
             unary_expr_rule
-        )))
+        ))
     ));
     return match_size > 0 ? match_size : -1;
 }

@@ -1,4 +1,42 @@
 stmt parser -> shall return a block* ? => for each rules -- define ret type 
 maybe not good idea to have a single sstack ? lets have 2... 
 token_stack 
-node_stack
+node_stack 
+
+
+    // ctk = capture token 
+    // stk = save token 
+    // ptk = push token 
+    // ... find a name that would push onto the stack 
+    /// ---> solved with tk and punc primitives
+
+    // to have ot not to add a 2 stacks vs one ?
+        // one for tokens 
+        // one for noes
+    // pros: better seperation of concerns // things
+    // cons: would need to resolve cases where we cant guess easily the original order
+
+    // do id need a special stack ?
+        // --> can returns a value* directly ? 
+            // --> may be a value or a temp or eomthing else we dont know yet.
+            // > keep it in its own stack.
+
+    // issue i.e :
+    // T? id, T? id, T? id ... 
+        // if T is cstr, we would not be able to know which type for which id ?
+        // > create an intermediate node
+        // > or always use T
+        // > or merge csstack and sstack 
+        // But: T? node, T? node, T? node ... 
+            //  -> same issue
+
+            // solved by -> alt(T_rule, cspush("any"))
+
+        // pros of splitting: 
+            // seems easier to implement / loop
+            // avoid code/cost of tagged union approach
+                // avoid noisy cast/struct creations etc..s
+        // cons:
+            // may create ambiguitites (may be solved as above)
+
+        //choice ==> have 3 stacks

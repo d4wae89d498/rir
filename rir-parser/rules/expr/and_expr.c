@@ -6,10 +6,10 @@ static int and_expr_parser_impl(void *arg)
     (void) arg;
     int match_size = apply(seq(
         eq_expr_rule,
-        opt(rep(seq(
+        orep(seq(
             tk("&&"),
             eq_expr_rule
-        )))
+        ))
     ));
     return match_size > 0 ? match_size : -1;
 }

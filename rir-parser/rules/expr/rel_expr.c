@@ -8,10 +8,10 @@ static int rel_expr_parser_impl(void *arg)
 
     int match_size = apply(seq(
         add_expr_rule,
-        opt(rep(seq(
+        orep(seq(
             alt(tk(">"), tk("<"), tk("<="), tk(">=")),
             add_expr_rule
-        )))
+        ))
     ));
     return match_size > 0 ? match_size : -1;
 }

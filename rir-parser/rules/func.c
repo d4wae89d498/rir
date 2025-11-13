@@ -6,12 +6,15 @@ static int func_parser_impl(void *arg)
     (void) arg;
     int match_size = apply(seq(
         opt(tk("export")),
-        rule(id_parser),
-        tk("("),
-        opt(rep(rule(id_parser))),
-        tk(")"),
-        rule(stmt_block_parser)
+        id_rule,
+        punc("("),
+        opt(rep(id_rule)),
+        punc(")"),
+        stmt_rule
     ));
-    return match_size > 0 ? match_size : -1;
+    if (match_size < 0)
+        return -1;
+
+    return match_size;
 }
 bpc_parser *func_parser = &func_parser_impl;

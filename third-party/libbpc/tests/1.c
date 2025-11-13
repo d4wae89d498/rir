@@ -37,7 +37,7 @@ static void rir_bkp_restore(void* ptr)
     self = (ctx*)ptr;
 }
 
-static int rir_token(void* arg)
+static int rir_punctuation(void* arg)
 {
     const char *str = arg;
     int tklen = (int) strlen(str);
@@ -49,14 +49,20 @@ static int rir_token(void* arg)
     return 0;
 }
 
+static int rir_token(void* arg)
+{
+    return rir_punctuation(arg);
+}
+
+
 static bool rir_eof(void)
 {
     return (*self->src == 0);
 }
 
-static void rir_consume(void)
+static void rir_consume(int len)
 {
-    self->src += 1;
+    self->src += len;
 }
 
 static int rir_peek(void)
@@ -66,6 +72,7 @@ static int rir_peek(void)
 
 bpc_implementation *bpc = &(bpc_implementation) {
     .token = &rir_token,
+    .punctuation = &rir_punctuation,
     .bkp = &rir_bkp,
     .bkp_restore = &rir_bkp_restore,
     .bkp_del = &rir_bkp_del,

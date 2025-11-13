@@ -11,7 +11,7 @@ static int stmt_parser_impl(void *arg)
         if_rule,
         while_rule,
         for_rule,
-        tk(";")
+        punc(";")
     ));
     return match_size > 0 ? match_size : -1;
 }
