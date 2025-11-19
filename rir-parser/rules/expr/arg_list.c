@@ -3,6 +3,7 @@
 // === arg_list ===
 static int arg_list_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
 
     // store stack sizes

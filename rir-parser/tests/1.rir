@@ -3,12 +3,16 @@ f(x) return x*x
 export main(ac, av) {
     extern printf
 
-    var i
+    const i = 1 + 1 + 0
 
-    i = 1 + 1 + 0
+    *i = 6
+    ***i = 7
+    hi[0][0] = 6
 
     if ac == i 
         printf("hello world %s\n", av[1])
     else
         printf("invalid usage.")
+
+    return 0
 }

@@ -3,6 +3,7 @@
 // === stmt_block ===
 static int stmt_block_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int match_size = apply(seq(
         punc("{"),

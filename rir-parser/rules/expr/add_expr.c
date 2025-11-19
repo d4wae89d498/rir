@@ -3,6 +3,7 @@
 // === add_expr ===
 static int add_expr_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int match_size = apply(seq(
         mul_expr_rule,

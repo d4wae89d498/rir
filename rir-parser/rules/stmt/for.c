@@ -3,6 +3,7 @@
 // === for ===
 static int for_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     bool has_assign = false;
     bool has_cond = false;

@@ -3,6 +3,7 @@
 // === if ===
 static int if_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     bool has_else = false;
 

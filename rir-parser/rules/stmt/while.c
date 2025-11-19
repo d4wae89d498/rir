@@ -3,6 +3,7 @@
 // === while ===
 static int while_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int match_size = apply(seq(
         punc("while"),

@@ -3,6 +3,7 @@
 // === mul_expr ===
 static int mul_expr_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     bool eq = false;
 

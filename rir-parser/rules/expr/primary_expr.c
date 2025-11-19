@@ -3,13 +3,41 @@
 // === primary_expr ===
 static int primary_expr_impl(void *arg)
 {
+    TRACE;
     (void) arg;
+
+    enum {
+        lit,
+        id,
+        expr
+    } match_type;
+
     int match_size = apply(alt(
-        intlit_rule,
-        strlit_rule,
-        id_rule,
-        seq(tk("("), expr_rule, tk(")"))
+        seq(intlit_rule, setval((int*)&match_type, lit)),
+        seq(strlit_rule, setval((int*)&match_type, lit)),
+        seq(id_rule, setval((int*)&match_type, id)),
+        seq(tk("("), expr_rule, tk(")"), setval((int*)&match_type, expr))
     ));
-    return match_size > 0 ? match_size : -1;
+    if (match_size <= 0)
+        return -1;
+
+    switch (match_type) {
+        case lit:
+            break;
+        case id:
+
+            // emits a value* ? like resolve("..") ?
+            // but then & value ?
+            // resolved later.. ?
+ 
+            break;
+        case expr:
+            break;
+        default:
+            error("Unknown match_type %d in primary_expr ", match_type);
+            exit(1);
+    }
+
+    return match_size;
 }
 bpc_parser *primary_expr_parser = &primary_expr_impl;

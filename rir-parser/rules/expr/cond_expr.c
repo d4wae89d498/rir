@@ -3,6 +3,7 @@
 // === cond_expr ===
 static int cond_expr_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int match_size = apply(seq(
         or_expr_rule,

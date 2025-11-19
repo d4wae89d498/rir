@@ -3,6 +3,7 @@
 // === postfix_expr ===
 static int postfix_expr_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int match_size = apply(seq(primary_expr_rule, orep(postfix_suffix_rule)));
     return match_size > 0 ? match_size : -1;

@@ -3,6 +3,7 @@
 // === expr ===
 static int expr_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     return apply(cond_expr_rule);
 }

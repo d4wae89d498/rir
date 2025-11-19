@@ -1,102 +1,141 @@
-/// Grammmaire ci-dessous pour reference seulement ! L'implémentation C fait fois
-
 // prog
-prog            : func* ;
+prog            : top_decl* ;
 
-// func
-func            : IDENTIFIER '(' param_list? ')' compound_statement ;
-
-// param_list
-param_list      : IDENTIFIER (',' IDENTIFIER)* ;
-
-// stmt
-statement       : assignment_statement ';'
-                | expression
-                | compound_statement
-                | if_statement
-                | while_statement
-                | for_statement
+// top_decl
+top_decl        : func_def
+                | variable_decl ';'
+                | 'extern' identifier_list ';'
                 | ';'
                 ;
 
-// stmt_block
-compound_statement
-                : '{' statement* '}' ;
+// func_def
+func_def        : 'export'? IDENTIFIER '(' identifier_list? ')' statement ;
 
-// if
-if_statement    : 'if' '(' expression ')' statement ('else' statement)?
+
+// id_list
+identifier_list : IDENTIFIER (',' IDENTIFIER)* ;
+
+
+// var_decl
+variable_decl   : 'static'? ('var' IDENTIFIER ('=' assignment_expr)?
+                | 'const' IDENTIFIER '=' assignment_expr)
                 ;
 
-// while
-while_statement : 'while' '(' expression ')' statement ;
-
-// for
-for_statement   : 'for' '(' assign? ';' expression? ';' assign? ')' statement ;
-
-// assign
-assignment_statement
-                : unary_expression '=' expression
+// stmt
+statement       : labeled_stmt
+                | expr_stmt
+                | compound_stmt
+                | if_stmt
+                | while_stmt
+                | for_stmt
+                | jump_stmt
+                | ';'
                 ;
+
+// block_item
+block_item      : block_decl
+                | statement
+                ;
+
+// block_decl
+block_decl      : variable_decl ';'
+                | ';'
+                ;
+
+// compound_stmt
+compound_stmt   : '{' block_item* '}' ;
+
+// labeled_stmt
+labeled_stmt    : IDENTIFIER ':' statement
+                ;
+
+// jump_stmt
+jump_stmt       : 'goto' IDENTIFIER ';'
+                | 'return' expr? ';'
+                | 'break' ';'
+                | 'continue' ';'
+                ;
+
+// if_stmt
+if_stmt         : 'if' '(' expr ')' statement ('else' statement)?
+                ;
+
+// while_stmt
+while_stmt      : 'while' '(' expr ')' statement ;
+
+// for_stmt
+for_stmt        : 'for' '(' for_init expr? ';' expr? ')' statement ;
+
+// for_init
+for_init        : variable_decl
+                | expr_stmt
+                | ';'
+                ;
+
+// expr_stmt
+expr_stmt       : expr? ';' ;
+
+// const_expr
+const_expr      : cond_expr ;
 
 // expr
-expression      : conditional_expression ;
+expr            : assignment_expr
+                | expr ',' assignment_expr
+                ;
+
+// assignment_expr
+assignment_expr : cond_expr
+                | unary_expr assignment_op assignment_expr
+                ;
+// assignment_op
+assignment_op   : '=' | '+=' | '-=' | '*=' | '/=' | '%=' ;
 
 // cond_expr
-conditional_expression
-                : logical_or_expression ('?' expression ':' conditional_expression)? ;
+cond_expr       : log_or_expr ('?' expr ':' cond_expr)?
+                ;
 
-// or_expr
-logical_or_expression
-                : logical_and_expression ('||' logical_and_expression)* ;
+// log_or_expr (or_expr)
+log_or_expr     : log_and_expr ('||' log_and_expr)* ;
 
-// and_expr
-logical_and_expression
-                : equality_expression ('&&' equality_expression)* ;
+// log_and_expr (and_expr)
+log_and_expr    : eq_expr ('&&' eq_expr)* ;
 
 // eq_expr
-equality_expression
-                : relational_expression (('=' '=') | ('!' '=')) relational_expression)* ;
+eq_expr         : rel_expr (('==' | '!=') rel_expr)* ;
 
 // rel_expr
-relational_expression
-                : additive_expression (('<' | '>' | '<=' | '>=') additive_expression)* ;
+rel_expr        : add_expr (('<' | '>' | '<=' | '>=') add_expr)* ;
 
 // add_expr
-additive_expression
-                : multiplicative_expression (('+' | '-') multiplicative_expression)* ;
+add_expr        : mult_expr (('+' | '-') mult_expr)* ;
 
 // mult_expr
-multiplicative_expression
-                : unary_expression (('*' | '/' | '%') unary_expression)* ;
+mult_expr       : unary_expr (('*' | '/' | '%') unary_expr)* ;
 
 // unary_expr
-unary_expression
-                : postfix_expression
-                | '++' unary_expression
-                | '--' unary_expression
-                |  ('&' | '*' | '+' | '-' | '!') unary_expression
+unary_expr      : postfix_expr
+                | '++' unary_expr
+                | '--' unary_expr
+                | ('&' | '*' | '+' | '-' | '!') unary_expr
                 ;
 
 // postfix_expr
-postfix_expression
-                : primary_expression postfix_suffix* ;
-
+postfix_expr    : prim_expr postfix_suffix* ;
 
 // postfix_suffix
-postfix_suffix  : '[' expression ']'
-                | '(' argument_expression_list? ')'
+postfix_suffix  : '[' expr ']'                      // lvalue
+                | '(' arg_list? ')'                 // call
+                | '.' IDENTIFIER                    // struct member
                 | '++'
                 | '--'
                 ;
 
-// primary_expr
-primary_expression
-                : IDENTIFIER
+// prim_expr
+prim_expr       : IDENTIFIER                        // rvalue
                 | CONSTANT
                 | STRING_LITERAL
-                | '(' expression ')'
+                | '(' expr ')'
                 ;
 
 // arg_list
-argument_expression_list            
-                : expression (',' expression)* ;
+arg_list        : assignment_expr (',' assignment_expr)* ;

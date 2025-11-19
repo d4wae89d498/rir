@@ -1,7 +1,9 @@
 #include <rir.h>
 
 // === strlit ===
-static int strlit_parser_impl(void *arg) {
+static int strlit_parser_impl(void *arg)
+{
+    TRACE;
     (void) arg;
     const char *input = std_parser_ctx->src;
     if (input[0] != '"')

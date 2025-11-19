@@ -3,6 +3,7 @@
 // === eq_expr ===
 static int eq_expr_parser_impl(void *arg)
 {
+    TRACE;
     (void) arg;
     int eq = 0;
 

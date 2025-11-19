@@ -1,5 +1,8 @@
 #include <rir.h>
 
+# define MAX_INT_LEN 20
+# define min(a, b) (a < b) ? a : b
+
 // === intlit ===
 static int intlit_parser_impl(void *arg)
 {
@@ -9,15 +12,15 @@ static int intlit_parser_impl(void *arg)
     int match_size = apply(rep(chris(isdigit)));
     if (match_size <= 0)
         return -1;
-    const char *str = strndup(start_ptr, match_size);
+
+    char buffer[MAX_INT_LEN + 1];
+    strncpy(buffer, start_ptr, min(match_size, MAX_INT_LEN));
 
     value *pushme = value_new(temp_id++, &intlit_new(
-        atoi(str)
+        atoi(buffer)
     )->expr);
 
-    // todo: pushme
-
-    free((void*)str);
+    nodestack_push(&nstack, &pushme->instr.node);
 
     return match_size;
 }
