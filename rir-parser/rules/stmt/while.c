@@ -7,9 +7,9 @@ static int while_parser_impl(void *arg)
     (void) arg;
     int match_size = apply(seq(
         punc("while"),
-        punc("("),
+        opt(punc("(")),
         expr_rule,
-        punc(")"),
+        opt(punc(")")),
         stmt_rule
     ));
     return match_size > 0 ? match_size : -1;

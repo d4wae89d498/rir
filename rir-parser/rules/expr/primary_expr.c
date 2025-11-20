@@ -25,7 +25,7 @@ static int primary_expr_impl(void *arg)
         case lit:
             break;
         case id:
-
+            debug("ID ACCEPTED (%d) '%.2s'", match_size, std_parser_ctx->src - 2)
             // emits a value* ? like resolve("..") ?
             // but then & value ?
             // resolved later.. ?

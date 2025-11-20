@@ -8,6 +8,10 @@ int main()
     // TEST 1.
     int size;
 
+    rir_parser_init("&i");
+    size = unary_expr_parser(0);
+    fmt_debug("size={}", size);
+   // exit(1);
 
     // === intlit tests ===
     rir_parser_init("12");
@@ -44,11 +48,10 @@ int main()
     /////
 
 
-
-    parse_file(stringify_defined(WS_DIR) "/rir-parser/tests/1.rir");
-    size = prog_parser(0);
+    int srclen = parse_file(stringify_defined(WS_DIR) "/rir-parser/tests/1.rir");
+    int parsedlen = prog_parser(0);
     fmt_debug("size={}", size);
-    assert(size == -1);
+    assert(parsedlen == srclen);
 
     return 0;
 }

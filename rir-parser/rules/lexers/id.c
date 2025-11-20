@@ -17,6 +17,7 @@ static int id_parser_impl(void *arg)
         strndup(start_ptr, match_size)
     );
     TRACE;
+    debug("====== ID SIZE %d", match_size)
     return match_size;
 }
 bpc_parser *id_parser = &id_parser_impl;

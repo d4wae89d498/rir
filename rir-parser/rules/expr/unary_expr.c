@@ -1,5 +1,10 @@
 #include <rir.h>
 
+static int bpc__debug(void *arg)
+{
+    debug(arg);
+    return 0;
+}
 
 // === unary_expr ===
 static int unary_expr_parser_impl(void *arg)
@@ -17,23 +22,25 @@ static int unary_expr_parser_impl(void *arg)
                 seq(tk("&"), id_rule),
                 seq(alt(tk("*"), tk("+"), tk("-"), tk("!")), unary_expr_rule)
             ),
-            toggle(&expect_tk)
+            toggle(&expect_tk),
+            closure(bpc__debug, "unary OK")
         )
     ));
-
-    if (match_size <= 0)
-        return -1;
 
     if (!expect_tk)
         return match_size;
 
+    debug("expect_tk %d", expect_tk)
     if (!cstrstack_size(&csstack))
     {
+        TRACE;
+        return -1;
         error("Unable to find unary op");
         exit(1);
         return match_size;
     }
     const char *tk = cstrstack_pull(&csstack);
+    debug("======> unary op %s", tk);
     if (!strcmp(tk, "++")) {
 
     } else if (!strcmp(tk, "--")) {
@@ -53,6 +60,8 @@ static int unary_expr_parser_impl(void *arg)
         break;
 
     default:
+        return -1;
+
         error("Unknown token [%s] in unary_expr", tk);
         exit(1);
     }

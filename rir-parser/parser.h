@@ -27,52 +27,45 @@ extern parser_ctx *std_parser_ctx;
 
 static const int max_snippet_len = 64;
 static int error_recovery(const char *arg) {
-
-    int y = 0;
-
-    while (isspace(*std_parser_ctx->src))
-    {
+    int skipped_whitespace = 0;
+    while (isspace((unsigned char)*std_parser_ctx->src)) {
         bpc->consume(1);
-        y += 1;    
+        skipped_whitespace++;
     }
     char buffer[max_snippet_len + 1];
-
-    int i = 0;
-    while ( std_parser_ctx->src[i] &&
-            std_parser_ctx->src[i] != '\n' &&
-            std_parser_ctx->src[i] != ';' ) {
-
-        if (i < max_snippet_len)
-        {
-            buffer[i] = std_parser_ctx->src[i];
-            buffer[i+1] = 0; 
+    const char *start = std_parser_ctx->src;
+    size_t token_length = 0;
+    while (start[token_length] && start[token_length] != '\n' && start[token_length] != ';') {
+        if (token_length < max_snippet_len) {
+            buffer[token_length] = start[token_length];
         }
-        i += 1;
-        if (i == max_snippet_len)
-           buffer[i] = 0;
+        token_length++;
     }
+    size_t copy_length = token_length < max_snippet_len ? token_length : max_snippet_len;
+    buffer[copy_length] = '\0';
 
-    parse_error(
-            std_parser_ctx->path  == 0 ? 
-                "<buffer>" : std_parser_ctx->path, 
-            std_parser_ctx->line, 
-            std_parser_ctx->col, 
+
+    int total_skipped = skipped_whitespace + (int)token_length;
+    if (total_skipped)
+    {
+        parse_error(
+            std_parser_ctx->path ? std_parser_ctx->path : "<buffer>",
+            std_parser_ctx->line,
+            std_parser_ctx->col,
             arg,
             buffer
-    );
-
-    debug("%d characters skipped.", i)
-
-    int z = 0;
-    while(z++ < i)
-        bpc->consume(1);
-
-
-    return i + y;
+        );
+        debug("%zu characters skipped.", token_length + skipped_whitespace);
+        for (size_t i = 0; i < token_length; ++i) {
+            bpc->consume(1);
+        }
+        return total_skipped;
+    }
+    return -1;
 }
 
 void parse_str(const char *content);
-void parse_file(const char *path);
+int parse_file(const char *path);
 
 extern cstrstack   csstack;
 extern strstack    sstack;

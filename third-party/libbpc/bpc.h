@@ -3,6 +3,7 @@
 # include <stddef.h>
 # include <string.h>
 # include <sugar.h>
+# include <diag.h>
 
 typedef int (bpc_parser)(void*);
 
@@ -27,7 +28,8 @@ static int _tk(void *arg)
     void *backup = bpc->bkp();
     size = bpc->token(arg);
     if (!size) {
-        bpc->bkp_restore(backup);
+        //TRACE;
+        bpc->bkp_restore(backup); 
         size = -1;
     }
     bpc->bkp_del(backup);
@@ -41,6 +43,7 @@ static int _punc(void *arg)
     void *backup = bpc->bkp();
     size = bpc->punctuation(arg);
     if (!size) {
+        //TRACE;
         bpc->bkp_restore(backup);
         size = -1;
     }
@@ -70,15 +73,25 @@ static int _alt(void *arg)
         current_match = apply(cls[i]);
         if (current_match > longest_match) {
             bpc->bkp_del(longest_match_bkp);
-            longest_match_bkp = bpc->bkp();
+//            longest_match_bkp = bpc->bkp();
             longest_match = current_match;
+            
+            // TODO: create a longest match primitive for peeking longest match
+            // but...  this would require stack cloning at each backup
+            // is it really what we want ?? Or make special backups...
+            // => we will wait until the reach of such needs
+            return longest_match;
         }
+        //TRACE;
         bpc->bkp_restore(initial);
         i += 1;
     }
 
     if (longest_match_bkp)
+    {
+        //TRACE;
         bpc->bkp_restore(longest_match_bkp);
+    }
     return longest_match;
 }
 
@@ -102,6 +115,7 @@ static int _seq(void *arg)
         candidate = apply(cls[i]);
         if (candidate < 0)
         {
+            //TRACE;
             bpc->bkp_restore(backup);
             return -1;
         }
@@ -115,10 +129,16 @@ static int _seq(void *arg)
 # define opt(R) closure(&_opt, R)
 static int _opt(void *arg)
 {
+    void *backup = bpc->bkp();
     closure* cl = (closure*)arg;
     int out = apply(cl);
     if (out < 0)
+    {
         out = 0;
+        //TRACE;
+        bpc->bkp_restore(backup);
+    }
+    bpc->bkp_del(backup);
     return out;
 }
 
@@ -159,7 +179,22 @@ static int _setval(void *ptr) {
     return 0;
 }
 
+static int _bpc_force_error(void *ptr) {
+    (void) ptr;
+    return -1;
+}
+
+/*# define rule(N) seq(                                       \
+        setval(&libdiag_depth, libdiag_depth+1),                    \
+        opt(skipws),                                        \
+        alt(                                                \
+            seq(closure(N, 0), opt(skipws)),                \
+            seq(setval(&libdiag_depth, libdiag_depth+-1), closure(_bpc_force_error, 0))           \
+        )                                                   \
+    )*/
+
 # define rule(N) seq(opt(skipws), closure(N, 0), opt(skipws))
+
 # define skipws  rep(chris(isspace))
 # define chris(f) closure(&_chris, (void*)(int (*)(int))&f)
 static int _chris(void* arg)

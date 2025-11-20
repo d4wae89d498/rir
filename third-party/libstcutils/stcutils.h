@@ -6,7 +6,7 @@
 # define T ptrset, void*
 # include <stc/hashset.h>
 # define T cstrstack, const char*
-# include <stc/hashset.h>
+# include <stc/stack.h>
 # define T strstack, char*,  (c_key_proto)
 # include <stc/stack.h>
 # define visitable(visitor, node, type, access)  \

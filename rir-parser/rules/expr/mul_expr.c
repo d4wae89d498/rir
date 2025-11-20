@@ -14,6 +14,11 @@ static int mul_expr_parser_impl(void *arg)
             unary_expr_rule
         ))
     ));
-    return match_size > 0 ? match_size : -1;
+    if (match_size <= 0) {
+        debug("not a mul!")
+        return -1;
+    }
+    debug("got a mul!");
+    return match_size;
 }
 bpc_parser *mul_expr_parser = &mul_expr_parser_impl;

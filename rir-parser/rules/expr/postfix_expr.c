@@ -5,7 +5,9 @@ static int postfix_expr_impl(void *arg)
 {
     TRACE;
     (void) arg;
-    int match_size = apply(seq(primary_expr_rule, orep(postfix_suffix_rule)));
+    int match_size = apply(
+        seq(primary_expr_rule, orep(postfix_suffix_rule))
+    );
     return match_size > 0 ? match_size : -1;
 }
 bpc_parser *postfix_expr_parser = &postfix_expr_impl;
@@ -16,7 +18,7 @@ static int postfix_suffix_impl(void *arg)
     (void) arg;
     int match_size = apply(alt(
         seq(tk("["), expr_rule, tk("]")),
-        seq(tk("("), expr_rule, tk(")")),
+        seq(tk("("), opt(arg_list_rule), tk(")")),
         tk("++"),
         tk("--")
     ));

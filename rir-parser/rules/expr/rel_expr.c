@@ -7,12 +7,13 @@ static int rel_expr_parser_impl(void *arg)
     (void) arg;
     bool eq = false;
 
-    int expect_tk = true;
+    int expect_tk = false;
     int match_size = apply(seq(
-        seq(add_expr_rule, setval(&expect_tk, false)),
+        add_expr_rule,
         orep(seq(
             alt(tk(">"), tk("<"), tk("<="), tk(">=")),
-            add_expr_rule
+            add_expr_rule,
+            toggle(&expect_tk)
         ))
     ));
     if (match_size <= 0)

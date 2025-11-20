@@ -9,9 +9,9 @@ static int if_parser_impl(void *arg)
 
     int match_size = apply(seq(
         punc("if"),
-        punc("("),
+        opt(punc("(")),
         expr_rule,
-        punc(")"),
+        opt(punc(")")),
         stmt_rule,
         opt(seq(punc("else"), stmt_rule, toggle(&has_else)))
     ));

@@ -42,7 +42,7 @@ void rir_parser_init(const char *src) {
 
 
 #define MAX_FILE_SIZE 4*1024*1024 // 4MB max for a source file seems large enough
-void parse_file(const char *path)
+int parse_file(const char *path)
 {
     if (!path)
     {
@@ -71,13 +71,14 @@ void parse_file(const char *path)
     if (n == MAX_FILE_SIZE && !feof(file)) {
         error("Input file %s is too big, unable to parse it.", path);
         free(buf);
-        return;
+        exit(1);
     }
 
     buf[n] = '\0';
     debug("=== parsing file ===\n%s\n========", buf);
     rir_parser_init(buf);
     std_parser_ctx->path = strdup(path);
+    return strlen(buf);
 }
 
 //////
@@ -85,6 +86,7 @@ void parse_file(const char *path)
 
 static void rir_bkp_del(void *ptr)
 {
+    free(ptr);
     //strstack_drop(&ctx_ptr->stack);
     return;
 }
@@ -138,9 +140,12 @@ static void rir_bkp_restore(void* ptr)
 
     int csstack_size_diff = cstrstack_size(&csstack) - bkp->csstack_size;
     if (csstack_size_diff > 0)
+    {
+        TRACE;
+        debug("earase: %d", csstack_size_diff)
         while (csstack_size_diff--)
             cstrstack_pop(&csstack);
-
+    }
     int sstack_size_diff = strstack_size(&sstack) - bkp->csstack_size;
     if (sstack_size_diff > 0)
         while (sstack_size_diff--)
@@ -189,11 +194,13 @@ static int rir_punctuation(void* arg)
 
 static int rir_token(void* arg)
 {
-
+    TRACE;
     int tklen = rir_punctuation(arg);
     if (tklen <= 0)
         return -1;
+    debug("(a tk)");
     cstrstack_push(&csstack, (const char*)arg);
+    debug("%d", cstrstack_size(&csstack));
     return tklen;
 }
 

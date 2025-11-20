@@ -7,19 +7,21 @@ static int stmt_parser_impl(void *arg)
     (void) arg;
     bool err;
     int match_size = apply(alt(
-        extern_rule,
-        ret_rule,
-        expr_rule,
         stmt_block_rule,
+        extern_rule,
+        ret_rule,        
         if_rule,
         while_rule,
         for_rule,
+        var_decl_rule,
+        expr_rule,
         punc(";")
     ));
 
     if (match_size <= 0)
     {
-        return error_recovery("Unknown statement '%s'");
+        return -1;
+//        return error_recovery("Unknown statement '%s'");
     }
     int v;
     switch(v) {

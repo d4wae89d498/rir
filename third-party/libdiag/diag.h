@@ -25,6 +25,22 @@ static char *workspace_dir = stringify_defined(WS_DIR) ;
 extern int errors;
 extern bool colors_enabled;
 extern bool debug_enabled;
+extern bool trace_enabled;
+extern int libdiag_depth;
+
+// REINIT
+
+#ifndef DEBUG
+# define DEBUG 0
+#endif
+#ifndef TRACE 
+# define TRACE 0
+#endif
+static void libdiag_setup_defaults()
+{
+    debug_enabled = DEBUG;
+    trace_enabled = TRACE;
+}
 
 // COLORS
 
@@ -51,19 +67,13 @@ static const char *RESET = "\x1b[0m";
 // IMPLS
 
 // === trace ===
-#ifdef TRACE
-# if TRACE == 1
-#  undef TRACE
-#  define TRACE fprintf(stderr, "[TRACE] %s:%d:%s()\n", __FILE__, __LINE__, __func__);
-# else
-#  undef TRACE
-#  define TRACE 
-# endif 
-#else 
-# define TRACE  
-#endif
+#undef TRACE
+#define TRACE if (trace_enabled) { fprintf(stderr, "%*s[TRACE] %s:%d:%s()\n", libdiag_depth, "", __FILE__, __LINE__, __func__); }
 
 // === common ===
+
+// === common :: func ===
+
 static void diag_print_common(const char *file, int line, const char *func, const char *label, const char *label_color_tty) {
     
     const char *label_color   = colors_enabled ? label_color_tty : "";
@@ -73,7 +83,7 @@ static void diag_print_common(const char *file, int line, const char *func, cons
         file += strlen(workspace_dir) + 1;
     }
     if (debug_enabled)
-       fprintf(stderr, "%s:%i %s() ", file, line, func);
+       fprintf(stderr, "%*s%s:%i:%s() ", libdiag_depth, "", file, line, func);
     fprintf(stderr, "%s%s: %s", label_color, label, white);
 }
 
@@ -83,6 +93,32 @@ static void diag_print_common(const char *file, int line, const char *func, cons
         verb(stderr, __VA_ARGS__);\
         fprintf(stderr, "%s\n", RESET);\
     }
+
+// === common :: col ===
+
+static void diag_print2_common(const char *file, int line, int col, const char *label, const char *label_color_tty) {
+    
+    const char *label_color   = colors_enabled ? label_color_tty : "";
+    const char *reset = colors_enabled ? RESET : "";
+    const char *white = colors_enabled ? BOLD_WHITE : "";
+    if (!strncmp(file, workspace_dir, strlen(workspace_dir))) {
+        file += strlen(workspace_dir) + 1;
+    }
+    if (debug_enabled)
+       fprintf(stderr, "%s:%i:%i ", file, line, col);
+    fprintf(stderr, "%s%s: %s", label_color, label, white);
+}
+
+# define rir_print2_impl(file, line, col, label, color, ...)\
+    if (1) {\
+        diag_print2_common(file, line, col, label, color);\
+        fprintf(stderr, __VA_ARGS__);\
+        fprintf(stderr, "%s\n", RESET);\
+    }
+
+# define parse_error(F, L, C, ...) \
+    rir_print2_impl(F, L, C, "error", BOLD_RED, __VA_ARGS__);\
+
 
 // === error ===
 # define error(...)\

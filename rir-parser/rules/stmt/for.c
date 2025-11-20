@@ -11,13 +11,13 @@ static int for_parser_impl(void *arg)
 
     int match_size = apply(seq(
         punc("for"),
-        punc("("),
+        opt(punc("(")),
         opt(seq(assign_rule, toggle(&has_assign))),
         punc(";"),
         opt(seq(expr_rule, toggle(&has_cond))),
         punc(";"),
         opt(seq(assign_rule, toggle(&has_incr))),
-        punc(")"),
+        opt(punc(")")),
         stmt_rule
     ));
     return match_size > 0 ? match_size : -1;

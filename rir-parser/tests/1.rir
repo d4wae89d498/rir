@@ -1,18 +1,37 @@
 f(x) return x*x
 
-export main(ac, av) {
-    extern printf
 
-    const i = 1 + 1 + 0
+g(x) return x*x + 4*9 * 8 + 
+    (9)
 
-    *i = 6
-    ***i = 7
-    hi[0][0] = 6
 
-    if ac == i 
-        printf("hello world %s\n", av[1])
-    else
-        printf("invalid usage.")
+p(x) {
+    *i + 2;
+
+    var i;
+    const y = 2 + 5;
+
+    i = 42;
+
+    **i = &y + (2 * 4)
+
+    if 1 == 2
+        hello(747)
+    else 
+        pata
+
+    while 1 
+        if 1 
+            printf(41)
+    
+    for  1;1;1
+        print(1)
+
+    if 1 
+        if 1 
+            a;
+        else 
+            b;
 
     return 0
 }

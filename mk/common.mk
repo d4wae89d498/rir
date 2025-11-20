@@ -24,12 +24,12 @@ CFLAGS ?= -std=$(CSTD) -pedantic 					\
 	-I$(WORKSPACE_DIR)/third-party/libbpc			\
 	-I$(WORKSPACE_DIR)/third-party/libstcutils		\
 	-DTRACE=$(TRACE)								\
-	-DDEBUG=1										\
 	-DWS_DIR=$(WORKSPACE_DIR)						\
 	-DNAME=$<
 # Wno-format-security: todo check why needed why fmt_printd 
 ifeq ($(DEBUG), 1) 
-	CFLAGS += -g	-fsanitize=address
+	CFLAGS += -DDEBUG=1 
+# -g -fsanitize=address
 endif
 
 LIBS := $(BUILD_DIR)/rir-backend/librir-backend.a						\

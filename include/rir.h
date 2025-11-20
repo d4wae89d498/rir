@@ -99,6 +99,7 @@ typedef struct unreachable  unreachable;
 static void setup(void)
 {
     TRACE;
+    libdiag_setup_defaults();
     setup_passes();
     setup_targets();
     setup_visitors();
